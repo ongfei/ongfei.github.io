@@ -4,17 +4,26 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>ongfei | 一步一步往上爬</title>
+  <title>iOS10 JPush | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="低调做事 快乐做人">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ongfei | 一步一步往上爬">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.先来看下改动的地方我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.
+
+下面直接堆代码首先头文件极光推送  12345#import &amp;quot;JPUSHService.h&amp;quot;  #import &amp;lt;AdSupport/Ad">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS10 JPush">
+<meta property="og:url" content="http://yoursite.com/2016/10/10/iOS10-JPush/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="低调做事 快乐做人">
+<meta property="og:description" content="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.先来看下改动的地方我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.
+
+下面直接堆代码首先头文件极光推送  12345#import &amp;quot;JPUSHService.h&amp;quot;  #import &amp;lt;AdSupport/Ad">
+<meta property="og:image" content="http://p1.bpimg.com/4851/6f841220056fde40.png">
+<meta property="og:updated_time" content="2016-10-10T08:14:37.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ongfei | 一步一步往上爬">
-<meta name="twitter:description" content="低调做事 快乐做人">
+<meta name="twitter:title" content="iOS10 JPush">
+<meta name="twitter:description" content="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.先来看下改动的地方我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.
+
+下面直接堆代码首先头文件极光推送  12345#import &amp;quot;JPUSHService.h&amp;quot;  #import &amp;lt;AdSupport/Ad">
+<meta name="twitter:image" content="http://p1.bpimg.com/4851/6f841220056fde40.png">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -126,9 +135,7 @@
 </nav>
 
       <div class="body-wrap">
-        
-  
-    <article id="post-iOS10-JPush" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-iOS10-JPush" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -137,8 +144,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/10/iOS10-JPush/">iOS10 JPush</a>
+    <h1 class="article-title" itemprop="name">
+      iOS10 JPush
     </h1>
   
 
@@ -180,125 +187,37 @@
   </div>
 </article>
 
-
-
-
-
-
-
-
-
-
   
-    <article id="post-iOS-Runtime" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/09/iOS-Runtime/">iOS Runtime</a>
-    </h1>
   
+    <a href="/2016/04/09/iOS-Runtime/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS Runtime</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><p>Runtime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。<br>也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。</p>
-<h4 id="面向对象："><a href="#面向对象：" class="headerlink" title="面向对象："></a>面向对象：</h4><p>Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。<br>Class *class = [[Class alloc] init];<br>alloc 方法会为对象分配一块内存空间，空间的大小为 isa_t（8 字节）的大小加上所有成员变量所需的空间，再进行一次内存对齐。分配完空间后会初始化 isa_t isa_t 是一个 union 类型的结构体（或者称之为联合体），它的结构是在 Runtime 里被定义的。</p>
-<pre><code>union isa_t {  
-isa_t() { }
-isa_t(uintptr_t value) :                     bits(value) { }
 
-Class cls;
-uintptr_t bits;
 
-struct {
-   uintptr_t indexed           : 1;
-   uintptr_t has_assoc         : 1;
-   uintptr_t has_cxx_dtor      : 1;
-   uintptr_t shiftcls          : 33;
-   uintptr_t magic             : 6;
-   uintptr_t weakly_referenced : 1;
-   uintptr_t deallocating      : 1;
-   uintptr_t has_sidetable_rc  : 1;
-   uintptr_t extra_rc          : 19;
- };
-};
-</code></pre><p>init 方法就直接返回了初始化好的对象，class 指针指向这个初始化好的对象。</p>
-<p>也就是在 Runtime 的协助之下，一个对象完成了创建。<br>你可能想知道，这个对象只存放了一个 isa_t 结构体和成员变量，对象的方法在哪里？</p>
-<p>在编译的时候，类在内存中的位置就已经确定，而在 main 方法之前，Runtime 将可执行文件中和动态库所有的符号（Class，Protocol，Selector，IMP，…）加载到内存中，由 Runtime 管理，这里也包括了也是一个对象的类。</p>
-<p>类对象里储存着一个 isa_t 的结构体，super_class 指针，cache_t 结构体，class_data_bits_t 指针。</p>
-<pre><code>struct objc_class : objc_object {
-    isa_t isa;
-    Class superclass;
-    cache_t cache;            
-    class_data_bits_t bits;    
-｝
-</code></pre><p>class_data_bits_t 指向类对象的数据区域，数据区域存放着这个类的实例方法链表。而类方法存在元类对象的数据区域。也就是有对象，类对象，元类对象三个概念，对象是在运行时动态创建的，可以有无数个，类对象和元类对象在 main 方法之前创建的，分别只会有一个。</p>
-<h4 id="消息分发："><a href="#消息分发：" class="headerlink" title="消息分发："></a>消息分发：</h4><p>在 Objective-C 中的“方法调用”其实应该叫做消息传递，[object message] 会被编译器翻译为 objc_msgSend(object, @selector(message))，这是一个 C 方法，首先看它的两个参数，第一个是 object ，既方法调用者，第二个参数称为选择子 SEL，Objective-C 为我们维护了一个巨大的选择子表，在使用 @selector() 时会从这个选择子表中根据选择子的名字查找对应的 SEL。如果没有找到，则会生成一个 SEL 并添加到表中，在编译期间会扫描全部的头文件和实现文件将其中的方法以及使用 @selector() 生成的选择子加入到选择子表中。</p>
-<p>通过第一个参数 object，可以找到 object 对象的 isa_t 结构体，从上文中能看 isa_t 结构体的结构，在 isa_t 结构体中，shiftcls 存放的是一个 33 位的地址，用于指向 object 对象的类对象，而类对象里有一个 cache_t 结构体，来看一下 cache_t 的具体代码，</p>
-<pre><code>struct cache_t {
-    struct bucket_t *_buckets;
-    mask_t _mask;
-    mask_t _occupied;
-｝
-</code></pre><p>_mask：分配用来缓存 bucket 的总数。<br>_occupied：表明目前实际占用的缓存 bucket 的个数。<br>_buckets：一个散列表，用来方法缓存，bucket_t 类型，包含 key 以及方法实现 IMP。</p>
-<pre><code>struct bucket_t {
-private:
- cache_key_t _key;
-  IMP _imp;
-｝
-</code></pre><p>objc_msgSend() 方法会先从缓存表里，查找是否有该 SEL 对应的 IMP，有的话算命中缓存，直接通过函数指针 IMP ，找到方法的具体实现函数，执行。<br>当然缓存表里可能并不会命中，则此时会根据类对象的 class_data_bits_t 指针找到数据区域，数据区域里用链表存放着类的实例方法，实例方法也是一个结构体，其结构为：</p>
-<pre><code>struct method_t {  
- SEL name;
- const char *types;
- IMP imp;
-};
-</code></pre><p>编译器将每个方法的返回值和参数类型编码为一个字符串，types 指向的就是这样一个字符串，objc_msgSend() 会在类对象的方法链表里按链表顺序去匹配 SEL，匹配成功则停止，并将此方法加入到类对象的 _buckets 里缓存起来。如果没找到则会通过类对象的 superclass 指针找到其父类，去父类的方法列表里寻找（也会从父类的方法缓存列表开始）。</p>
-<p>如果继续没有找到会一直向父类寻找，直到遇见 NSObject，NSObject 的 superclass 指向 nil。也就意味着寻找结束，并没有找到实现方法。（如果这个过程找到了，也同样会在 object 的类对象的 _buckets 里缓存起来）。</p>
-<p>选择子在当前类和父类中都没有找到实现，就进入了方法决议（method resolve），首先判断当前 object 的类对象是否实现了 resolveInstanceMethod: 方法，如果实现的话，会调用 resolveInstanceMethod：方法，这个时候我们可以在 resolveInstanceMethod：方法里动态的添加该 SEL 对应的方法（也可以去做点别的，比如写入日志）。之后会重新执行查找方法实现的流程，如果依旧没找到方法，或者没有实现 resolveInstanceMethod: 方法，Runtime 还有另一套机制，消息转发。</p>
-<h4 id="消息转发："><a href="#消息转发：" class="headerlink" title="消息转发："></a>消息转发：</h4><p>消息转发分为以下几步：<br>1.调用 forwardingTargetForSelector: 方法，尝试找到一个能响应该消息的对象。如果获取到，则直接转发给它。如果返回了 nil，继续下面的动作。<br>2.调用 methodSignatureForSelector: 方法，尝试获得一个方法签名。如果获取不到，则直接调用 doesNotRecognizeSelector 抛出异常。<br>3.调用 forwardInvocation: 方法，将第 3 步获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了。</p>
-<p>以上三个方法都可以通过在 object 的类对象里实现， forwardingTargetForSelector: 可以通过对参数 SEL 的判断，返回一个可以响应该消息的对象。这样则会重新从该对象开始执行查找方法实现的流程，找到了也同样会在 object 的类对象的 _buckets 里缓存起来。而 2，3 方法则一般是配套使用，实现 methodSignatureForSelector: 方法根据参数 SEL ，做相应处理，返回 NSMethodSignature (方法签名) 对象，NSMethodSignature 对象会被包装成 NSInvocation 对象，forwardInvocation: 方法里就可以对 NSInvocation 进行处理了。</p>
-<p>上面是讲的是实例方法，类方法没什么区别，类方法储存在元类对象的数据区域里，通过类对象的 isa_t 找到元类对象，执行查找方法实现的流程，元类对象的 superclass 最终也会指向 NSObject。没找到的话，也会有方法决议以及消息转发。</p>
-<h3 id="runtime-可以做什么："><a href="#runtime-可以做什么：" class="headerlink" title="runtime 可以做什么："></a>runtime 可以做什么：</h3><p>实现多继承：从 forwardingTargetForSelector: 方法就能知道，一个类可以做到继承多个类的效果，只需要在这一步将消息转发给正确的类对象就可以模拟多继承的效果。</p>
-<h4 id="交换两个方法的实现："><a href="#交换两个方法的实现：" class="headerlink" title="交换两个方法的实现："></a>交换两个方法的实现：</h4><pre><code>Method m1 = class_getInstanceMethod([M1 class], @selector(hello1));
-Method m2 = class_getInstanceMethod([M2 class], @selector(hello2));
-method_exchangeImplementations(m2, m1);
-</code></pre><h4 id="关联对象："><a href="#关联对象：" class="headerlink" title="关联对象："></a>关联对象：</h4><p>通过下面两个方法，可以给 category 实现添加成员变量的效果。</p>
-<pre><code>objc_setAssociatedObject
-objc_getAssociatedObject
-</code></pre><h4 id="动态添加类和方法："><a href="#动态添加类和方法：" class="headerlink" title="动态添加类和方法："></a>动态添加类和方法：</h4><p>objc_allocateClassPair 函数与 objc_registerClassPair 函数可以完成一个新类的添加，class_addMethod 给类添加方法，class_addIvar 添加成员变量，objc_registerClassPair 来注册类，其中成员变量的添加必须在类注册之前，类注册后就可以创建该类的对象了，而再添加成员变量就会破坏创建的对象的内存结构。</p>
-<h4 id="将-json-转换为-model："><a href="#将-json-转换为-model：" class="headerlink" title="将 json 转换为 model："></a>将 json 转换为 model：</h4><p>用到了 Runtime 获取某一个类的全部属性的名字，以及 Runtime 获取属性的类型。</p>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/04/09/iOS-Runtime/" class="archive-article-date">
-  	<time datetime="2016-04-09T07:43:22.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-04-09</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li></ul>
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
 
 
@@ -306,177 +225,6 @@ objc_getAssociatedObject
 
 
 
-
-
-
-  
-    <article id="post-Hexo-搭建自己的博客" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/09/Hexo-搭建自己的博客/">Hexo 搭建自己的博客</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<h2 id="什么是Hexo"><a href="#什么是Hexo" class="headerlink" title="什么是Hexo"></a>什么是Hexo</h2><p>Hexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便的生成静态网页托管在github和Heroku上</p>
-<h2 id="GitHub-Pages是什么？"><a href="#GitHub-Pages是什么？" class="headerlink" title="GitHub Pages是什么？"></a>GitHub Pages是什么？</h2><p>GitHub Pages 可以被认为是用户编写的、托管在github上的静态网页。由于它的空间免费稳定， 可以用于介绍托管在github上的Project或者搭建网站。有两种形式: Project Site 和 User/Org Site，二者之间的差异可以戳 GitHub Pages 。基于 GP 创建Site是很方便的，这有一个简单的教程： 学习 Github Page 教你分分钟搭建自己的博客</p>
-<p>gp 生成的网站的默认域名是 username.github.io 或者 username.github.io/project-name ，但gp是支持自定义域名的： Custom Domain Name 。购买域名之后，可以和默认的二级域名进行绑定，教程参考： 购买域名、设置DNS</p>
-<hr>
-<h2 id="Hexo-的安装"><a href="#Hexo-的安装" class="headerlink" title="Hexo 的安装"></a>Hexo 的安装</h2><ol>
-<li>由于 Hexo 是基于 Node ，安装前要先安装 Node. 进入官网(<a href="https://nodejs.org/en/" target="_blank" rel="external">https://nodejs.org/en/</a>) 下载安装包，直接点击安装就可以了</li>
-<li>安装Git以及申请git账号,相信这步就不用多说了</li>
-<li>安装Hexo</li>
-</ol>
-<pre><code>Node和Git都安装好后，可执行如下命令安装hexo：
-</code></pre><hr>
-<p>安装:</p>
-<blockquote>
-<pre><code>$ sudo npm install -g hexo
-</code></pre></blockquote>
-<p>初始化:<br>创建一个文件夹，如：Blog，cd到Blog里执行hexo init的。命令：</p>
-<blockquote>
-<pre><code>$ hexo init
-</code></pre></blockquote>
-<p>生成静态页面</p>
-<p>继续再Blog目录下执行如下命令，生成静态页面</p>
-<blockquote>
-<pre><code>$ hexo generate （hexo g  也可以） 
-</code></pre></blockquote>
-<p>本地启动</p>
-<p>启动本地服务，进行文章预览调试，命令：</p>
-<blockquote>
-<pre><code>$ hexo server  
-</code></pre></blockquote>
-<p>浏览器输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 访问试试看,如果没错误 你就会访问到你的网页了</p>
-<hr>
-<h3 id="下面就是要将-hexo-部署至Git"><a href="#下面就是要将-hexo-部署至Git" class="headerlink" title="下面就是要将 hexo 部署至Git"></a>下面就是要将 hexo 部署至Git</h3><ul>
-<li><ol>
-<li>首先在github上建立一个工程,名字就是 —&gt;  你的github名.github.io</li>
-</ol>
-</li>
-<li><ol>
-<li>配置_config.yml文件，来建立关联.</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>$ vim _config.yml
-</code></pre></blockquote>
-<p>翻到最下面，改成我这样子的，注意： : 后面要有空格</p>
-<p>deploy:<br>  type: git<br>  repository: <a href="https://github.com/ongfei/ongfei.github.io.git" target="_blank" rel="external">https://github.com/ongfei/ongfei.github.io.git</a><br>  branch: master</p>
-<ul>
-<li><ol>
-<li>执行如下命令才能使用git部署</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>$ npm install hexo-deployer-git --save
-</code></pre></blockquote>
-<ul>
-<li><ol>
-<li>然后，执行配置命令：</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>$ hexo deploy
-</code></pre></blockquote>
-<p>然后再浏览器中输入<br><a href="http://ongfei.github.io/" target="_blank" rel="external">http://ongfei.github.io/</a></p>
-<hr>
-<p>部署步骤 每次部署的步骤，可按以下三步来进行。</p>
-<pre><code>$ hexo clean
-$ hexo generate
-$ hexo deploy
-</code></pre><hr>
-<hr>
-<p>一些常用命令：</p>
-<pre><code>$ hexo new &quot;postName&quot; #新建文章
-$ hexo new page &quot;pageName&quot; #新建页面
-$ hexo generate #生成静态页面至public目录
-$ hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）
-$ hexo deploy #将.deploy目录部署到GitHub
-$ hexo help  # 查看帮助
-$ hexo version  #查看Hexo的版本
-</code></pre><h2 id="关于主题的更改"><a href="#关于主题的更改" class="headerlink" title="关于主题的更改"></a>关于主题的更改</h2><p>附上一个git地址 <a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">https://github.com/litten/hexo-theme-yilia</a></p>
-<h2 id="创建和发布文章"><a href="#创建和发布文章" class="headerlink" title="创建和发布文章"></a>创建和发布文章</h2><p>想要发布新的文章，首先创建<br>cd到Hexo文件夹</p>
-<pre><code>$ hexo new &quot;文章标题&quot;
-</code></pre><p>你可以在Hexo-&gt;Source-&gt;_post目录下看到你新创建的那个文章，还有一个配套的文件夹，里面放这边博文的图片资源</p>
-<p>使用支持MarkDown编辑器编写的打开新创建的文件，就可以写文章了，要根据MarkDown语法写出来的文章才会好看</p>
-<p>markdown具体语法参考(<a href="http://www.appinn.com/markdown/#code" target="_blank" rel="external">http://www.appinn.com/markdown/#code</a>)</p>
-<pre><code>title:  #文章标题
-date:  #时间，一般不用改
-categories:  #目录分类
-tags:  #标签，格式可以是[Hexo,总结]，中间用英文逗号分开
-keywords:  #文章关键词，多个关键词用英文逗号隔开 
-</code></pre><p>文章写好直接执行下面命令即可直接发布文章</p>
-<pre><code>$ hexo d -g
-</code></pre><p>如果发布时候出现错误</p>
-<h6 id="ERROR-Deployer-not-found-git"><a href="#ERROR-Deployer-not-found-git" class="headerlink" title="ERROR Deployer not found: git"></a>ERROR Deployer not found: git</h6><p>执行</p>
-<pre><code>$ npm install hexo-deployer-git --save
-</code></pre><p>关于文章图片的插入<br>这个有必要说一下怎么做<br>文章插入图片需要用到Hexo的一个插件，首先cd到hexo的根目录</p>
-<pre><code>$ npm install https://github.com/CodeFalling/hexo-asset-image --save
-</code></pre><p>然后把图片放入对应文章的配套文件夹下，比如1.png</p>
-<pre><code>[站外图片上传中……(17)]
-</code></pre><p>推荐两个比较好用的可以把图片存到网络上：</p>
-<p><a href="http://tuchuang.org/" target="_blank" rel="external">图床</a>；无需注册，方便快捷。<br><a href="https://portal.qiniu.com/signup?code=3lglas6pgi2qa" target="_blank" rel="external">七牛云存储</a>；需要注册，免费，空间大，速度快。</p>
-<hr>
-<hr>
-<h3 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h3><ol>
-<li>家里电脑使用博客 <br><br>建立git远端仓库管理博客,并使用家里的电脑把本地博客的配置推送到远端仓库。 </li>
-<li>公司电脑使用博客<br><br>到了公司只需要执行sudo npm install -g hexo,然后cd到你的博客目录下,如我cd 到Hexo目录下, 然后执行 hexo server 就可以在本地预览博客了。 </li>
-<li>使用Git保存 <br><br>修改好博客后记得先使用git来提交下, 即使下次把博客的样式修改坏了, 也可以使用 git reset –hard 来回退。如: 我cd 到 Blog-Growing 目录下使用git提交。 </li>
-<li>博客提交<br><br>1、修改好的博客使用 hexo d 展示到博客页上。  <br><br>2、git push 整个本地博客。</li>
-</ol>
-<hr>
-<hr>
-<h4 id="为什么使用百度搜索不到-Github-Page-上的博客？"><a href="#为什么使用百度搜索不到-Github-Page-上的博客？" class="headerlink" title="为什么使用百度搜索不到 Github Page 上的博客？"></a>为什么使用百度搜索不到 Github Page 上的博客？</h4><p>有人联系过 Github Support 部门 , 给出大致的意思就是: 百度爬虫爬得太猛烈，已经对很多 Github 用户造成了问题。所以 Github 将禁止百度爬虫的爬取。</p>
-<h4 id="如何让百度能搜索你的博客"><a href="#如何让百度能搜索你的博客" class="headerlink" title="如何让百度能搜索你的博客?"></a>如何让百度能搜索你的博客?</h4><p>　　根据上面说的, 目前发现只是Github Page禁止了百度搜索, 所以让百度能搜索到你的博客还是有一些方法的。例如: <em> 自己搞个VPS,博客部署在VPS上。 </em> 博客部署 Coding.net 上, GitCafe已经合并到 Coding 。 我使用的是第二种方法, 博客部署在 Coding.net 上也相对简单些。</p>
-<p>在Coding上部署你的博客。<br>　　Coding同样支持Hexo、Jekyll等博客的部署, Coding 跟Github还是挺像的,而且是中文。 同样的在Coding里面建一个项目,项目名字跟你的用户名一样,这里我就不啰嗦了, 说几个需要注意的地方:<br>注意一:<br>　　在Coding Page 上部署博客,需要把博客推送到coding-pages 分支上, 分支名字是固定的。<br>注意二:<br>　　Coding Page 不支持自定义CNAME, 你需要点击到Page模块,然后添加一个域名来绑定。</p>
-<p>更详细的请看Coding Pages 官网介绍.</p>
-<h4 id="此过程中总会遇到大大小小的坑-查资料也是学习的过程-共勉"><a href="#此过程中总会遇到大大小小的坑-查资料也是学习的过程-共勉" class="headerlink" title="此过程中总会遇到大大小小的坑 , 查资料也是学习的过程. 共勉."></a>此过程中总会遇到大大小小的坑 , 查资料也是学习的过程. 共勉.</h4>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2015/10/09/Hexo-搭建自己的博客/" class="archive-article-date">
-  	<time datetime="2015-10-09T04:17:30.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-10-09</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网站/">网站</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-  
 
 
       </div>
@@ -498,8 +246,8 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
 		fancybox: true,
 		mathjax: false,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
