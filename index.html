@@ -190,6 +190,63 @@
 
 
   
+    <article id="post-Xcode8-权限问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/26/Xcode8-权限问题/">Xcode8 权限问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="权限配置-info-plist-文件"><a href="#权限配置-info-plist-文件" class="headerlink" title="权限配置 info.plist 文件"></a>权限配置 info.plist 文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">麦克风权限：Privacy - Microphone Usage Description 是否允许此App使用你的麦克风？</div><div class="line">相机权限： Privacy - Camera Usage Description 是否允许此App使用你的相机？</div><div class="line">相册权限： Privacy - Photo Library Usage Description 是否允许此App访问你的媒体资料库？</div><div class="line">通讯录权限： Privacy - Contacts Usage Description 是否允许此App访问你的通讯录？</div><div class="line">蓝牙权限：Privacy - Bluetooth Peripheral Usage Description 是否许允此App使用蓝牙？</div><div class="line">语音转文字权限：Privacy - Speech Recognition Usage Description 是否允许此App使用语音识别？</div><div class="line">日历权限：Privacy - Calendars Usage Description 是否允许此App使用日历？</div><div class="line">定位权限：Privacy - Location When In Use Usage Description 我们需要通过您的地理位置信息获取您周边的相关数据</div><div class="line">定位权限: Privacy - Location Always Usage Description 我们需要通过您的地理位置信息获取您周边的相关数据</div></pre></td></tr></table></figure>
+<h4 id="后记"><a href="#后记" class="headerlink" title="后记:"></a>后记:</h4><h5 id="date-2016-10-09"><a href="#date-2016-10-09" class="headerlink" title="date: 2016-10-09"></a>date: 2016-10-09</h5><p>今天上线 , 传 Appstore 成功之后 , 等了半个小时 , 在 iTunes 里还是找不到构建版本 (Xcode8 上传会出现的问题) 其实也不算问题 , 只是改了规矩 . 查看了一下邮件 , 发现提示我 相机的权限没加 , 又重新加了相机的权限 , 用手机测试能用之后再次提交 , 几分钟后 ,收到 iTunes Store 的邮件 发送成功.</p>
+<p>所以iOS10 用到的权限 如果不在plist文件中添加权限描述说明 100%会造成崩溃,所以构建的版本也不会显示在 iTunes Store , 请注意查收邮件</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/09/26/Xcode8-权限问题/" class="archive-article-date">
+  	<time datetime="2016-09-26T02:20:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-09-26</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xcode/">Xcode</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iOS-Runtime" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -537,7 +594,7 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a>
+    				<a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 10px;">Xcode</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a>
     			</div>
     	</section>
     
