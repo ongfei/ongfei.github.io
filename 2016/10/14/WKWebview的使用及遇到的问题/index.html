@@ -20,7 +20,7 @@ backForwardList">
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration NS_DESIGNATED_INITIALIZER;
 4、WKWebView的一些简单属性的介绍
 backForwardList">
-<meta property="og:updated_time" content="2016-10-14T09:00:51.000Z">
+<meta property="og:updated_time" content="2016-10-14T09:34:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WKWebview的使用及遇到的问题">
 <meta name="twitter:description" content="今天试了试WKWebView,试出来很多问题.记录如下
@@ -268,7 +268,10 @@ WKUserScript *userScript = [[WKUserScript alloc]initWithSource:@&quot;js代码&q
 [userContentController addScriptMessageHandler:[[WeakScriptMessageDelegate alloc] initWithDelegate:self] name:@&quot;closeMe&quot;];
 </code></pre><p>运行代码，self释放了，WeakScriptMessageDelegate却没有释放啊啊啊！<br>还需在self的dealloc里面 添加这样一句代码：</p>
 <pre><code>[[_webView configuration].userContentController removeScriptMessageHandlerForName:@&quot;closeMe&quot;];
-</code></pre><h3 id="关于Cookie"><a href="#关于Cookie" class="headerlink" title="关于Cookie"></a>关于Cookie</h3><p>同一个应用，不同UIWebView之间的Cookie是自动同步的。它们都是保存在NSHTTPCookieStorage中。 当UIWebView加载一个URL的时候，在加载完成时候，这个URL response中包含的cookie会自动以NSHttpCookie的形式保存到 NSHTTPCookieStorage中。同时，如果在http response中，对cookie进行更新或者删除的话，其结果也会直接反应到NSHTTPCookieStorage 存储的cookie数据中。</p>
+</code></pre><hr>
+<hr>
+<hr>
+<h3 id="坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答"><a href="#坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答" class="headerlink" title="坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答"></a>坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答</h3><h3 id="关于Cookie"><a href="#关于Cookie" class="headerlink" title="关于Cookie"></a>关于Cookie</h3><p>同一个应用，不同UIWebView之间的Cookie是自动同步的。它们都是保存在NSHTTPCookieStorage中。 当UIWebView加载一个URL的时候，在加载完成时候，这个URL response中包含的cookie会自动以NSHttpCookie的形式保存到 NSHTTPCookieStorage中。同时，如果在http response中，对cookie进行更新或者删除的话，其结果也会直接反应到NSHTTPCookieStorage 存储的cookie数据中。</p>
 <pre><code>//获取保存的cookie
 NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage]; 
 //设置
