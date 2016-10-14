@@ -20,7 +20,7 @@ backForwardList">
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration NS_DESIGNATED_INITIALIZER;
 4、WKWebView的一些简单属性的介绍
 backForwardList">
-<meta property="og:updated_time" content="2016-10-14T08:54:25.000Z">
+<meta property="og:updated_time" content="2016-10-14T09:00:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WKWebview的使用及遇到的问题">
 <meta name="twitter:description" content="今天试了试WKWebView,试出来很多问题.记录如下
@@ -177,28 +177,39 @@ allowsBackForwardNavigationGestures  是否允许侧滑返回上一页
 </code></pre><p>WKWebViewUIDelegate 代理方法</p>
 <pre><code>//当需要打开一个新窗口的时候的调用，如a标签的target=&apos;_blank&apos;，需要返回一个新的Webview
 - (nullable WKWebView )webView:(WKWebView )webView createWebViewWithConfiguration:(WKWebViewConfiguration )configuration forNavigationAction:(WKNavigationAction )navigationAction windowFeatures:(WKWindowFeatures )windowFeatures
+
 以下三个类似alert的代理，一定要调用completionHandler(),这个回调，告诉webview结果
+
 //webview上需要弹出alert的时候调用此方法，如果不实现此方法，则webview的alert是显示不出来,alert类似于只有确定按钮的UIAlertView
 - (void)webView:(WKWebView )webView runJavaScriptAlertPanelWithMessage:(NSString )message initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(void))completionHandler
+
 //webview上需要弹出confirm的时候调用此方法，如果不实现此方法，则webview的confirm是显示不出来,confirm类似于有确定按钮和取消按钮的UIAlertView
 - (void)webView:(WKWebView )webView runJavaScriptConfirmPanelWithMessage:(NSString )message initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(BOOL result))completionHandler
- webview上需要弹出prompt的时候调用此方法，如果不实现此方法，则webview的prompt是显示不出来,prompt类似于带一个textField的UIAlertView。defaultText相当于textField的placeholed
+
+// webview上需要弹出prompt的时候调用此方法，如果不实现此方法，则webview的prompt是显示不出来,prompt类似于带一个textField的UIAlertView。defaultText相当于textField的placeholed
 - (void)webView:(WKWebView )webView runJavaScriptTextInputPanelWithPrompt:(NSString )prompt defaultText:(nullable NSString )defaultText initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(NSString  __nullable result))completionHandler
+
 //window.close() 的时候调用
 - (void)webViewDidClose:(WKWebView *)webView
 </code></pre><p>WKWebViewNavigationDelegate代理方法</p>
 <pre><code>//决定是否允许发起这个请求
 - (void)webView:(WKWebView )webView decidePolicyForNavigationAction:(WKNavigationAction )navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+
 //在webview有响应之后，再次决定是否允许这个请求
 - (void)webView:(WKWebView )webView decidePolicyForNavigationResponse:(WKNavigationResponse )navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandle
+
 //webview开始加载的时候调用
 - (void)webView:(WKWebView )webView didStartProvisionalNavigation:(null_unspecified WKNavigation )navigation
+
 //webview内容已经加载结束，但是上面的某些资源比如图片加载之前调用
 - (void)webView:(WKWebView )webView didCommitNavigation:(null_unspecified WKNavigation )navigation
+
 //webview加载结束的时候调用
 - (void)webView:(WKWebView )webView didCommitNavigation:(null_unspecified WKNavigation )navigation
+
 //webview加载失败的时候调用
 - (void)webView:(WKWebView )webView didFailProvisionalNavigation:(null_unspecified WKNavigation )navigation withError:(NSError )error
+
 //webview在commit过程中失败的时候调用，例如在didCommitNavigation这个代理方法中调用webview的stopLoading方法
 - (void)webView:(WKWebView )webView didFailNavigation:(null_unspecified WKNavigation )navigation withError:(NSError )error
 </code></pre><p>WKScriptMessageHandler</p>
