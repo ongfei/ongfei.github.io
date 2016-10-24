@@ -285,6 +285,27 @@ NSMutableURLRequest *requset = [NSMutableURLRequest requestWithURL:[NSURL URLWit
 
 
 更多可以去查看stackoverflow上回答：http://stackoverflow.com/questions/26573137/can-i-set-the-cookies-to-be-used-by-a-wkwebview/26577303#26577303
+</code></pre><h5 id="以下方法来自网络"><a href="#以下方法来自网络" class="headerlink" title="以下方法来自网络"></a>以下方法来自网络</h5><pre><code>+ (NSString *)cookiesForURLString:(NSString *)str{
+NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:str]]; // 这里的HOST是你web服务器的域名地址
+// 比如你之前登录的网站地址是abc.com（当然前面要加http://，如果你服务器需要端口号也可以加上端口号），那么这里的HOST就是http://abc.com
+
+// 设置header，通过遍历cookies来一个一个的设置header
+for (NSHTTPCookie *cookie in cookies){
+
+    // cookiesWithResponseHeaderFields方法，需要为URL设置一个cookie为NSDictionary类型的header，注意NSDictionary里面的forKey需要是@&quot;Set-Cookie&quot;
+    NSArray *headeringCookie = [NSHTTPCookie cookiesWithResponseHeaderFields:
+                                [NSDictionary dictionaryWithObject:
+                                 [[NSString alloc] initWithFormat:@&quot;%@=%@&quot;,[cookie name],[cookie value]]
+                                                            forKey:@&quot;Set-Cookie&quot;]
+                                                                      forURL:[NSURL URLWithString:str]];
+
+    // 通过setCookies方法，完成设置，这样只要一访问URL为HOST的网页时，会自动附带上设置好的header
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:headeringCookie
+                                                       forURL:[NSURL URLWithString:str]
+                                              mainDocumentURL:nil];
+}
+return str;
+}    
 </code></pre>
       
     </div>
