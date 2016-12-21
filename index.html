@@ -1037,6 +1037,92 @@ objc_getAssociatedObject
 
 
   
+    <article id="post-程序加角标以及后台显示" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/11/21/程序加角标以及后台显示/">程序加角标以及后台显示</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、设置角标的代码：</p>
+<p>　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化</p>
+<p>　　  NSString *count = [responseObject[@”count”] description];</p>
+<p>if ([count isEqualToString:@”0”]) {</p>
+<p>self.tabBarItem.badgeValue = nil; //设置tabBar的角标</p>
+<p>[UIApplication sharedApplication].applicationIconBadgeNumber = 0;// 设置应用程序的角标</p>
+<p>}else</p>
+<p>{</p>
+<p>self.tabBarItem.badgeValue = count;</p>
+<p>[UIApplication sharedApplication].applicationIconBadgeNumber = status.intValue;</p>
+<p>}</p>
+<p>2、在给应用程序发送角标设置的时候，可能会报以下错误：</p>
+<p>　　“Attempting to badge the application icon but haven’t received permission from”</p>
+<p>　　这是因为一切都是iOS8捣的鬼。您如果把模拟器换成iOS7.1或者更早的，就不会有这个问题。而现在在iOS8中要实现badge、alert和sound等都需要用户同意才能，因为这些都算做Notification“通知”，为了防止有些应用动不动给用户发送“通知”骚扰用户，所以在iOS8时，要“通知”必须要用户同意才行。</p>
+<p>　　下面代码的这个“通知设置”，主要是定义“通知类型”。同时我哦们把所有的通知类型都囊括进来，这样，我们就不需要以后一个一个的去设置alert和sound了。</p>
+<p>　　这段代码是在AppDelegate.m的 didFinishLaunchingWithOptions中实现：</p>
+<p>　　float sysVersion=[[UIDevice currentDevice]systemVersion].floatValue;</p>
+<p>if (sysVersion&gt;=8.0) {</p>
+<p>　　UIUserNotificationType type=UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound;</p>
+<p>　　        UIUserNotificationSettings *setting=[UIUserNotificationSettings settingsForTypes:type categories:nil];</p>
+<p>　　[[UIApplication sharedApplication]registerUserNotificationSettings:setting];</p>
+<p>}</p>
+<p>3、当然说到角标，肯定会有一个关于后台运行的问题，以前我们程序的后台模式只有3种才允许后台长时间，例如保持网络连接、多媒体应用、 VOIP:网络电话（现在很多了，比如蓝牙之类的）</p>
+<p>　　（1 那现在是什么情况呢？比如说我们要获取角标的数据，通过定时器（代码如下），如果是进入后台运行状态可能会导致定时器暂停</p>
+<p>　　　　//定时获得未读数据　　</p>
+<p>　　    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(getUnreadCount) userInfo:nil repeats:YES];</p>
+<p>　　// !!主线程也会抽时间处理一下timer（不管主线程是否正在执行其他事件操作）——不加的话执行其他操作可能定时器会被忽略不执行</p>
+<p>　　 [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];</p>
+<p>　　（2 解决方法：</p>
+<p>　　 首先，我们还应该知道app的状态：  1.死亡状态：没有打开app  2.前台运行状态   3.后台暂停状态：停止一切动画、定时器、多媒体、联网操作，很难再作其他操作  4.后台运行状态。</p>
+<p>　　那么进入后台运行状态我们可以在在AppDelegate.m中调用applicationDidEnterBackground：</p>
+<p>　　/*</p>
+<p>　　* 程序进入后台的时候调用</p>
+<p>　　*/</p>
+<p>　　- (void)applicationDidEnterBackground:(UIApplication *)application {</p>
+<p>　　// 向操作系统申请后台运行的资格，能维持多久，是不确定的　　</p>
+<p>　　UIBackgroundTaskIdentifier task = [application beginBackgroundTaskWithExpirationHandler:^{</p>
+<p>　　　　// 当申请的后台运行时间已经结束（过期），就会调用这个block </p>
+<p>　　　　// 过期则需要结束任务</p>
+<p>　　　　[application endBackgroundTask:task];</p>
+<p>　　}];</p>
+<p>　　当然这种方法是暂时性的，过期的话我们就没办法了吗？不！同时我们还可以假装是音频软件：在Info.plst中设置后台模式：Required background modes == App plays audio or streams audio/video using AirPlay，然后搞一个0kb的MP3文件，没有声音 循环播放！</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/11/21/程序加角标以及后台显示/" class="archive-article-date">
+  	<time datetime="2015-11-21T09:42:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-11-21</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Hexo-搭建自己的博客" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
