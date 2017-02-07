@@ -4,30 +4,27 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>程序加角标以及后台显示 | ongfei | 一步一步往上爬</title>
+  <title>发布自己的代码到CocoaPods | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1、设置角标的代码：
-　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化
-　　  NSString *count = [responseObject[@”count”] description];
-if ([count isEqualToString:@”0”]) {
-self.tabBarItem.badge">
+  <meta name="description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
+如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
+如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
+####第一步">
 <meta property="og:type" content="article">
-<meta property="og:title" content="程序加角标以及后台显示">
-<meta property="og:url" content="http://yoursite.com/2015/11/21/程序加角标以及后台显示/index.html">
+<meta property="og:title" content="发布自己的代码到CocoaPods">
+<meta property="og:url" content="http://yoursite.com/2016/12/07/发布自己的代码到CocoaPods/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="1、设置角标的代码：
-　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化
-　　  NSString *count = [responseObject[@”count”] description];
-if ([count isEqualToString:@”0”]) {
-self.tabBarItem.badge">
-<meta property="og:updated_time" content="2017-02-07T06:16:41.000Z">
+<meta property="og:description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
+如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
+如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
+####第一步">
+<meta property="og:updated_time" content="2017-02-07T07:37:17.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="程序加角标以及后台显示">
-<meta name="twitter:description" content="1、设置角标的代码：
-　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化
-　　  NSString *count = [responseObject[@”count”] description];
-if ([count isEqualToString:@”0”]) {
-self.tabBarItem.badge">
+<meta name="twitter:title" content="发布自己的代码到CocoaPods">
+<meta name="twitter:description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
+如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
+如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
+####第一步">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -139,7 +136,7 @@ self.tabBarItem.badge">
 </nav>
 
       <div class="body-wrap">
-        <article id="post-程序加角标以及后台显示" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-发布自己的代码到CocoaPods" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -149,7 +146,7 @@ self.tabBarItem.badge">
         
   
     <h1 class="article-title" itemprop="name">
-      程序加角标以及后台显示
+      发布自己的代码到CocoaPods
     </h1>
   
 
@@ -157,57 +154,81 @@ self.tabBarItem.badge">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1、设置角标的代码：</p>
-<p>　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化</p>
-<p>　　  NSString *count = [responseObject[@”count”] description];</p>
-<p>if ([count isEqualToString:@”0”]) {</p>
-<p>self.tabBarItem.badgeValue = nil; //设置tabBar的角标</p>
-<p>[UIApplication sharedApplication].applicationIconBadgeNumber = 0;// 设置应用程序的角标</p>
-<p>}else</p>
-<p>{</p>
-<p>self.tabBarItem.badgeValue = count;</p>
-<p>[UIApplication sharedApplication].applicationIconBadgeNumber = status.intValue;</p>
-<p>}</p>
-<p>2、在给应用程序发送角标设置的时候，可能会报以下错误：</p>
-<p>　　“Attempting to badge the application icon but haven’t received permission from”</p>
-<p>　　这是因为一切都是iOS8捣的鬼。您如果把模拟器换成iOS7.1或者更早的，就不会有这个问题。而现在在iOS8中要实现badge、alert和sound等都需要用户同意才能，因为这些都算做Notification“通知”，为了防止有些应用动不动给用户发送“通知”骚扰用户，所以在iOS8时，要“通知”必须要用户同意才行。</p>
-<p>　　下面代码的这个“通知设置”，主要是定义“通知类型”。同时我哦们把所有的通知类型都囊括进来，这样，我们就不需要以后一个一个的去设置alert和sound了。</p>
-<p>　　这段代码是在AppDelegate.m的 didFinishLaunchingWithOptions中实现：</p>
-<p>　　float sysVersion=[[UIDevice currentDevice]systemVersion].floatValue;</p>
-<p>if (sysVersion&gt;=8.0) {</p>
-<p>　　UIUserNotificationType type=UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound;</p>
-<p>　　        UIUserNotificationSettings *setting=[UIUserNotificationSettings settingsForTypes:type categories:nil];</p>
-<p>　　[[UIApplication sharedApplication]registerUserNotificationSettings:setting];</p>
-<p>}</p>
-<p>3、当然说到角标，肯定会有一个关于后台运行的问题，以前我们程序的后台模式只有3种才允许后台长时间，例如保持网络连接、多媒体应用、 VOIP:网络电话（现在很多了，比如蓝牙之类的）</p>
-<p>　　（1 那现在是什么情况呢？比如说我们要获取角标的数据，通过定时器（代码如下），如果是进入后台运行状态可能会导致定时器暂停</p>
-<p>　　　　//定时获得未读数据　　</p>
-<p>　　    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(getUnreadCount) userInfo:nil repeats:YES];</p>
-<p>　　// !!主线程也会抽时间处理一下timer（不管主线程是否正在执行其他事件操作）——不加的话执行其他操作可能定时器会被忽略不执行</p>
-<p>　　 [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];</p>
-<p>　　（2 解决方法：</p>
-<p>　　 首先，我们还应该知道app的状态：  1.死亡状态：没有打开app  2.前台运行状态   3.后台暂停状态：停止一切动画、定时器、多媒体、联网操作，很难再作其他操作  4.后台运行状态。</p>
-<p>　　那么进入后台运行状态我们可以在在AppDelegate.m中调用applicationDidEnterBackground：</p>
-<p>　　/*</p>
-<p>　　* 程序进入后台的时候调用</p>
-<p>　　*/</p>
-<p>　　- (void)applicationDidEnterBackground:(UIApplication *)application {</p>
-<p>　　// 向操作系统申请后台运行的资格，能维持多久，是不确定的　　</p>
-<p>　　UIBackgroundTaskIdentifier task = [application beginBackgroundTaskWithExpirationHandler:^{</p>
-<p>　　　　// 当申请的后台运行时间已经结束（过期），就会调用这个block </p>
-<p>　　　　// 过期则需要结束任务</p>
-<p>　　　　[application endBackgroundTask:task];</p>
-<p>　　}];</p>
-<p>　　当然这种方法是暂时性的，过期的话我们就没办法了吗？不！同时我们还可以假装是音频软件：在Info.plst中设置后台模式：Required background modes == App plays audio or streams audio/video using AirPlay，然后搞一个0kb的MP3文件，没有声音 循环播放！</p>
+        <p>##如何发布自己的开源代码到CocoaPods<br>在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。</p>
+<p>如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？</p>
+<p>如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：<a href="http://blog.devtang.com/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></p>
+<p>####第一步 注册trunk</p>
+<p>在注册trunk之前，我们需要确认当前的CocoaPods版本是否足够新。trunk需要pod在0.33及以上版本，如果你不满足要求，打开Terminal使用ruby的gem命令更新pod:</p>
+<pre><code>sudo gem install cocoapods
+</code></pre><p>注册trunk：</p>
+<pre><code>pod trunk register 邮箱地址@ &quot;用户名&quot;
+</code></pre><p>用户名这里我是用的github上的用户名</p>
+<p>注册成功之后</p>
+<pre><code>pod trunk me 
+</code></pre><p>可以查询到你的个人信息:邮箱,姓名,注册时间,开源库,session</p>
+<p>添加其他维护者（如果你的pod是由多人维护的，你也可以添加其他维护者）</p>
+<pre><code>pod trunk add-owner 名字 邮件@
+</code></pre><p>####第二步 建立PodSpec文件并通过trunk推送给CocoaPods服务器</p>
+<p>通过下面命令可以创建一个PodSpec文件</p>
+<pre><code>pod spec create 文件名
+</code></pre><p>执行完该命令之后会在工程目录生成XPRACSignal.podspec文件，然后编辑这个文件！里面注释很多</p>
+<pre><code>Pod::Spec.new do |s|
+  s.name             = &quot;ongfei&quot;    #名称
+  s.version          = &quot;0.0.1&quot;             #版本号
+  s.summary          = &quot;Just Testing.&quot;     #简短介绍，下面是详细介绍
+  ##s.description      = &lt;&lt;-DESC
+                       Testing Private Podspec.
+
+                       * Markdown format.
+                       * Don&apos;t worry about the indent, we strip it!
+                       DESC
+  s.homepage          = &quot;https://github.com/ongfei/DfPodTest&quot;  #主页,这里要填写可以访问到的地址，不然验证不通过
+  # s.screenshots     = &quot;www.example.com/screenshots_1&quot;, &quot;www.example.com/screenshots_2&quot;           #截图
+  s.license          = &apos;MIT&apos;   #开源协议
+  s.author           = { &quot;ongfei&quot; =&gt; &quot;ong_fei@163.com&quot; }  #作者信息
+  s.source           = { :git =&gt; &quot;https://github.com/ongfei/DfPodTest.git&quot;, :tag =&gt; s.version.to_s }     #项目地址，这里不支持ssh的地址，验证不通过，只支持HTTP和HTTPS，最好使用HTTPS
+  # s.social_media_url = &apos;https://twitter.com/&lt;twitter_username&gt;&apos;                       #多媒体介绍地址
+
+  s.platform     = :ios, &apos;7.0&apos;            #支持的平台及版本
+  s.requires_arc = true                   #是否使用ARC，如果指定具体文件，则具体的问题使用ARC
+
+  s.source_files = &apos;ToolTest/*.{h,m}&apos;     #代码源文件地址，**/*表示Classes目录及其子目录下所有文件，如果有多个目录下则用逗号分开，如果需要在项目中分组显示，这里也要做相应的设置
+  ##s.resource_bundles = {
+    &apos;PodTestLibrary&apos; =&gt; [&apos;Pod/Assets/*.png&apos;]
+  }                                       #资源文件地址
+  s.frameworks = &apos;UIKit&apos;                  #所需的framework，多个用逗号隔开
+  s.dependency &apos;FMDB&apos;, &apos;~&gt; 2.5&apos;   #依赖关系，该项目所依赖的其他库，如果有多个需要填写多个s.dependency
+end
+</code></pre><p>编辑完podspec文件后，需要验证一下这个文件是否可用，验证需要执行一下命令</p>
+<pre><code>pod lib lint
+</code></pre><p>当出现     PodTestLibrary passed validation 的时候 说明 podspec可用 </p>
+<p>如果出现了错误可以看下这篇文章<a href="http://blog.csdn.net/blog_jihq/article/details/52614156" target="_blank" rel="external">pod创建问题</a></p>
+<p>####提交code到git仓库中，并打上tag版本号</p>
+<pre><code>git add -A
+git commit -m &quot;first commit&quot;
+git push origin master
+git tag &apos;1.0.0&apos; 
+git push --tags 
+</code></pre><p>####提交到CocoaPods trunk</p>
+<pre><code>pod trunk push podspec文件名
+</code></pre><p>如果没有错误 就会提示 successfully published<br>说明cocoapod库已接收</p>
+<p>这个时候要更新一下本地的依赖库</p>
+<pre><code>pod setup
+</code></pre><p>然后用pod search 查询一下吧</p>
 
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2015/11/21/程序加角标以及后台显示/" class="archive-article-date">
-  	<time datetime="2015-11-21T09:42:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-11-21</time>
+      <a href="/2016/12/07/发布自己的代码到CocoaPods/" class="archive-article-date">
+  	<time datetime="2016-12-07T06:19:55.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-07</time>
 </a>
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CocoaPods/">CocoaPods</a></li></ul>
+	</div>
+
       
 
       <div class="clearfix"></div>
@@ -218,18 +239,9 @@ self.tabBarItem.badge">
   
 <nav id="article-nav">
   
-    <a href="/2016/04/09/iOS-Runtime/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          iOS Runtime
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/11/06/谓词-NSPredicate-的使用/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">谓词(NSPredicate)的使用</div>
+    <a href="/2016/10/10/iOS10-JPush/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">iOS10 JPush</div>
       <i class="icon-circle-right"></i>
     </a>
   
