@@ -128,6 +128,670 @@
       <div class="body-wrap">
         
   
+    <article id="post-iOS10-JPush" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/10/iOS10-JPush/">iOS10 JPush</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录"><a href="#苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录" class="headerlink" title="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录."></a>苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.</h5><h5 id="先来看下改动的地方"><a href="#先来看下改动的地方" class="headerlink" title="先来看下改动的地方"></a>先来看下改动的地方</h5><p><img src="http://p1.bpimg.com/4851/6f841220056fde40.png" alt=""><br>我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.</p>
+<hr>
+<h4 id="下面直接堆代码"><a href="#下面直接堆代码" class="headerlink" title="下面直接堆代码"></a>下面直接堆代码</h4><h5 id="首先头文件"><a href="#首先头文件" class="headerlink" title="首先头文件"></a>首先头文件</h5><figure class="highlight plain"><figcaption><span>极光推送  </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#import &quot;JPUSHService.h&quot;  </div><div class="line">#import &lt;AdSupport/AdSupport.h&gt;//用不到就不需要导入  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">#import &lt;UserNotifications/UserNotifications.h&gt; // 这里是iOS10需要用到的框架  </div><div class="line">#endif</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;  </div><div class="line">      </div><div class="line">    // 注册apns通知  </div><div class="line">    if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 10.0) // iOS10  </div><div class="line">    &#123;  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">        JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];  </div><div class="line">        entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge | UNAuthorizationOptionSound;  </div><div class="line">        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];  </div><div class="line">#endif  </div><div class="line">    &#125;  </div><div class="line">    else if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 8.0) // iOS8, iOS9  </div><div class="line">    &#123;  </div><div class="line">        //可以添加自定义categories  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    else // iOS7  </div><div class="line">    &#123;  </div><div class="line">        //categories 必须为nil  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    /* </div><div class="line">     *  launchingOption 启动参数. </div><div class="line">     *  appKey 一个JPush 应用必须的,唯一的标识. </div><div class="line">     *  channel 发布渠道. 可选. </div><div class="line">     *  isProduction 是否生产环境. 如果为开发状态,设置为 NO; 如果为生产状态,应改为 YES. </div><div class="line">     *  advertisingIdentifier 广告标识符（IDFA） 如果不需要使用IDFA，传nil. </div><div class="line">     * 此接口必须在 App 启动时调用, 否则 JPush SDK 将无法正常工作. </div><div class="line">     */  </div><div class="line">    // 广告标识符  </div><div class="line">    NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];  </div><div class="line">      </div><div class="line">    // 如不需要使用IDFA，advertisingIdentifier 可为nil  </div><div class="line">    // 注册极光推送  </div><div class="line">    [JPUSHService setupWithOption:launchOptions appKey:JPUSHAPPKEY channel:channel apsForProduction:isProduction advertisingIdentifier:advertisingId];  </div><div class="line">      </div><div class="line">    //2.1.9版本新增获取registration id block接口。  </div><div class="line">    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) &#123;  </div><div class="line">        if(resCode == 0)  </div><div class="line">        &#123;  </div><div class="line">            // iOS10获取registrationID放到这里了, 可以存到缓存里, 用来标识用户单独发送推送  </div><div class="line">            NSLog(@&quot;registrationID获取成功：%@&quot;,registrationID);  </div><div class="line">            [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@&quot;registrationID&quot;];  </div><div class="line">            [[NSUserDefaults standardUserDefaults] synchronize];  </div><div class="line">        &#125;  </div><div class="line">        else  </div><div class="line">        &#123;  </div><div class="line">            NSLog(@&quot;registrationID获取失败，code：%d&quot;,resCode);  </div><div class="line">        &#125;  </div><div class="line">    &#125;];  </div><div class="line">      </div><div class="line">    return YES;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="对角标的一些处理"><a href="#对角标的一些处理" class="headerlink" title="对角标的一些处理"></a>对角标的一些处理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)applicationDidEnterBackground:(UIApplication *)application &#123;  </div><div class="line">    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">- (void)applicationWillEnterForeground:(UIApplication *)application &#123;  </div><div class="line">    [application setApplicationIconBadgeNumber:0];  </div><div class="line">    [application cancelAllLocalNotifications];  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#pragma mark - 注册推送回调获取 DeviceToken  </div><div class="line">#pragma mark -- 成功  </div><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken  </div><div class="line">&#123;  </div><div class="line">    // 注册成功  </div><div class="line">    // 极光: Required - 注册 DeviceToken  </div><div class="line">    [JPUSHService registerDeviceToken:deviceToken];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">#pragma mark -- 失败  </div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error  </div><div class="line">&#123;  </div><div class="line">    // 注册失败  </div><div class="line">    NSLog(@&quot;did Fail To Register For Remote Notifications With Error: %@&quot;, error);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了"><a href="#这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了" class="headerlink" title="这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了"></a>这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo &#123;</div><div class="line">    </div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    [application setApplicationIconBadgeNumber:[userInfo[@&quot;badge&quot;] integerValue]];</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:  (NSDictionary *)userInfo fetchCompletionHandler:(void (^)   (UIBackgroundFetchResult))completionHandler &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;this is iOS7 Remote Notification&quot;);</div><div class="line">    </div><div class="line">    // Required</div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    completionHandler(UIBackgroundFetchResultNewData);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#pragma mark - iOS10: 收到推送消息调用(iOS10是通过Delegate实现的回调)  </div><div class="line">#pragma mark- JPUSHRegisterDelegate  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">// 当程序在前台时, 收到推送弹出的通知  </div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = notification.request.content.userInfo; if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    completionHandler(UNNotificationPresentationOptionAlert); //                    Badge Sound Alert</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = response.notification.request.content.userInfo; if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    </div><div class="line">    completionHandler();</div><div class="line">&#125;</div><div class="line">#endif</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/10/iOS10-JPush/" class="archive-article-date">
+  	<time datetime="2016-10-10T07:56:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-10</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JPush/">JPush</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-Xcode8-权限问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/26/Xcode8-权限问题/">Xcode8 权限问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="权限配置-info-plist-文件"><a href="#权限配置-info-plist-文件" class="headerlink" title="权限配置 info.plist 文件"></a>权限配置 info.plist 文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">麦克风权限：Privacy - Microphone Usage Description 是否允许此App使用你的麦克风？</div><div class="line">相机权限： Privacy - Camera Usage Description 是否允许此App使用你的相机？</div><div class="line">相册权限： Privacy - Photo Library Usage Description 是否允许此App访问你的媒体资料库？</div><div class="line">通讯录权限： Privacy - Contacts Usage Description 是否允许此App访问你的通讯录？</div><div class="line">蓝牙权限：Privacy - Bluetooth Peripheral Usage Description 是否许允此App使用蓝牙？</div><div class="line">语音转文字权限：Privacy - Speech Recognition Usage Description 是否允许此App使用语音识别？</div><div class="line">日历权限：Privacy - Calendars Usage Description 是否允许此App使用日历？</div><div class="line">定位权限：Privacy - Location When In Use Usage Description 我们需要通过您的地理位置信息获取您周边的相关数据</div><div class="line">定位权限: Privacy - Location Always Usage Description 我们需要通过您的地理位置信息获取您周边的相关数据</div></pre></td></tr></table></figure>
+<h4 id="后记"><a href="#后记" class="headerlink" title="后记:"></a>后记:</h4><h5 id="date-2016-10-09"><a href="#date-2016-10-09" class="headerlink" title="date: 2016-10-09"></a>date: 2016-10-09</h5><p>今天上线 , 传 Appstore 成功之后 , 等了半个小时 , 在 iTunes 里还是找不到构建版本 (Xcode8 上传会出现的问题) 其实也不算问题 , 只是改了规矩 . 查看了一下邮件 , 发现提示我 相机的权限没加 , 又重新加了相机的权限 , 用手机测试能用之后再次提交 , 几分钟后 ,收到 iTunes Store 的邮件 发送成功.</p>
+<p>所以iOS10 用到的权限 如果不在plist文件中添加权限描述说明 100%会造成崩溃,所以构建的版本也不会显示在 iTunes Store , 请注意查收邮件</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/09/26/Xcode8-权限问题/" class="archive-article-date">
+  	<time datetime="2016-09-26T02:20:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-09-26</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xcode/">Xcode</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-利用Javascript去操作UIWebView的内容" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/21/利用Javascript去操作UIWebView的内容/">利用Javascript去操作UIWebView的内容</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="利用Javascript去操作UIWebView的内容"><a href="#利用Javascript去操作UIWebView的内容" class="headerlink" title="利用Javascript去操作UIWebView的内容"></a>利用Javascript去操作UIWebView的内容</h3><p><a href="http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/" target="_blank" rel="external">http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/</a></p>
+<p>博客还是不错的 有的可以借鉴下</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/10/21/利用Javascript去操作UIWebView的内容/" class="archive-article-date">
+  	<time datetime="2015-10-21T04:31:14.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-10-21</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xcode/">xcode</a></li></ul>
+	</div>
+
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-WKWebview的使用及遇到的问题" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/14/WKWebview的使用及遇到的问题/">WKWebview的使用及遇到的问题</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天试了试WKWebView,试出来很多问题.记录如下</p>
+<p>初始化方法如下:</p>
+<pre><code>- (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration NS_DESIGNATED_INITIALIZER;
+</code></pre><p>4、WKWebView的一些简单属性的介绍</p>
+<pre><code>backForwardList            浏览历史
+title                      网页标题             支持KVO
+URL                        正在显示的URL        支持KVO
+loading                    是否正在加载          支持KVO
+estimatedProgress          加载进度             支持KVO
+canGoBack  canGoForward    能否后退 前进         支持KVO
+reload                     重新加载
+stopLoading                停止加载
+allowsBackForwardNavigationGestures  是否允许侧滑返回上一页
+</code></pre><p>5、WKWebView的加载方法跟UIWebView基本一样</p>
+<pre><code>- loadRequest:
+- loadHTMLString:
+- loadData:
+</code></pre><p>WKWebViewUIDelegate 代理方法</p>
+<pre><code>//当需要打开一个新窗口的时候的调用，如a标签的target=&apos;_blank&apos;，需要返回一个新的Webview
+- (nullable WKWebView )webView:(WKWebView )webView createWebViewWithConfiguration:(WKWebViewConfiguration )configuration forNavigationAction:(WKNavigationAction )navigationAction windowFeatures:(WKWindowFeatures )windowFeatures
+
+以下三个类似alert的代理，一定要调用completionHandler(),这个回调，告诉webview结果
+
+//webview上需要弹出alert的时候调用此方法，如果不实现此方法，则webview的alert是显示不出来,alert类似于只有确定按钮的UIAlertView
+- (void)webView:(WKWebView )webView runJavaScriptAlertPanelWithMessage:(NSString )message initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(void))completionHandler
+
+//webview上需要弹出confirm的时候调用此方法，如果不实现此方法，则webview的confirm是显示不出来,confirm类似于有确定按钮和取消按钮的UIAlertView
+- (void)webView:(WKWebView )webView runJavaScriptConfirmPanelWithMessage:(NSString )message initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(BOOL result))completionHandler
+
+// webview上需要弹出prompt的时候调用此方法，如果不实现此方法，则webview的prompt是显示不出来,prompt类似于带一个textField的UIAlertView。defaultText相当于textField的placeholed
+- (void)webView:(WKWebView )webView runJavaScriptTextInputPanelWithPrompt:(NSString )prompt defaultText:(nullable NSString )defaultText initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(NSString  __nullable result))completionHandler
+
+//window.close() 的时候调用
+- (void)webViewDidClose:(WKWebView *)webView
+</code></pre><p>WKWebViewNavigationDelegate代理方法</p>
+<pre><code>//决定是否允许发起这个请求
+- (void)webView:(WKWebView )webView decidePolicyForNavigationAction:(WKNavigationAction )navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
+
+//在webview有响应之后，再次决定是否允许这个请求
+- (void)webView:(WKWebView )webView decidePolicyForNavigationResponse:(WKNavigationResponse )navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandle
+
+//webview开始加载的时候调用
+- (void)webView:(WKWebView )webView didStartProvisionalNavigation:(null_unspecified WKNavigation )navigation
+
+//webview内容已经加载结束，但是上面的某些资源比如图片加载之前调用
+- (void)webView:(WKWebView )webView didCommitNavigation:(null_unspecified WKNavigation )navigation
+
+//webview加载结束的时候调用
+- (void)webView:(WKWebView )webView didCommitNavigation:(null_unspecified WKNavigation )navigation
+
+//webview加载失败的时候调用
+- (void)webView:(WKWebView )webView didFailProvisionalNavigation:(null_unspecified WKNavigation )navigation withError:(NSError )error
+
+//webview在commit过程中失败的时候调用，例如在didCommitNavigation这个代理方法中调用webview的stopLoading方法
+- (void)webView:(WKWebView )webView didFailNavigation:(null_unspecified WKNavigation )navigation withError:(NSError )error
+</code></pre><p>WKScriptMessageHandler</p>
+<pre><code>//收到JavaScript回调的时候调用
+- (void)userContentController:(WKUserContentController )userContentController didReceiveScriptMessage:(WKScriptMessage )message
+</code></pre><h3 id="WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。"><a href="#WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。" class="headerlink" title="WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。"></a>WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。</h3><pre><code>WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc]init];
+
+WKUserScript *userScript = [[WKUserScript alloc]initWithSource:@&quot;js代码&quot; injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO];
+
+[configuration.userContentController addUserScript:userScript];
+</code></pre><h5 id="OC执行JS代码：调用JS代码"><a href="#OC执行JS代码：调用JS代码" class="headerlink" title="OC执行JS代码：调用JS代码"></a>OC执行JS代码：调用JS代码</h5><pre><code>- (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(id, NSError *))completionHandler;
+//completionHandler 拥有两个参数，一个是返回错误，一个可以返回执行脚本后的返回值
+</code></pre><h5 id="JS调用App注册过的方法"><a href="#JS调用App注册过的方法" class="headerlink" title="JS调用App注册过的方法"></a>JS调用App注册过的方法</h5><p>再WKWebView里面注册供JS调用的方法，是通过WKUserContentController类下面的方法：</p>
+<pre><code>- (void)addScriptMessageHandler:(id &lt;WKScriptMessageHandler&gt;)scriptMessageHandler name:(NSString *)name;
+</code></pre><p>scriptMessageHandler是代理回调，JS调用name方法后，OC会调用scriptMessageHandler指定的对象。</p>
+<p>JS在调用OC注册方法的时候要用下面的方式：</p>
+<pre><code>window.webkit.messageHandlers.&lt;name&gt;.postMessage(&lt;messageBody&gt;)
+</code></pre><p>注意，name(方法名)是放在中间的，messageBody只能是一个对象，如果要传多个值，需要封装成数组，或者字典。整个示例如下：</p>
+<p>//OC注册供JS调用的方法</p>
+<pre><code>[[_webView configuration].userContentController addScriptMessageHandler:self name:@&quot;closeMe&quot;];
+</code></pre><p>//OC在JS调用方法做的处理</p>
+<pre><code>- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
+{
+  NSLog(@&quot;JS 调用了 %@ 方法，传回参数 %@&quot;,message.name,message.body);
+}
+</code></pre><p>//JS调用</p>
+<pre><code>window.webkit.messageHandlers.closeMe.postMessage(null);
+</code></pre><p>如果你在self的dealloc打个断点，会发现self没有释放！这显然是不行的！谷歌后看到一种解决方法，如下：</p>
+<pre><code>@interface WeakScriptMessageDelegate : NSObject&lt;WKScriptMessageHandler&gt;
+
+@property (nonatomic, weak) id&lt;WKScriptMessageHandler&gt; scriptDelegate;
+
+- (instancetype)initWithDelegate:(id&lt;WKScriptMessageHandler&gt;)scriptDelegate;
+
+@end
+
+@implementation     WeakScriptMessageDelegate
+
+- (instancetype)initWithDelegate:(id&lt;WKScriptMessageHandler&gt;)scriptDelegate
+{
+  self = [super init];
+  if (self) {
+     _scriptDelegate = scriptDelegate;
+    }
+   return self;
+}
+
+- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
+{
+   [self.scriptDelegate    userContentController:userContentController didReceiveScriptMessage:message];
+}
+
+@end
+</code></pre><p>思路是另外创建一个代理对象，然后通过代理对象回调指定的self，</p>
+<pre><code>WKUserContentController *userContentController = [[WKUserContentController alloc] init];    
+[userContentController addScriptMessageHandler:[[WeakScriptMessageDelegate alloc] initWithDelegate:self] name:@&quot;closeMe&quot;];
+</code></pre><p>运行代码，self释放了，WeakScriptMessageDelegate却没有释放啊啊啊！<br>还需在self的dealloc里面 添加这样一句代码：</p>
+<pre><code>[[_webView configuration].userContentController removeScriptMessageHandlerForName:@&quot;closeMe&quot;];
+</code></pre><hr>
+<hr>
+<hr>
+<h3 id="坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答"><a href="#坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答" class="headerlink" title="坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答"></a>坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答</h3><h3 id="关于Cookie"><a href="#关于Cookie" class="headerlink" title="关于Cookie"></a>关于Cookie</h3><p>同一个应用，不同UIWebView之间的Cookie是自动同步的。它们都是保存在NSHTTPCookieStorage中。 当UIWebView加载一个URL的时候，在加载完成时候，这个URL response中包含的cookie会自动以NSHttpCookie的形式保存到 NSHTTPCookieStorage中。同时，如果在http response中，对cookie进行更新或者删除的话，其结果也会直接反应到NSHTTPCookieStorage 存储的cookie数据中。</p>
+<pre><code>//获取保存的cookie
+NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage]; 
+//设置
+[storage setCookies:cookies forURL:url mainDocumentURL:nil] 
+//删除
+[storage deleteCookie:cookie]
+</code></pre><h3 id="WKWebView-cookie同步"><a href="#WKWebView-cookie同步" class="headerlink" title="WKWebView cookie同步"></a>WKWebView cookie同步</h3><p>WKWebView的cookie并不会再加载url后自动保存到NSHTTPCookieStorage中。</p>
+<p>原因是因为现在WKWebView会忽视默认的网络存储， NSURLCache, NSHTTPCookieStorage, NSCredentialStorage。 目前是这样的，WKWebView有自己的进程，同样也有自己的存储空间用来存储cookie和cache， 其他的网络类如NSURLConnection是无法访问到的。 同时WKWebView发起的资源请求也是不经过NSURLProtocol的，导致无法自定义请求。</p>
+<p>同一个应用，不同WKWebView之间的cookie同步，可以通过使用同一个WKProcessPool实现cookie的同步。</p>
+<pre><code>1.创建ProcessPool的单例,来管理 WKProcessPool.
+2. WKWebViewConfiguration *cofi = [[WKWebViewConfiguration alloc] init];
+cofi.processPool = [ProcessPool share];
+</code></pre><h4 id="获取Cookie"><a href="#获取Cookie" class="headerlink" title="获取Cookie:"></a>获取Cookie:</h4><pre><code>NSMutableString *cookieStr = [NSMutableString string];
+
+for (NSHTTPCookie *cookie in NSHTTPCookieStorage.sharedHTTPCookieStorage.cookies) {
+    [cookieStr appendString:[NSString stringWithFormat:@&quot;%@=%@&quot;,cookie.name,cookie.value]];
+}
+NSMutableURLRequest *requset = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@&quot;www.xxxx.com&quot;]];
+[requset addValue:cookieStr forHTTPHeaderField:@&quot;Cookie&quot;];
+
+[self.webV loadRequest:requset];
+
+
+更多可以去查看stackoverflow上回答：http://stackoverflow.com/questions/26573137/can-i-set-the-cookies-to-be-used-by-a-wkwebview/26577303#26577303
+</code></pre><h5 id="以下方法来自网络"><a href="#以下方法来自网络" class="headerlink" title="以下方法来自网络"></a>以下方法来自网络</h5><pre><code>+ (NSString *)cookiesForURLString:(NSString *)str{
+NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:str]]; // 这里的HOST是你web服务器的域名地址
+// 比如你之前登录的网站地址是abc.com（当然前面要加http://，如果你服务器需要端口号也可以加上端口号），那么这里的HOST就是http://abc.com
+
+// 设置header，通过遍历cookies来一个一个的设置header
+for (NSHTTPCookie *cookie in cookies){
+
+    // cookiesWithResponseHeaderFields方法，需要为URL设置一个cookie为NSDictionary类型的header，注意NSDictionary里面的forKey需要是@&quot;Set-Cookie&quot;
+    NSArray *headeringCookie = [NSHTTPCookie cookiesWithResponseHeaderFields:
+                                [NSDictionary dictionaryWithObject:
+                                 [[NSString alloc] initWithFormat:@&quot;%@=%@&quot;,[cookie name],[cookie value]]
+                                                            forKey:@&quot;Set-Cookie&quot;]
+                                                                      forURL:[NSURL URLWithString:str]];
+
+    // 通过setCookies方法，完成设置，这样只要一访问URL为HOST的网页时，会自动附带上设置好的header
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:headeringCookie
+                                                       forURL:[NSURL URLWithString:str]
+                                              mainDocumentURL:nil];
+}
+return str;
+}    
+</code></pre>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/10/14/WKWebview的使用及遇到的问题/" class="archive-article-date">
+  	<time datetime="2015-10-14T07:46:10.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-10-14</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-IOS中webview捕捉js中的alert 并修改标题和按钮" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/02/IOS中webview捕捉js中的alert 并修改标题和按钮/">IOS中webview捕捉js中的alert 并修改标题和按钮</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="IOS中webview捕捉js中的alert-并修改标题和按钮"><a href="#IOS中webview捕捉js中的alert-并修改标题和按钮" class="headerlink" title="IOS中webview捕捉js中的alert 并修改标题和按钮"></a>IOS中webview捕捉js中的alert 并修改标题和按钮</h3><pre><code>@interface UIWebView (JavaScriptAlert)   
+
+- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame;  
+
+@end  
+
+@implementation UIWebView (JavaScriptAlert)  
+
+- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame {  
+
+
+    UIAlertView* customAlert = [[UIAlertView alloc] initWithTitle:@&quot;提示信息&quot; message:message delegate:nil cancelButtonTitle:@&quot;确定&quot; otherButtonTitles:nil];  
+
+    [customAlert show];  
+
+    [customAlert autorelease];  
+
+}  
+@end
+</code></pre><p>把此方法直接放到webview.m文件中即可</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/10/02/IOS中webview捕捉js中的alert 并修改标题和按钮/" class="archive-article-date">
+  	<time datetime="2015-10-02T09:02:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-10-02</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xcode/">Xcode</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-iOS-Runtime" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/09/iOS-Runtime/">iOS Runtime</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><p>Runtime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。<br>也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。</p>
+<h4 id="面向对象："><a href="#面向对象：" class="headerlink" title="面向对象："></a>面向对象：</h4><p>Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。<br>Class *class = [[Class alloc] init];<br>alloc 方法会为对象分配一块内存空间，空间的大小为 isa_t（8 字节）的大小加上所有成员变量所需的空间，再进行一次内存对齐。分配完空间后会初始化 isa_t isa_t 是一个 union 类型的结构体（或者称之为联合体），它的结构是在 Runtime 里被定义的。</p>
+<pre><code>union isa_t {  
+isa_t() { }
+isa_t(uintptr_t value) :                     bits(value) { }
+
+Class cls;
+uintptr_t bits;
+
+struct {
+   uintptr_t indexed           : 1;
+   uintptr_t has_assoc         : 1;
+   uintptr_t has_cxx_dtor      : 1;
+   uintptr_t shiftcls          : 33;
+   uintptr_t magic             : 6;
+   uintptr_t weakly_referenced : 1;
+   uintptr_t deallocating      : 1;
+   uintptr_t has_sidetable_rc  : 1;
+   uintptr_t extra_rc          : 19;
+ };
+};
+</code></pre><p>init 方法就直接返回了初始化好的对象，class 指针指向这个初始化好的对象。</p>
+<p>也就是在 Runtime 的协助之下，一个对象完成了创建。<br>你可能想知道，这个对象只存放了一个 isa_t 结构体和成员变量，对象的方法在哪里？</p>
+<p>在编译的时候，类在内存中的位置就已经确定，而在 main 方法之前，Runtime 将可执行文件中和动态库所有的符号（Class，Protocol，Selector，IMP，…）加载到内存中，由 Runtime 管理，这里也包括了也是一个对象的类。</p>
+<p>类对象里储存着一个 isa_t 的结构体，super_class 指针，cache_t 结构体，class_data_bits_t 指针。</p>
+<pre><code>struct objc_class : objc_object {
+    isa_t isa;
+    Class superclass;
+    cache_t cache;            
+    class_data_bits_t bits;    
+｝
+</code></pre><p>class_data_bits_t 指向类对象的数据区域，数据区域存放着这个类的实例方法链表。而类方法存在元类对象的数据区域。也就是有对象，类对象，元类对象三个概念，对象是在运行时动态创建的，可以有无数个，类对象和元类对象在 main 方法之前创建的，分别只会有一个。</p>
+<h4 id="消息分发："><a href="#消息分发：" class="headerlink" title="消息分发："></a>消息分发：</h4><p>在 Objective-C 中的“方法调用”其实应该叫做消息传递，[object message] 会被编译器翻译为 objc_msgSend(object, @selector(message))，这是一个 C 方法，首先看它的两个参数，第一个是 object ，既方法调用者，第二个参数称为选择子 SEL，Objective-C 为我们维护了一个巨大的选择子表，在使用 @selector() 时会从这个选择子表中根据选择子的名字查找对应的 SEL。如果没有找到，则会生成一个 SEL 并添加到表中，在编译期间会扫描全部的头文件和实现文件将其中的方法以及使用 @selector() 生成的选择子加入到选择子表中。</p>
+<p>通过第一个参数 object，可以找到 object 对象的 isa_t 结构体，从上文中能看 isa_t 结构体的结构，在 isa_t 结构体中，shiftcls 存放的是一个 33 位的地址，用于指向 object 对象的类对象，而类对象里有一个 cache_t 结构体，来看一下 cache_t 的具体代码，</p>
+<pre><code>struct cache_t {
+    struct bucket_t *_buckets;
+    mask_t _mask;
+    mask_t _occupied;
+｝
+</code></pre><p>_mask：分配用来缓存 bucket 的总数。<br>_occupied：表明目前实际占用的缓存 bucket 的个数。<br>_buckets：一个散列表，用来方法缓存，bucket_t 类型，包含 key 以及方法实现 IMP。</p>
+<pre><code>struct bucket_t {
+private:
+ cache_key_t _key;
+  IMP _imp;
+｝
+</code></pre><p>objc_msgSend() 方法会先从缓存表里，查找是否有该 SEL 对应的 IMP，有的话算命中缓存，直接通过函数指针 IMP ，找到方法的具体实现函数，执行。<br>当然缓存表里可能并不会命中，则此时会根据类对象的 class_data_bits_t 指针找到数据区域，数据区域里用链表存放着类的实例方法，实例方法也是一个结构体，其结构为：</p>
+<pre><code>struct method_t {  
+ SEL name;
+ const char *types;
+ IMP imp;
+};
+</code></pre><p>编译器将每个方法的返回值和参数类型编码为一个字符串，types 指向的就是这样一个字符串，objc_msgSend() 会在类对象的方法链表里按链表顺序去匹配 SEL，匹配成功则停止，并将此方法加入到类对象的 _buckets 里缓存起来。如果没找到则会通过类对象的 superclass 指针找到其父类，去父类的方法列表里寻找（也会从父类的方法缓存列表开始）。</p>
+<p>如果继续没有找到会一直向父类寻找，直到遇见 NSObject，NSObject 的 superclass 指向 nil。也就意味着寻找结束，并没有找到实现方法。（如果这个过程找到了，也同样会在 object 的类对象的 _buckets 里缓存起来）。</p>
+<p>选择子在当前类和父类中都没有找到实现，就进入了方法决议（method resolve），首先判断当前 object 的类对象是否实现了 resolveInstanceMethod: 方法，如果实现的话，会调用 resolveInstanceMethod：方法，这个时候我们可以在 resolveInstanceMethod：方法里动态的添加该 SEL 对应的方法（也可以去做点别的，比如写入日志）。之后会重新执行查找方法实现的流程，如果依旧没找到方法，或者没有实现 resolveInstanceMethod: 方法，Runtime 还有另一套机制，消息转发。</p>
+<h4 id="消息转发："><a href="#消息转发：" class="headerlink" title="消息转发："></a>消息转发：</h4><p>消息转发分为以下几步：<br>1.调用 forwardingTargetForSelector: 方法，尝试找到一个能响应该消息的对象。如果获取到，则直接转发给它。如果返回了 nil，继续下面的动作。<br>2.调用 methodSignatureForSelector: 方法，尝试获得一个方法签名。如果获取不到，则直接调用 doesNotRecognizeSelector 抛出异常。<br>3.调用 forwardInvocation: 方法，将第 3 步获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了。</p>
+<p>以上三个方法都可以通过在 object 的类对象里实现， forwardingTargetForSelector: 可以通过对参数 SEL 的判断，返回一个可以响应该消息的对象。这样则会重新从该对象开始执行查找方法实现的流程，找到了也同样会在 object 的类对象的 _buckets 里缓存起来。而 2，3 方法则一般是配套使用，实现 methodSignatureForSelector: 方法根据参数 SEL ，做相应处理，返回 NSMethodSignature (方法签名) 对象，NSMethodSignature 对象会被包装成 NSInvocation 对象，forwardInvocation: 方法里就可以对 NSInvocation 进行处理了。</p>
+<p>上面是讲的是实例方法，类方法没什么区别，类方法储存在元类对象的数据区域里，通过类对象的 isa_t 找到元类对象，执行查找方法实现的流程，元类对象的 superclass 最终也会指向 NSObject。没找到的话，也会有方法决议以及消息转发。</p>
+<h3 id="runtime-可以做什么："><a href="#runtime-可以做什么：" class="headerlink" title="runtime 可以做什么："></a>runtime 可以做什么：</h3><p>实现多继承：从 forwardingTargetForSelector: 方法就能知道，一个类可以做到继承多个类的效果，只需要在这一步将消息转发给正确的类对象就可以模拟多继承的效果。</p>
+<h4 id="交换两个方法的实现："><a href="#交换两个方法的实现：" class="headerlink" title="交换两个方法的实现："></a>交换两个方法的实现：</h4><pre><code>Method m1 = class_getInstanceMethod([M1 class], @selector(hello1));
+Method m2 = class_getInstanceMethod([M2 class], @selector(hello2));
+method_exchangeImplementations(m2, m1);
+</code></pre><h4 id="关联对象："><a href="#关联对象：" class="headerlink" title="关联对象："></a>关联对象：</h4><p>通过下面两个方法，可以给 category 实现添加成员变量的效果。</p>
+<pre><code>objc_setAssociatedObject
+objc_getAssociatedObject
+</code></pre><h4 id="动态添加类和方法："><a href="#动态添加类和方法：" class="headerlink" title="动态添加类和方法："></a>动态添加类和方法：</h4><p>objc_allocateClassPair 函数与 objc_registerClassPair 函数可以完成一个新类的添加，class_addMethod 给类添加方法，class_addIvar 添加成员变量，objc_registerClassPair 来注册类，其中成员变量的添加必须在类注册之前，类注册后就可以创建该类的对象了，而再添加成员变量就会破坏创建的对象的内存结构。</p>
+<h4 id="将-json-转换为-model："><a href="#将-json-转换为-model：" class="headerlink" title="将 json 转换为 model："></a>将 json 转换为 model：</h4><p>用到了 Runtime 获取某一个类的全部属性的名字，以及 Runtime 获取属性的类型。</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/04/09/iOS-Runtime/" class="archive-article-date">
+  	<time datetime="2015-04-09T07:43:22.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-04-09</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
+    <article id="post-程序加角标以及后台显示" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/11/21/程序加角标以及后台显示/">程序加角标以及后台显示</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1、设置角标的代码：</p>
+<p>　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化</p>
+<p>　　  NSString *count = [responseObject[@”count”] description];</p>
+<p>if ([count isEqualToString:@”0”]) {</p>
+<p>self.tabBarItem.badgeValue = nil; //设置tabBar的角标</p>
+<p>[UIApplication sharedApplication].applicationIconBadgeNumber = 0;// 设置应用程序的角标</p>
+<p>}else</p>
+<p>{</p>
+<p>self.tabBarItem.badgeValue = count;</p>
+<p>[UIApplication sharedApplication].applicationIconBadgeNumber = status.intValue;</p>
+<p>}</p>
+<p>2、在给应用程序发送角标设置的时候，可能会报以下错误：</p>
+<p>　　“Attempting to badge the application icon but haven’t received permission from”</p>
+<p>　　这是因为一切都是iOS8捣的鬼。您如果把模拟器换成iOS7.1或者更早的，就不会有这个问题。而现在在iOS8中要实现badge、alert和sound等都需要用户同意才能，因为这些都算做Notification“通知”，为了防止有些应用动不动给用户发送“通知”骚扰用户，所以在iOS8时，要“通知”必须要用户同意才行。</p>
+<p>　　下面代码的这个“通知设置”，主要是定义“通知类型”。同时我哦们把所有的通知类型都囊括进来，这样，我们就不需要以后一个一个的去设置alert和sound了。</p>
+<p>　　这段代码是在AppDelegate.m的 didFinishLaunchingWithOptions中实现：</p>
+<p>　　float sysVersion=[[UIDevice currentDevice]systemVersion].floatValue;</p>
+<p>if (sysVersion&gt;=8.0) {</p>
+<p>　　UIUserNotificationType type=UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound;</p>
+<p>　　        UIUserNotificationSettings *setting=[UIUserNotificationSettings settingsForTypes:type categories:nil];</p>
+<p>　　[[UIApplication sharedApplication]registerUserNotificationSettings:setting];</p>
+<p>}</p>
+<p>3、当然说到角标，肯定会有一个关于后台运行的问题，以前我们程序的后台模式只有3种才允许后台长时间，例如保持网络连接、多媒体应用、 VOIP:网络电话（现在很多了，比如蓝牙之类的）</p>
+<p>　　（1 那现在是什么情况呢？比如说我们要获取角标的数据，通过定时器（代码如下），如果是进入后台运行状态可能会导致定时器暂停</p>
+<p>　　　　//定时获得未读数据　　</p>
+<p>　　    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(getUnreadCount) userInfo:nil repeats:YES];</p>
+<p>　　// !!主线程也会抽时间处理一下timer（不管主线程是否正在执行其他事件操作）——不加的话执行其他操作可能定时器会被忽略不执行</p>
+<p>　　 [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];</p>
+<p>　　（2 解决方法：</p>
+<p>　　 首先，我们还应该知道app的状态：  1.死亡状态：没有打开app  2.前台运行状态   3.后台暂停状态：停止一切动画、定时器、多媒体、联网操作，很难再作其他操作  4.后台运行状态。</p>
+<p>　　那么进入后台运行状态我们可以在在AppDelegate.m中调用applicationDidEnterBackground：</p>
+<p>　　/*</p>
+<p>　　* 程序进入后台的时候调用</p>
+<p>　　*/</p>
+<p>　　- (void)applicationDidEnterBackground:(UIApplication *)application {</p>
+<p>　　// 向操作系统申请后台运行的资格，能维持多久，是不确定的　　</p>
+<p>　　UIBackgroundTaskIdentifier task = [application beginBackgroundTaskWithExpirationHandler:^{</p>
+<p>　　　　// 当申请的后台运行时间已经结束（过期），就会调用这个block </p>
+<p>　　　　// 过期则需要结束任务</p>
+<p>　　　　[application endBackgroundTask:task];</p>
+<p>　　}];</p>
+<p>　　当然这种方法是暂时性的，过期的话我们就没办法了吗？不！同时我们还可以假装是音频软件：在Info.plst中设置后台模式：Required background modes == App plays audio or streams audio/video using AirPlay，然后搞一个0kb的MP3文件，没有声音 循环播放！</p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2014/11/21/程序加角标以及后台显示/" class="archive-article-date">
+  	<time datetime="2014-11-21T09:42:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2014-11-21</time>
+</a>
+      
+      
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-谓词-NSPredicate-的使用" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -138,7 +802,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/11/06/谓词-NSPredicate-的使用/">谓词(NSPredicate)的使用</a>
+      <a class="article-title" href="/2014/11/06/谓词-NSPredicate-的使用/">谓词(NSPredicate)的使用</a>
     </h1>
   
 
@@ -433,8 +1097,8 @@ NSMutableSet提供了如下方法使用谓词来过滤集合
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2016/11/06/谓词-NSPredicate-的使用/" class="archive-article-date">
-  	<time datetime="2016-11-06T08:30:46.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-11-06</time>
+      <a href="/2014/11/06/谓词-NSPredicate-的使用/" class="archive-article-date">
+  	<time datetime="2014-11-06T08:30:46.000Z" itemprop="datePublished"><i class="icon-clock"></i>2014-11-06</time>
 </a>
       
 	<div class="article-tag tagcloud">
@@ -459,7 +1123,7 @@ NSMutableSet提供了如下方法使用谓词来过滤集合
 
 
   
-    <article id="post-利用Javascript去操作UIWebView的内容" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-iOS-开发切圆之-View-只切指定的角" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -469,7 +1133,7 @@ NSMutableSet提供了如下方法使用谓词来过滤集合
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/21/利用Javascript去操作UIWebView的内容/">利用Javascript去操作UIWebView的内容</a>
+      <a class="article-title" href="/2014/11/04/iOS-开发切圆之-View-只切指定的角/">iOS 开发切圆之 View 只切指定的角</a>
     </h1>
   
 
@@ -477,299 +1141,123 @@ NSMutableSet提供了如下方法使用谓词来过滤集合
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="利用Javascript去操作UIWebView的内容"><a href="#利用Javascript去操作UIWebView的内容" class="headerlink" title="利用Javascript去操作UIWebView的内容"></a>利用Javascript去操作UIWebView的内容</h3><p><a href="http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/" target="_blank" rel="external">http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/</a></p>
-<p>博客还是不错的 有的可以借鉴下</p>
+        <p>###iOS 开发切圆之 View 只切指定的角</p>
+<p>如果需要将UIView的4个角全部都为圆角，做法相当简单，只需设置其Layer的cornerRadius属性即可（项目需要使用QuartzCore框架）。而若要指定某几个角（小于4）为圆角而别的不变时，这种方法就不好用了。</p>
+<pre><code>UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(120, 10, 80, 80)];
+view2.backgroundColor = [UIColor redColor];
+[self.view addSubview:view2];
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/21/利用Javascript去操作UIWebView的内容/" class="archive-article-date">
-  	<time datetime="2016-10-21T04:31:14.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-21</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xcode/">xcode</a></li></ul>
-	</div>
+UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view2.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(10, 10)];
+CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+maskLayer.frame = view2.bounds;
+maskLayer.path = maskPath.CGPath;
+view2.layer.mask = maskLayer;
+</code></pre><p>其中</p>
+<pre><code>byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight
+指定了需要成为圆角的角。该参数是UIRectCorner类型的，可选的值有
+* UIRectCornerTopLeft
+* UIRectCornerTopRight
+* UIRectCornerBottomLeft
+* UIRectCornerBottomRight
+* UIRectCornerAllCorners
+</code></pre><p>从名字很容易看出来代表的意思，使用“|”来组合就好了。</p>
+<p>#####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
+<pre><code> - (UIImageView  *)avatarImage { 
 
-      
+ if (!_avatarImage) { 
 
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-WKWebview的使用及遇到的问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/14/WKWebview的使用及遇到的问题/">WKWebview的使用及遇到的问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>今天试了试WKWebView,试出来很多问题.记录如下</p>
-<p>初始化方法如下:</p>
-<pre><code>- (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration NS_DESIGNATED_INITIALIZER;
-</code></pre><p>4、WKWebView的一些简单属性的介绍</p>
-<pre><code>backForwardList            浏览历史
-title                      网页标题             支持KVO
-URL                        正在显示的URL        支持KVO
-loading                    是否正在加载          支持KVO
-estimatedProgress          加载进度             支持KVO
-canGoBack  canGoForward    能否后退 前进         支持KVO
-reload                     重新加载
-stopLoading                停止加载
-allowsBackForwardNavigationGestures  是否允许侧滑返回上一页
-</code></pre><p>5、WKWebView的加载方法跟UIWebView基本一样</p>
-<pre><code>- loadRequest:
-- loadHTMLString:
-- loadData:
-</code></pre><p>WKWebViewUIDelegate 代理方法</p>
-<pre><code>//当需要打开一个新窗口的时候的调用，如a标签的target=&apos;_blank&apos;，需要返回一个新的Webview
-- (nullable WKWebView )webView:(WKWebView )webView createWebViewWithConfiguration:(WKWebViewConfiguration )configuration forNavigationAction:(WKNavigationAction )navigationAction windowFeatures:(WKWindowFeatures )windowFeatures
-
-以下三个类似alert的代理，一定要调用completionHandler(),这个回调，告诉webview结果
-
-//webview上需要弹出alert的时候调用此方法，如果不实现此方法，则webview的alert是显示不出来,alert类似于只有确定按钮的UIAlertView
-- (void)webView:(WKWebView )webView runJavaScriptAlertPanelWithMessage:(NSString )message initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(void))completionHandler
-
-//webview上需要弹出confirm的时候调用此方法，如果不实现此方法，则webview的confirm是显示不出来,confirm类似于有确定按钮和取消按钮的UIAlertView
-- (void)webView:(WKWebView )webView runJavaScriptConfirmPanelWithMessage:(NSString )message initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(BOOL result))completionHandler
-
-// webview上需要弹出prompt的时候调用此方法，如果不实现此方法，则webview的prompt是显示不出来,prompt类似于带一个textField的UIAlertView。defaultText相当于textField的placeholed
-- (void)webView:(WKWebView )webView runJavaScriptTextInputPanelWithPrompt:(NSString )prompt defaultText:(nullable NSString )defaultText initiatedByFrame:(WKFrameInfo )frame completionHandler:(void (^)(NSString  __nullable result))completionHandler
-
-//window.close() 的时候调用
-- (void)webViewDidClose:(WKWebView *)webView
-</code></pre><p>WKWebViewNavigationDelegate代理方法</p>
-<pre><code>//决定是否允许发起这个请求
-- (void)webView:(WKWebView )webView decidePolicyForNavigationAction:(WKNavigationAction )navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler
-
-//在webview有响应之后，再次决定是否允许这个请求
-- (void)webView:(WKWebView )webView decidePolicyForNavigationResponse:(WKNavigationResponse )navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandle
-
-//webview开始加载的时候调用
-- (void)webView:(WKWebView )webView didStartProvisionalNavigation:(null_unspecified WKNavigation )navigation
-
-//webview内容已经加载结束，但是上面的某些资源比如图片加载之前调用
-- (void)webView:(WKWebView )webView didCommitNavigation:(null_unspecified WKNavigation )navigation
-
-//webview加载结束的时候调用
-- (void)webView:(WKWebView )webView didCommitNavigation:(null_unspecified WKNavigation )navigation
-
-//webview加载失败的时候调用
-- (void)webView:(WKWebView )webView didFailProvisionalNavigation:(null_unspecified WKNavigation )navigation withError:(NSError )error
-
-//webview在commit过程中失败的时候调用，例如在didCommitNavigation这个代理方法中调用webview的stopLoading方法
-- (void)webView:(WKWebView )webView didFailNavigation:(null_unspecified WKNavigation )navigation withError:(NSError )error
-</code></pre><p>WKScriptMessageHandler</p>
-<pre><code>//收到JavaScript回调的时候调用
-- (void)userContentController:(WKUserContentController )userContentController didReceiveScriptMessage:(WKScriptMessage )message
-</code></pre><h3 id="WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。"><a href="#WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。" class="headerlink" title="WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。"></a>WKWebViewConfiguration里面有个userContentController。可通过它为webview注入javaScript代码。并且可以添加监听javaScript的回调。</h3><pre><code>WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc]init];
-
-WKUserScript *userScript = [[WKUserScript alloc]initWithSource:@&quot;js代码&quot; injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:NO];
-
-[configuration.userContentController addUserScript:userScript];
-</code></pre><h5 id="OC执行JS代码：调用JS代码"><a href="#OC执行JS代码：调用JS代码" class="headerlink" title="OC执行JS代码：调用JS代码"></a>OC执行JS代码：调用JS代码</h5><pre><code>- (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(id, NSError *))completionHandler;
-//completionHandler 拥有两个参数，一个是返回错误，一个可以返回执行脚本后的返回值
-</code></pre><h5 id="JS调用App注册过的方法"><a href="#JS调用App注册过的方法" class="headerlink" title="JS调用App注册过的方法"></a>JS调用App注册过的方法</h5><p>再WKWebView里面注册供JS调用的方法，是通过WKUserContentController类下面的方法：</p>
-<pre><code>- (void)addScriptMessageHandler:(id &lt;WKScriptMessageHandler&gt;)scriptMessageHandler name:(NSString *)name;
-</code></pre><p>scriptMessageHandler是代理回调，JS调用name方法后，OC会调用scriptMessageHandler指定的对象。</p>
-<p>JS在调用OC注册方法的时候要用下面的方式：</p>
-<pre><code>window.webkit.messageHandlers.&lt;name&gt;.postMessage(&lt;messageBody&gt;)
-</code></pre><p>注意，name(方法名)是放在中间的，messageBody只能是一个对象，如果要传多个值，需要封装成数组，或者字典。整个示例如下：</p>
-<p>//OC注册供JS调用的方法</p>
-<pre><code>[[_webView configuration].userContentController addScriptMessageHandler:self name:@&quot;closeMe&quot;];
-</code></pre><p>//OC在JS调用方法做的处理</p>
-<pre><code>- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
-{
-  NSLog(@&quot;JS 调用了 %@ 方法，传回参数 %@&quot;,message.name,message.body);
+    _avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)];
+    _avatarImage.backgroundColor = [UIColor grayColor];
+    _avatarImage.contentMode = UIViewContentModeScaleAspectFit;
+    _avatarImage.layer.cornerRadius = avatarDiameter/2.0;
+    _avatarImage.layer.masksToBounds = YES;
+    [_avatarImage setImage:[UIImage imageNamed:@&quot;test.jpg&quot;]];
+  }
+return _avatarImage;
 }
-</code></pre><p>//JS调用</p>
-<pre><code>window.webkit.messageHandlers.closeMe.postMessage(null);
-</code></pre><p>如果你在self的dealloc打个断点，会发现self没有释放！这显然是不行的！谷歌后看到一种解决方法，如下：</p>
-<pre><code>@interface WeakScriptMessageDelegate : NSObject&lt;WKScriptMessageHandler&gt;
+</code></pre><p>#####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
+<pre><code>// 创建一个view
+ UIView *showView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
+ [self.view addSubview:showView];
+ showView.backgroundColor = [UIColor whiteColor];
+ showView.alpha = 0.5;
 
-@property (nonatomic, weak) id&lt;WKScriptMessageHandler&gt; scriptDelegate;
+  // 贝塞尔曲线(创建一个圆)
+   UIBezierPath *path = [UIBezierPath     bezierPathWithArcCenter:CGPointMake(100 / 2.f, 100 / 2.f)
+                                                       radius:100 / 2.f
+                                                      startAngle:0 
+                                                      endAngle:M_PI * 2
+                                                     clockwise:YES];
 
-- (instancetype)initWithDelegate:(id&lt;WKScriptMessageHandler&gt;)scriptDelegate;
+ CAShapeLayer *layer = [CAShapeLayer layer];
+ layer.frame = showView.bounds;
+ layer.path = path.CGPath;
+ [showView.layer addSublayer:layer];
+</code></pre><p>#####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
+<pre><code>- (instancetype)initWithFrame:(CGRect)frame {
 
-@end
+    if (self = [super initWithFrame:frame]) {
 
-@implementation     WeakScriptMessageDelegate
-
-- (instancetype)initWithDelegate:(id&lt;WKScriptMessageHandler&gt;)scriptDelegate
-{
-  self = [super init];
-  if (self) {
-     _scriptDelegate = scriptDelegate;
     }
-   return self;
+    return self;
+}
+- (void)drawRect:(CGRect)rect { 
+     // Drawing code 
+    CGRect bounds = self.bounds;
+    [[UIColor whiteColor] set];
+    UIRectFill(bounds);
+
+    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:CGRectGetWidth(bounds)/2.0] addClip];
+    [self.image drawInRect:bounds];
+}
+</code></pre><p>贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
+<pre><code>- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+
+ if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+
+     [self.contentView addSubview:self.avatarImage];
+     [self.contentView addSubview:self.maskImage];
+ }
+ return self;
 }
 
-- (void)userContentController:(WKUserContentController *)userContentController didReceiveScriptMessage:(WKScriptMessage *)message
-{
-   [self.scriptDelegate    userContentController:userContentController didReceiveScriptMessage:message];
+- (UIImageView *)avatarImage {
+
+ if (!_avatarImage) { 
+
+    _avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)];
+    _avatarImage.backgroundColor = [UIColor grayColor];
+    _avatarImage.contentMode = UIViewContentModeScaleAspectFit;
+     [_avatarImage setImage:[UIImage imageNamed:@&quot;test.jpg&quot;]];
+ }
+ return _avatarImage;
+</code></pre><p> }</p>
+<pre><code> //中心镂空的图
+ - (UIImageView *)maskImage {  
+
+ if (!_maskImage) { 
+
+   _maskImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)]; 
+    _maskImage.contentMode = UIViewContentModeScaleAspectFit; 
+   [_maskImage setImage:[UIImage imageNamed:@&quot;corner_circle.png&quot;]]; 
+ }
+ return _maskImage;
 }
-
-@end
-</code></pre><p>思路是另外创建一个代理对象，然后通过代理对象回调指定的self，</p>
-<pre><code>WKUserContentController *userContentController = [[WKUserContentController alloc] init];    
-[userContentController addScriptMessageHandler:[[WeakScriptMessageDelegate alloc] initWithDelegate:self] name:@&quot;closeMe&quot;];
-</code></pre><p>运行代码，self释放了，WeakScriptMessageDelegate却没有释放啊啊啊！<br>还需在self的dealloc里面 添加这样一句代码：</p>
-<pre><code>[[_webView configuration].userContentController removeScriptMessageHandlerForName:@&quot;closeMe&quot;];
-</code></pre><hr>
-<hr>
-<hr>
-<h3 id="坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答"><a href="#坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答" class="headerlink" title="坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答"></a>坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答</h3><h3 id="关于Cookie"><a href="#关于Cookie" class="headerlink" title="关于Cookie"></a>关于Cookie</h3><p>同一个应用，不同UIWebView之间的Cookie是自动同步的。它们都是保存在NSHTTPCookieStorage中。 当UIWebView加载一个URL的时候，在加载完成时候，这个URL response中包含的cookie会自动以NSHttpCookie的形式保存到 NSHTTPCookieStorage中。同时，如果在http response中，对cookie进行更新或者删除的话，其结果也会直接反应到NSHTTPCookieStorage 存储的cookie数据中。</p>
-<pre><code>//获取保存的cookie
-NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage]; 
-//设置
-[storage setCookies:cookies forURL:url mainDocumentURL:nil] 
-//删除
-[storage deleteCookie:cookie]
-</code></pre><h3 id="WKWebView-cookie同步"><a href="#WKWebView-cookie同步" class="headerlink" title="WKWebView cookie同步"></a>WKWebView cookie同步</h3><p>WKWebView的cookie并不会再加载url后自动保存到NSHTTPCookieStorage中。</p>
-<p>原因是因为现在WKWebView会忽视默认的网络存储， NSURLCache, NSHTTPCookieStorage, NSCredentialStorage。 目前是这样的，WKWebView有自己的进程，同样也有自己的存储空间用来存储cookie和cache， 其他的网络类如NSURLConnection是无法访问到的。 同时WKWebView发起的资源请求也是不经过NSURLProtocol的，导致无法自定义请求。</p>
-<p>同一个应用，不同WKWebView之间的cookie同步，可以通过使用同一个WKProcessPool实现cookie的同步。</p>
-<pre><code>1.创建ProcessPool的单例,来管理 WKProcessPool.
-2. WKWebViewConfiguration *cofi = [[WKWebViewConfiguration alloc] init];
-cofi.processPool = [ProcessPool share];
-</code></pre><h4 id="获取Cookie"><a href="#获取Cookie" class="headerlink" title="获取Cookie:"></a>获取Cookie:</h4><pre><code>NSMutableString *cookieStr = [NSMutableString string];
-
-for (NSHTTPCookie *cookie in NSHTTPCookieStorage.sharedHTTPCookieStorage.cookies) {
-    [cookieStr appendString:[NSString stringWithFormat:@&quot;%@=%@&quot;,cookie.name,cookie.value]];
-}
-NSMutableURLRequest *requset = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@&quot;www.xxxx.com&quot;]];
-[requset addValue:cookieStr forHTTPHeaderField:@&quot;Cookie&quot;];
-
-[self.webV loadRequest:requset];
-
-
-更多可以去查看stackoverflow上回答：http://stackoverflow.com/questions/26573137/can-i-set-the-cookies-to-be-used-by-a-wkwebview/26577303#26577303
-</code></pre><h5 id="以下方法来自网络"><a href="#以下方法来自网络" class="headerlink" title="以下方法来自网络"></a>以下方法来自网络</h5><pre><code>+ (NSString *)cookiesForURLString:(NSString *)str{
-NSArray *cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:str]]; // 这里的HOST是你web服务器的域名地址
-// 比如你之前登录的网站地址是abc.com（当然前面要加http://，如果你服务器需要端口号也可以加上端口号），那么这里的HOST就是http://abc.com
-
-// 设置header，通过遍历cookies来一个一个的设置header
-for (NSHTTPCookie *cookie in cookies){
-
-    // cookiesWithResponseHeaderFields方法，需要为URL设置一个cookie为NSDictionary类型的header，注意NSDictionary里面的forKey需要是@&quot;Set-Cookie&quot;
-    NSArray *headeringCookie = [NSHTTPCookie cookiesWithResponseHeaderFields:
-                                [NSDictionary dictionaryWithObject:
-                                 [[NSString alloc] initWithFormat:@&quot;%@=%@&quot;,[cookie name],[cookie value]]
-                                                            forKey:@&quot;Set-Cookie&quot;]
-                                                                      forURL:[NSURL URLWithString:str]];
-
-    // 通过setCookies方法，完成设置，这样只要一访问URL为HOST的网页时，会自动附带上设置好的header
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookies:headeringCookie
-                                                       forURL:[NSURL URLWithString:str]
-                                              mainDocumentURL:nil];
-}
-return str;
-}    
 </code></pre>
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2016/10/14/WKWebview的使用及遇到的问题/" class="archive-article-date">
-  	<time datetime="2016-10-14T07:46:10.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-14</time>
+      <a href="/2014/11/04/iOS-开发切圆之-View-只切指定的角/" class="archive-article-date">
+  	<time datetime="2014-11-04T07:38:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2014-11-04</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/切角/">切角</a></li></ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOS10-JPush" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/10/iOS10-JPush/">iOS10 JPush</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录"><a href="#苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录" class="headerlink" title="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录."></a>苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.</h5><h5 id="先来看下改动的地方"><a href="#先来看下改动的地方" class="headerlink" title="先来看下改动的地方"></a>先来看下改动的地方</h5><p><img src="http://p1.bpimg.com/4851/6f841220056fde40.png" alt=""><br>我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.</p>
-<hr>
-<h4 id="下面直接堆代码"><a href="#下面直接堆代码" class="headerlink" title="下面直接堆代码"></a>下面直接堆代码</h4><h5 id="首先头文件"><a href="#首先头文件" class="headerlink" title="首先头文件"></a>首先头文件</h5><figure class="highlight plain"><figcaption><span>极光推送  </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#import &quot;JPUSHService.h&quot;  </div><div class="line">#import &lt;AdSupport/AdSupport.h&gt;//用不到就不需要导入  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">#import &lt;UserNotifications/UserNotifications.h&gt; // 这里是iOS10需要用到的框架  </div><div class="line">#endif</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;  </div><div class="line">      </div><div class="line">    // 注册apns通知  </div><div class="line">    if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 10.0) // iOS10  </div><div class="line">    &#123;  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">        JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];  </div><div class="line">        entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge | UNAuthorizationOptionSound;  </div><div class="line">        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];  </div><div class="line">#endif  </div><div class="line">    &#125;  </div><div class="line">    else if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 8.0) // iOS8, iOS9  </div><div class="line">    &#123;  </div><div class="line">        //可以添加自定义categories  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    else // iOS7  </div><div class="line">    &#123;  </div><div class="line">        //categories 必须为nil  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    /* </div><div class="line">     *  launchingOption 启动参数. </div><div class="line">     *  appKey 一个JPush 应用必须的,唯一的标识. </div><div class="line">     *  channel 发布渠道. 可选. </div><div class="line">     *  isProduction 是否生产环境. 如果为开发状态,设置为 NO; 如果为生产状态,应改为 YES. </div><div class="line">     *  advertisingIdentifier 广告标识符（IDFA） 如果不需要使用IDFA，传nil. </div><div class="line">     * 此接口必须在 App 启动时调用, 否则 JPush SDK 将无法正常工作. </div><div class="line">     */  </div><div class="line">    // 广告标识符  </div><div class="line">    NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];  </div><div class="line">      </div><div class="line">    // 如不需要使用IDFA，advertisingIdentifier 可为nil  </div><div class="line">    // 注册极光推送  </div><div class="line">    [JPUSHService setupWithOption:launchOptions appKey:JPUSHAPPKEY channel:channel apsForProduction:isProduction advertisingIdentifier:advertisingId];  </div><div class="line">      </div><div class="line">    //2.1.9版本新增获取registration id block接口。  </div><div class="line">    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) &#123;  </div><div class="line">        if(resCode == 0)  </div><div class="line">        &#123;  </div><div class="line">            // iOS10获取registrationID放到这里了, 可以存到缓存里, 用来标识用户单独发送推送  </div><div class="line">            NSLog(@&quot;registrationID获取成功：%@&quot;,registrationID);  </div><div class="line">            [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@&quot;registrationID&quot;];  </div><div class="line">            [[NSUserDefaults standardUserDefaults] synchronize];  </div><div class="line">        &#125;  </div><div class="line">        else  </div><div class="line">        &#123;  </div><div class="line">            NSLog(@&quot;registrationID获取失败，code：%d&quot;,resCode);  </div><div class="line">        &#125;  </div><div class="line">    &#125;];  </div><div class="line">      </div><div class="line">    return YES;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="对角标的一些处理"><a href="#对角标的一些处理" class="headerlink" title="对角标的一些处理"></a>对角标的一些处理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)applicationDidEnterBackground:(UIApplication *)application &#123;  </div><div class="line">    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">- (void)applicationWillEnterForeground:(UIApplication *)application &#123;  </div><div class="line">    [application setApplicationIconBadgeNumber:0];  </div><div class="line">    [application cancelAllLocalNotifications];  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#pragma mark - 注册推送回调获取 DeviceToken  </div><div class="line">#pragma mark -- 成功  </div><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken  </div><div class="line">&#123;  </div><div class="line">    // 注册成功  </div><div class="line">    // 极光: Required - 注册 DeviceToken  </div><div class="line">    [JPUSHService registerDeviceToken:deviceToken];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">#pragma mark -- 失败  </div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error  </div><div class="line">&#123;  </div><div class="line">    // 注册失败  </div><div class="line">    NSLog(@&quot;did Fail To Register For Remote Notifications With Error: %@&quot;, error);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了"><a href="#这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了" class="headerlink" title="这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了"></a>这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo &#123;</div><div class="line">    </div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    [application setApplicationIconBadgeNumber:[userInfo[@&quot;badge&quot;] integerValue]];</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:  (NSDictionary *)userInfo fetchCompletionHandler:(void (^)   (UIBackgroundFetchResult))completionHandler &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;this is iOS7 Remote Notification&quot;);</div><div class="line">    </div><div class="line">    // Required</div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    completionHandler(UIBackgroundFetchResultNewData);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#pragma mark - iOS10: 收到推送消息调用(iOS10是通过Delegate实现的回调)  </div><div class="line">#pragma mark- JPUSHRegisterDelegate  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">// 当程序在前台时, 收到推送弹出的通知  </div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = notification.request.content.userInfo; if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    completionHandler(UNNotificationPresentationOptionAlert); //                    Badge Sound Alert</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = response.notification.request.content.userInfo; if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    </div><div class="line">    completionHandler();</div><div class="line">&#125;</div><div class="line">#endif</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/10/iOS10-JPush/" class="archive-article-date">
-  	<time datetime="2016-10-10T07:56:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-10</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JPush/">JPush</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
 
       <div class="clearfix"></div>
     </div>
@@ -796,7 +1284,7 @@ return str;
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/09/Hexo-搭建自己的博客/">Hexo 搭建自己的博客</a>
+      <a class="article-title" href="/2014/10/09/Hexo-搭建自己的博客/">Hexo 搭建自己的博客</a>
     </h1>
   
 
@@ -930,501 +1418,13 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2016/10/09/Hexo-搭建自己的博客/" class="archive-article-date">
-  	<time datetime="2016-10-09T04:17:30.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-09</time>
+      <a href="/2014/10/09/Hexo-搭建自己的博客/" class="archive-article-date">
+  	<time datetime="2014-10-09T04:17:30.000Z" itemprop="datePublished"><i class="icon-clock"></i>2014-10-09</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网站/">网站</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-IOS中webview捕捉js中的alert 并修改标题和按钮" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/02/IOS中webview捕捉js中的alert 并修改标题和按钮/">IOS中webview捕捉js中的alert 并修改标题和按钮</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="IOS中webview捕捉js中的alert-并修改标题和按钮"><a href="#IOS中webview捕捉js中的alert-并修改标题和按钮" class="headerlink" title="IOS中webview捕捉js中的alert 并修改标题和按钮"></a>IOS中webview捕捉js中的alert 并修改标题和按钮</h3><pre><code>@interface UIWebView (JavaScriptAlert)   
-
-- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame;  
-
-@end  
-
-@implementation UIWebView (JavaScriptAlert)  
-
-- (void)webView:(UIWebView *)sender runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(id)frame {  
-
-
-    UIAlertView* customAlert = [[UIAlertView alloc] initWithTitle:@&quot;提示信息&quot; message:message delegate:nil cancelButtonTitle:@&quot;确定&quot; otherButtonTitles:nil];  
-
-    [customAlert show];  
-
-    [customAlert autorelease];  
-
-}  
-@end
-</code></pre><p>把此方法直接放到webview.m文件中即可</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/02/IOS中webview捕捉js中的alert 并修改标题和按钮/" class="archive-article-date">
-  	<time datetime="2016-10-02T09:02:01.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-02</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xcode/">Xcode</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-Xcode8-权限问题" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/26/Xcode8-权限问题/">Xcode8 权限问题</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="权限配置-info-plist-文件"><a href="#权限配置-info-plist-文件" class="headerlink" title="权限配置 info.plist 文件"></a>权限配置 info.plist 文件</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">麦克风权限：Privacy - Microphone Usage Description 是否允许此App使用你的麦克风？</div><div class="line">相机权限： Privacy - Camera Usage Description 是否允许此App使用你的相机？</div><div class="line">相册权限： Privacy - Photo Library Usage Description 是否允许此App访问你的媒体资料库？</div><div class="line">通讯录权限： Privacy - Contacts Usage Description 是否允许此App访问你的通讯录？</div><div class="line">蓝牙权限：Privacy - Bluetooth Peripheral Usage Description 是否许允此App使用蓝牙？</div><div class="line">语音转文字权限：Privacy - Speech Recognition Usage Description 是否允许此App使用语音识别？</div><div class="line">日历权限：Privacy - Calendars Usage Description 是否允许此App使用日历？</div><div class="line">定位权限：Privacy - Location When In Use Usage Description 我们需要通过您的地理位置信息获取您周边的相关数据</div><div class="line">定位权限: Privacy - Location Always Usage Description 我们需要通过您的地理位置信息获取您周边的相关数据</div></pre></td></tr></table></figure>
-<h4 id="后记"><a href="#后记" class="headerlink" title="后记:"></a>后记:</h4><h5 id="date-2016-10-09"><a href="#date-2016-10-09" class="headerlink" title="date: 2016-10-09"></a>date: 2016-10-09</h5><p>今天上线 , 传 Appstore 成功之后 , 等了半个小时 , 在 iTunes 里还是找不到构建版本 (Xcode8 上传会出现的问题) 其实也不算问题 , 只是改了规矩 . 查看了一下邮件 , 发现提示我 相机的权限没加 , 又重新加了相机的权限 , 用手机测试能用之后再次提交 , 几分钟后 ,收到 iTunes Store 的邮件 发送成功.</p>
-<p>所以iOS10 用到的权限 如果不在plist文件中添加权限描述说明 100%会造成崩溃,所以构建的版本也不会显示在 iTunes Store , 请注意查收邮件</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/09/26/Xcode8-权限问题/" class="archive-article-date">
-  	<time datetime="2016-09-26T02:20:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-09-26</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xcode/">Xcode</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOS-Runtime" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/04/09/iOS-Runtime/">iOS Runtime</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><p>Runtime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。<br>也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。</p>
-<h4 id="面向对象："><a href="#面向对象：" class="headerlink" title="面向对象："></a>面向对象：</h4><p>Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。<br>Class *class = [[Class alloc] init];<br>alloc 方法会为对象分配一块内存空间，空间的大小为 isa_t（8 字节）的大小加上所有成员变量所需的空间，再进行一次内存对齐。分配完空间后会初始化 isa_t isa_t 是一个 union 类型的结构体（或者称之为联合体），它的结构是在 Runtime 里被定义的。</p>
-<pre><code>union isa_t {  
-isa_t() { }
-isa_t(uintptr_t value) :                     bits(value) { }
-
-Class cls;
-uintptr_t bits;
-
-struct {
-   uintptr_t indexed           : 1;
-   uintptr_t has_assoc         : 1;
-   uintptr_t has_cxx_dtor      : 1;
-   uintptr_t shiftcls          : 33;
-   uintptr_t magic             : 6;
-   uintptr_t weakly_referenced : 1;
-   uintptr_t deallocating      : 1;
-   uintptr_t has_sidetable_rc  : 1;
-   uintptr_t extra_rc          : 19;
- };
-};
-</code></pre><p>init 方法就直接返回了初始化好的对象，class 指针指向这个初始化好的对象。</p>
-<p>也就是在 Runtime 的协助之下，一个对象完成了创建。<br>你可能想知道，这个对象只存放了一个 isa_t 结构体和成员变量，对象的方法在哪里？</p>
-<p>在编译的时候，类在内存中的位置就已经确定，而在 main 方法之前，Runtime 将可执行文件中和动态库所有的符号（Class，Protocol，Selector，IMP，…）加载到内存中，由 Runtime 管理，这里也包括了也是一个对象的类。</p>
-<p>类对象里储存着一个 isa_t 的结构体，super_class 指针，cache_t 结构体，class_data_bits_t 指针。</p>
-<pre><code>struct objc_class : objc_object {
-    isa_t isa;
-    Class superclass;
-    cache_t cache;            
-    class_data_bits_t bits;    
-｝
-</code></pre><p>class_data_bits_t 指向类对象的数据区域，数据区域存放着这个类的实例方法链表。而类方法存在元类对象的数据区域。也就是有对象，类对象，元类对象三个概念，对象是在运行时动态创建的，可以有无数个，类对象和元类对象在 main 方法之前创建的，分别只会有一个。</p>
-<h4 id="消息分发："><a href="#消息分发：" class="headerlink" title="消息分发："></a>消息分发：</h4><p>在 Objective-C 中的“方法调用”其实应该叫做消息传递，[object message] 会被编译器翻译为 objc_msgSend(object, @selector(message))，这是一个 C 方法，首先看它的两个参数，第一个是 object ，既方法调用者，第二个参数称为选择子 SEL，Objective-C 为我们维护了一个巨大的选择子表，在使用 @selector() 时会从这个选择子表中根据选择子的名字查找对应的 SEL。如果没有找到，则会生成一个 SEL 并添加到表中，在编译期间会扫描全部的头文件和实现文件将其中的方法以及使用 @selector() 生成的选择子加入到选择子表中。</p>
-<p>通过第一个参数 object，可以找到 object 对象的 isa_t 结构体，从上文中能看 isa_t 结构体的结构，在 isa_t 结构体中，shiftcls 存放的是一个 33 位的地址，用于指向 object 对象的类对象，而类对象里有一个 cache_t 结构体，来看一下 cache_t 的具体代码，</p>
-<pre><code>struct cache_t {
-    struct bucket_t *_buckets;
-    mask_t _mask;
-    mask_t _occupied;
-｝
-</code></pre><p>_mask：分配用来缓存 bucket 的总数。<br>_occupied：表明目前实际占用的缓存 bucket 的个数。<br>_buckets：一个散列表，用来方法缓存，bucket_t 类型，包含 key 以及方法实现 IMP。</p>
-<pre><code>struct bucket_t {
-private:
- cache_key_t _key;
-  IMP _imp;
-｝
-</code></pre><p>objc_msgSend() 方法会先从缓存表里，查找是否有该 SEL 对应的 IMP，有的话算命中缓存，直接通过函数指针 IMP ，找到方法的具体实现函数，执行。<br>当然缓存表里可能并不会命中，则此时会根据类对象的 class_data_bits_t 指针找到数据区域，数据区域里用链表存放着类的实例方法，实例方法也是一个结构体，其结构为：</p>
-<pre><code>struct method_t {  
- SEL name;
- const char *types;
- IMP imp;
-};
-</code></pre><p>编译器将每个方法的返回值和参数类型编码为一个字符串，types 指向的就是这样一个字符串，objc_msgSend() 会在类对象的方法链表里按链表顺序去匹配 SEL，匹配成功则停止，并将此方法加入到类对象的 _buckets 里缓存起来。如果没找到则会通过类对象的 superclass 指针找到其父类，去父类的方法列表里寻找（也会从父类的方法缓存列表开始）。</p>
-<p>如果继续没有找到会一直向父类寻找，直到遇见 NSObject，NSObject 的 superclass 指向 nil。也就意味着寻找结束，并没有找到实现方法。（如果这个过程找到了，也同样会在 object 的类对象的 _buckets 里缓存起来）。</p>
-<p>选择子在当前类和父类中都没有找到实现，就进入了方法决议（method resolve），首先判断当前 object 的类对象是否实现了 resolveInstanceMethod: 方法，如果实现的话，会调用 resolveInstanceMethod：方法，这个时候我们可以在 resolveInstanceMethod：方法里动态的添加该 SEL 对应的方法（也可以去做点别的，比如写入日志）。之后会重新执行查找方法实现的流程，如果依旧没找到方法，或者没有实现 resolveInstanceMethod: 方法，Runtime 还有另一套机制，消息转发。</p>
-<h4 id="消息转发："><a href="#消息转发：" class="headerlink" title="消息转发："></a>消息转发：</h4><p>消息转发分为以下几步：<br>1.调用 forwardingTargetForSelector: 方法，尝试找到一个能响应该消息的对象。如果获取到，则直接转发给它。如果返回了 nil，继续下面的动作。<br>2.调用 methodSignatureForSelector: 方法，尝试获得一个方法签名。如果获取不到，则直接调用 doesNotRecognizeSelector 抛出异常。<br>3.调用 forwardInvocation: 方法，将第 3 步获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了。</p>
-<p>以上三个方法都可以通过在 object 的类对象里实现， forwardingTargetForSelector: 可以通过对参数 SEL 的判断，返回一个可以响应该消息的对象。这样则会重新从该对象开始执行查找方法实现的流程，找到了也同样会在 object 的类对象的 _buckets 里缓存起来。而 2，3 方法则一般是配套使用，实现 methodSignatureForSelector: 方法根据参数 SEL ，做相应处理，返回 NSMethodSignature (方法签名) 对象，NSMethodSignature 对象会被包装成 NSInvocation 对象，forwardInvocation: 方法里就可以对 NSInvocation 进行处理了。</p>
-<p>上面是讲的是实例方法，类方法没什么区别，类方法储存在元类对象的数据区域里，通过类对象的 isa_t 找到元类对象，执行查找方法实现的流程，元类对象的 superclass 最终也会指向 NSObject。没找到的话，也会有方法决议以及消息转发。</p>
-<h3 id="runtime-可以做什么："><a href="#runtime-可以做什么：" class="headerlink" title="runtime 可以做什么："></a>runtime 可以做什么：</h3><p>实现多继承：从 forwardingTargetForSelector: 方法就能知道，一个类可以做到继承多个类的效果，只需要在这一步将消息转发给正确的类对象就可以模拟多继承的效果。</p>
-<h4 id="交换两个方法的实现："><a href="#交换两个方法的实现：" class="headerlink" title="交换两个方法的实现："></a>交换两个方法的实现：</h4><pre><code>Method m1 = class_getInstanceMethod([M1 class], @selector(hello1));
-Method m2 = class_getInstanceMethod([M2 class], @selector(hello2));
-method_exchangeImplementations(m2, m1);
-</code></pre><h4 id="关联对象："><a href="#关联对象：" class="headerlink" title="关联对象："></a>关联对象：</h4><p>通过下面两个方法，可以给 category 实现添加成员变量的效果。</p>
-<pre><code>objc_setAssociatedObject
-objc_getAssociatedObject
-</code></pre><h4 id="动态添加类和方法："><a href="#动态添加类和方法：" class="headerlink" title="动态添加类和方法："></a>动态添加类和方法：</h4><p>objc_allocateClassPair 函数与 objc_registerClassPair 函数可以完成一个新类的添加，class_addMethod 给类添加方法，class_addIvar 添加成员变量，objc_registerClassPair 来注册类，其中成员变量的添加必须在类注册之前，类注册后就可以创建该类的对象了，而再添加成员变量就会破坏创建的对象的内存结构。</p>
-<h4 id="将-json-转换为-model："><a href="#将-json-转换为-model：" class="headerlink" title="将 json 转换为 model："></a>将 json 转换为 model：</h4><p>用到了 Runtime 获取某一个类的全部属性的名字，以及 Runtime 获取属性的类型。</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/04/09/iOS-Runtime/" class="archive-article-date">
-  	<time datetime="2016-04-09T07:43:22.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-04-09</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Runtime/">Runtime</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-程序加角标以及后台显示" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/21/程序加角标以及后台显示/">程序加角标以及后台显示</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1、设置角标的代码：</p>
-<p>　　   // 从后台取出来的数据可能是int型的不能直接给badgeValue（string类型的），需要通过description转化</p>
-<p>　　  NSString *count = [responseObject[@”count”] description];</p>
-<p>if ([count isEqualToString:@”0”]) {</p>
-<p>self.tabBarItem.badgeValue = nil; //设置tabBar的角标</p>
-<p>[UIApplication sharedApplication].applicationIconBadgeNumber = 0;// 设置应用程序的角标</p>
-<p>}else</p>
-<p>{</p>
-<p>self.tabBarItem.badgeValue = count;</p>
-<p>[UIApplication sharedApplication].applicationIconBadgeNumber = status.intValue;</p>
-<p>}</p>
-<p>2、在给应用程序发送角标设置的时候，可能会报以下错误：</p>
-<p>　　“Attempting to badge the application icon but haven’t received permission from”</p>
-<p>　　这是因为一切都是iOS8捣的鬼。您如果把模拟器换成iOS7.1或者更早的，就不会有这个问题。而现在在iOS8中要实现badge、alert和sound等都需要用户同意才能，因为这些都算做Notification“通知”，为了防止有些应用动不动给用户发送“通知”骚扰用户，所以在iOS8时，要“通知”必须要用户同意才行。</p>
-<p>　　下面代码的这个“通知设置”，主要是定义“通知类型”。同时我哦们把所有的通知类型都囊括进来，这样，我们就不需要以后一个一个的去设置alert和sound了。</p>
-<p>　　这段代码是在AppDelegate.m的 didFinishLaunchingWithOptions中实现：</p>
-<p>　　float sysVersion=[[UIDevice currentDevice]systemVersion].floatValue;</p>
-<p>if (sysVersion&gt;=8.0) {</p>
-<p>　　UIUserNotificationType type=UIUserNotificationTypeBadge | UIUserNotificationTypeAlert | UIUserNotificationTypeSound;</p>
-<p>　　        UIUserNotificationSettings *setting=[UIUserNotificationSettings settingsForTypes:type categories:nil];</p>
-<p>　　[[UIApplication sharedApplication]registerUserNotificationSettings:setting];</p>
-<p>}</p>
-<p>3、当然说到角标，肯定会有一个关于后台运行的问题，以前我们程序的后台模式只有3种才允许后台长时间，例如保持网络连接、多媒体应用、 VOIP:网络电话（现在很多了，比如蓝牙之类的）</p>
-<p>　　（1 那现在是什么情况呢？比如说我们要获取角标的数据，通过定时器（代码如下），如果是进入后台运行状态可能会导致定时器暂停</p>
-<p>　　　　//定时获得未读数据　　</p>
-<p>　　    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:60 target:self selector:@selector(getUnreadCount) userInfo:nil repeats:YES];</p>
-<p>　　// !!主线程也会抽时间处理一下timer（不管主线程是否正在执行其他事件操作）——不加的话执行其他操作可能定时器会被忽略不执行</p>
-<p>　　 [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];</p>
-<p>　　（2 解决方法：</p>
-<p>　　 首先，我们还应该知道app的状态：  1.死亡状态：没有打开app  2.前台运行状态   3.后台暂停状态：停止一切动画、定时器、多媒体、联网操作，很难再作其他操作  4.后台运行状态。</p>
-<p>　　那么进入后台运行状态我们可以在在AppDelegate.m中调用applicationDidEnterBackground：</p>
-<p>　　/*</p>
-<p>　　* 程序进入后台的时候调用</p>
-<p>　　*/</p>
-<p>　　- (void)applicationDidEnterBackground:(UIApplication *)application {</p>
-<p>　　// 向操作系统申请后台运行的资格，能维持多久，是不确定的　　</p>
-<p>　　UIBackgroundTaskIdentifier task = [application beginBackgroundTaskWithExpirationHandler:^{</p>
-<p>　　　　// 当申请的后台运行时间已经结束（过期），就会调用这个block </p>
-<p>　　　　// 过期则需要结束任务</p>
-<p>　　　　[application endBackgroundTask:task];</p>
-<p>　　}];</p>
-<p>　　当然这种方法是暂时性的，过期的话我们就没办法了吗？不！同时我们还可以假装是音频软件：在Info.plst中设置后台模式：Required background modes == App plays audio or streams audio/video using AirPlay，然后搞一个0kb的MP3文件，没有声音 循环播放！</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2015/11/21/程序加角标以及后台显示/" class="archive-article-date">
-  	<time datetime="2015-11-21T09:42:54.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-11-21</time>
-</a>
-      
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOS-开发切圆之-View-只切指定的角" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/04/iOS-开发切圆之-View-只切指定的角/">iOS 开发切圆之 View 只切指定的角</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>###iOS 开发切圆之 View 只切指定的角</p>
-<p>如果需要将UIView的4个角全部都为圆角，做法相当简单，只需设置其Layer的cornerRadius属性即可（项目需要使用QuartzCore框架）。而若要指定某几个角（小于4）为圆角而别的不变时，这种方法就不好用了。</p>
-<pre><code>UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(120, 10, 80, 80)];
-view2.backgroundColor = [UIColor redColor];
-[self.view addSubview:view2];
-
-UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view2.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(10, 10)];
-CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-maskLayer.frame = view2.bounds;
-maskLayer.path = maskPath.CGPath;
-view2.layer.mask = maskLayer;
-</code></pre><p>其中</p>
-<pre><code>byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight
-指定了需要成为圆角的角。该参数是UIRectCorner类型的，可选的值有
-* UIRectCornerTopLeft
-* UIRectCornerTopRight
-* UIRectCornerBottomLeft
-* UIRectCornerBottomRight
-* UIRectCornerAllCorners
-</code></pre><p>从名字很容易看出来代表的意思，使用“|”来组合就好了。</p>
-<p>#####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
-<pre><code> - (UIImageView  *)avatarImage { 
-
- if (!_avatarImage) { 
-
-    _avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)];
-    _avatarImage.backgroundColor = [UIColor grayColor];
-    _avatarImage.contentMode = UIViewContentModeScaleAspectFit;
-    _avatarImage.layer.cornerRadius = avatarDiameter/2.0;
-    _avatarImage.layer.masksToBounds = YES;
-    [_avatarImage setImage:[UIImage imageNamed:@&quot;test.jpg&quot;]];
-  }
-return _avatarImage;
-}
-</code></pre><p>#####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
-<pre><code>// 创建一个view
- UIView *showView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
- [self.view addSubview:showView];
- showView.backgroundColor = [UIColor whiteColor];
- showView.alpha = 0.5;
-
-  // 贝塞尔曲线(创建一个圆)
-   UIBezierPath *path = [UIBezierPath     bezierPathWithArcCenter:CGPointMake(100 / 2.f, 100 / 2.f)
-                                                       radius:100 / 2.f
-                                                      startAngle:0 
-                                                      endAngle:M_PI * 2
-                                                     clockwise:YES];
-
- CAShapeLayer *layer = [CAShapeLayer layer];
- layer.frame = showView.bounds;
- layer.path = path.CGPath;
- [showView.layer addSublayer:layer];
-</code></pre><p>#####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
-<pre><code>- (instancetype)initWithFrame:(CGRect)frame {
-
-    if (self = [super initWithFrame:frame]) {
-
-    }
-    return self;
-}
-- (void)drawRect:(CGRect)rect { 
-     // Drawing code 
-    CGRect bounds = self.bounds;
-    [[UIColor whiteColor] set];
-    UIRectFill(bounds);
-
-    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:CGRectGetWidth(bounds)/2.0] addClip];
-    [self.image drawInRect:bounds];
-}
-</code></pre><p>贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
-<pre><code>- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-
- if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-
-     [self.contentView addSubview:self.avatarImage];
-     [self.contentView addSubview:self.maskImage];
- }
- return self;
-}
-
-- (UIImageView *)avatarImage {
-
- if (!_avatarImage) { 
-
-    _avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)];
-    _avatarImage.backgroundColor = [UIColor grayColor];
-    _avatarImage.contentMode = UIViewContentModeScaleAspectFit;
-     [_avatarImage setImage:[UIImage imageNamed:@&quot;test.jpg&quot;]];
- }
- return _avatarImage;
-</code></pre><p> }</p>
-<pre><code> //中心镂空的图
- - (UIImageView *)maskImage {  
-
- if (!_maskImage) { 
-
-   _maskImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)]; 
-    _maskImage.contentMode = UIViewContentModeScaleAspectFit; 
-   [_maskImage setImage:[UIImage imageNamed:@&quot;corner_circle.png&quot;]]; 
- }
- return _maskImage;
-}
-</code></pre>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2015/11/04/iOS-开发切圆之-View-只切指定的角/" class="archive-article-date">
-  	<time datetime="2015-11-04T07:38:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-11-04</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/切角/">切角</a></li></ul>
 	</div>
 
       
