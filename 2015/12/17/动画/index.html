@@ -4,17 +4,36 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Tag: CocoaPods | ongfei | 一步一步往上爬</title>
+  <title>动画&lt;一&gt; | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="低调做事 快乐做人">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ongfei | 一步一步往上爬">
-<meta property="og:url" content="http://yoursite.com/tags/CocoaPods/index.html">
+  <meta name="description" content="UIImageView的动画UIImageView * activityImageView = [[UIImageView alloc] init];
+
+activityImageView.frame = CGRectMake(100, 100, 50, 50);
+
+[self.view addSubview:activityImageView];
+
+NSMutableArray *imagesL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动画<一>">
+<meta property="og:url" content="http://yoursite.com/2015/12/17/动画/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="低调做事 快乐做人">
+<meta property="og:description" content="UIImageView的动画UIImageView * activityImageView = [[UIImageView alloc] init];
+
+activityImageView.frame = CGRectMake(100, 100, 50, 50);
+
+[self.view addSubview:activityImageView];
+
+NSMutableArray *imagesL">
+<meta property="og:updated_time" content="2017-02-09T08:07:19.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ongfei | 一步一步往上爬">
-<meta name="twitter:description" content="低调做事 快乐做人">
+<meta name="twitter:title" content="动画<一>">
+<meta name="twitter:description" content="UIImageView的动画UIImageView * activityImageView = [[UIImageView alloc] init];
+
+activityImageView.frame = CGRectMake(100, 100, 50, 50);
+
+[self.view addSubview:activityImageView];
+
+NSMutableArray *imagesL">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -126,54 +145,219 @@
 </nav>
 
       <div class="body-wrap">
+        <article id="post-动画" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
         
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/12/07/发布自己的代码到CocoaPods/" class="archive-article-date">
-  	<time datetime="2016-12-07T06:19:55.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-07</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/07/发布自己的代码到CocoaPods/">发布自己的代码到CocoaPods</a>
+    <h1 class="article-title" itemprop="name">
+      动画&lt;一&gt;
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="UIImageView的动画"><a href="#UIImageView的动画" class="headerlink" title="UIImageView的动画"></a>UIImageView的动画</h3><pre><code>UIImageView * activityImageView = [[UIImageView alloc] init];
+
+activityImageView.frame = CGRectMake(100, 100, 50, 50);
+
+[self.view addSubview:activityImageView];
+
+NSMutableArray *imagesList = [NSMutableArray array];
+for (NSInteger i = 1; i &lt; 3; i++) {
+
+   NSString *fileName = [NSString stringWithFormat:@&quot;b%ld.png&quot;,i];
+   UIImage *image = [UIImage imageNamed:fileName];
+   [imagesList addObject:image];
+ }
+
+ [activityImageView setAnimationImages:imagesList];
+ [activityImageView setAnimationDuration:0.5];
+ //0为无限循环
+ [activityImageView setAnimationRepeatCount:0];
+ [activityImageView startAnimating];
+ //    [activityImageView stopAnimating];
+</code></pre><h3 id="UIView-动画"><a href="#UIView-动画" class="headerlink" title="UIView 动画"></a>UIView 动画</h3><h4 id="第一种"><a href="#第一种" class="headerlink" title="第一种"></a>第一种</h4><pre><code>//创建一个CGAffineTransform  transform对象
+CGAffineTransform  transform;
+//设置旋转度数
+transform = CGAffineTransformRotate(testView.transform,M_PI/6.0);
+//动画开始
+[UIView beginAnimations:@&quot;rotate&quot; context:nil ];
+//动画时常
+[UIView setAnimationDuration:2];
+//自动反转
+//    [UIView setAnimationRepeatAutoreverses:YES];
+[UIView setAnimationRepeatCount:3];
+//添加代理
+[UIView setAnimationDelegate:self];
+//获取transform的值
+[testView setTransform:transform];
+//关闭动画
+[UIView commitAnimations];
+</code></pre><h4 id="第二种"><a href="#第二种" class="headerlink" title="第二种"></a>第二种</h4><pre><code>/* Duration 动画持续时间
+delay 动画延迟时间
+options 动画的节奏控制 */
+
+[UIView animateWithDuration:5 delay:5 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+testView.frame = CGRectMake(100, 300, 100, 100);
+} completion:^(BOOL finished) {
+
+}];
+
+/* Damping 动画的弹力指数
+Velocity 弹力的初速度 */
+
+[UIView animateWithDuration:0.5 delay:1 usingSpringWithDamping:0.8 initialSpringVelocity:10 options:0 animations:^{
+testView.frame = CGRectMake(100, 300, 100, 100);
+} completion:^(BOOL finished) {
+
+}];
+</code></pre><h3 id="CoreAnimation"><a href="#CoreAnimation" class="headerlink" title="CoreAnimation"></a>CoreAnimation</h3><p>CATransition</p>
+<p>继承关系：CATransition -&gt; CAAnimation</p>
+<pre><code>CATransition *transition = [CATransition animation];
+transition.duration = 0.5;
+transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+//动画类型
+transition.type = kCATransitionPush;
+//动画方向
+transition.subtype = kCATransitionFromTop;
+[testView.layer addAnimation:transition forKey:nil];
+
+CAPropertyAnimation
+</code></pre><p>继承关系：CABasicAnimation,CAKeyframeAnimation -&gt; CAPropertyAnimation -&gt; CAAnimation</p>
+<p>CABasicAnimation</p>
+<pre><code>CABasicAnimation * animation = [CABasicAnimation animation];
+animation.keyPath = @&quot;position.y&quot;;
+
+//运动的绝对距离
+animation.fromValue = @77;
+animation.toValue = @455;
+
+//运动的相对距离
+//    animation.byValue = @222;
+
+animation.duration = 1;
+//留在最终状态
+animation.fillMode = @&quot;forwards&quot;;
+//防止它被自动移除
+animation.removedOnCompletion = NO;
+animation.timingFunction = [CAMediaTimingFunction functionWithControlPoints:0.5 :0 :0.9 :0.7];
+[testView.layer addAnimation:animation forKey:@&quot;basic&quot;];
+</code></pre><p>CAKeyframeAnimation 例一</p>
+<pre><code>CAKeyframeAnimation * animation = [CAKeyframeAnimation animation];
+animation.keyPath = @&quot;position.x&quot;;
+animation.values = @[@0,@10,@-10,@10,@0];
+//指定关键帧动画发生的时间
+animation.keyTimes = @[ @0, @(1 / 6.0), @(3 / 6.0), @(5 / 6.0), @1 ];
+animation.duration = 0.4;
+//提前无需设置位置
+animation.additive = YES;
+[testView.layer addAnimation:animation forKey:@&quot;shake&quot;];
+</code></pre><p>CAKeyframeAnimation 例二</p>
+<pre><code>CGRect boundingRect = CGRectMake(-150, -150,300, 300);
+
+CAKeyframeAnimation *orbit = [CAKeyframeAnimation animation];
+orbit.keyPath = @&quot;position&quot;;
+//创建一个圆形的 CGPath 作为我们的关键帧动画的 path。
+orbit.path = CFAutorelease(CGPathCreateWithEllipseInRect(boundingRect, NULL));
+orbit.duration = 2;
+orbit.additive = YES;
+orbit.repeatCount = HUGE_VALF;
+//恒定速度
+orbit.calculationMode = kCAAnimationPaced;
+//确保沿着路径旋转
+orbit.rotationMode = kCAAnimationRotateAuto;
+[testView.layer addAnimation:orbit forKey:@&quot;orbit&quot;];
+</code></pre><p>CAAnimationGroup 组动画</p>
+<pre><code>CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale&quot;];
+animation.duration = 3.;
+animation.fromValue = @(0.1);
+animation.toValue = @(1.);
+
+CABasicAnimation *animation2 = [CABasicAnimation animationWithKeyPath:@&quot;transform.scale.y&quot;];
+animation2.duration = 3.;
+animation2.fromValue = @(1);
+animation2.toValue = @(2.);
+animation2.beginTime = 3.;
+
+CAAnimationGroup *group = [CAAnimationGroup animation];
+group.duration = 6.;
+group.animations = @[animation,animation2];
+[testView.layer addAnimation:group forKey:nil];
+</code></pre>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/12/17/动画/" class="archive-article-date">
+  	<time datetime="2015-12-17T07:47:39.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-12-17</time>
+</a>
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CocoaPods/">CocoaPods</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/动画/">动画</a></li></ul>
 	</div>
 
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-  
-    </div></section>
-  
 
-    
+  
+<nav id="article-nav">
+  
+    <a href="/2016/04/09/iOS-Runtime/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          iOS Runtime
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/11/21/程序加角标以及后台显示/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">程序加角标以及后台显示</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
 
 
       </div>
@@ -196,9 +380,9 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
