@@ -497,7 +497,7 @@ view2.layer.mask = maskLayer;
 * UIRectCornerBottomRight
 * UIRectCornerAllCorners
 </code></pre><p>从名字很容易看出来代表的意思，使用“|”来组合就好了。</p>
-<p>#####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
+<p> #####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
 <pre><code> - (UIImageView  *)avatarImage { 
 
  if (!_avatarImage) { 
@@ -511,7 +511,7 @@ view2.layer.mask = maskLayer;
   }
 return _avatarImage;
 }
-</code></pre><p>#####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
+</code></pre><p> #####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
 <pre><code>// 创建一个view
  UIView *showView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
  [self.view addSubview:showView];
@@ -529,7 +529,7 @@ return _avatarImage;
  layer.frame = showView.bounds;
  layer.path = path.CGPath;
  [showView.layer addSublayer:layer];
-</code></pre><p>#####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
+</code></pre><p> #####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
 <pre><code>- (instancetype)initWithFrame:(CGRect)frame {
 
     if (self = [super initWithFrame:frame]) {
@@ -546,7 +546,7 @@ return _avatarImage;
     [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:CGRectGetWidth(bounds)/2.0] addClip];
     [self.image drawInRect:bounds];
 }
-</code></pre><p>贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
+</code></pre><p>#####贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
 <pre><code>- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 
  if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {

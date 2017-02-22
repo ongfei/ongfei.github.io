@@ -16,7 +16,7 @@ UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(120, 1">
 <meta property="og:description" content="###iOS 开发切圆之 View 只切指定的角
 如果需要将UIView的4个角全部都为圆角，做法相当简单，只需设置其Layer的cornerRadius属性即可（项目需要使用QuartzCore框架）。而若要指定某几个角（小于4）为圆角而别的不变时，这种方法就不好用了。
 UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(120, 1">
-<meta property="og:updated_time" content="2017-02-07T06:17:17.000Z">
+<meta property="og:updated_time" content="2017-02-22T02:29:26.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS 开发切圆之 View 只切指定的角">
 <meta name="twitter:description" content="###iOS 开发切圆之 View 只切指定的角
@@ -171,7 +171,7 @@ view2.layer.mask = maskLayer;
 * UIRectCornerBottomRight
 * UIRectCornerAllCorners
 </code></pre><p>从名字很容易看出来代表的意思，使用“|”来组合就好了。</p>
-<p>#####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
+<p> #####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
 <pre><code> - (UIImageView  *)avatarImage { 
 
  if (!_avatarImage) { 
@@ -185,7 +185,7 @@ view2.layer.mask = maskLayer;
   }
 return _avatarImage;
 }
-</code></pre><p>#####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
+</code></pre><p> #####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
 <pre><code>// 创建一个view
  UIView *showView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
  [self.view addSubview:showView];
@@ -203,7 +203,7 @@ return _avatarImage;
  layer.frame = showView.bounds;
  layer.path = path.CGPath;
  [showView.layer addSublayer:layer];
-</code></pre><p>#####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
+</code></pre><p> #####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
 <pre><code>- (instancetype)initWithFrame:(CGRect)frame {
 
     if (self = [super initWithFrame:frame]) {
@@ -220,7 +220,7 @@ return _avatarImage;
     [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:CGRectGetWidth(bounds)/2.0] addClip];
     [self.image drawInRect:bounds];
 }
-</code></pre><p>贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
+</code></pre><p>#####贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
 <pre><code>- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 
  if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
