@@ -4,27 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>iOS TableView动画效果 | ongfei | 一步一步往上爬</title>
+  <title>collectionView 拖动 | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##iOS TableView动画效果
-
-在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。
-在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadDat">
+  <meta name="description" content="##collectionView 拖动代理的变化
+#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
+####iOS9 之后 collectionView 新增拖动代理
+// Support for reordering
+- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndex">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS TableView动画效果">
-<meta property="og:url" content="http://yoursite.com/2015/12/18/iOS-TableView动画效果/index.html">
+<meta property="og:title" content="collectionView 拖动">
+<meta property="og:url" content="http://yoursite.com/2017/03/06/collectionView-拖动/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="##iOS TableView动画效果
-
-在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。
-在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadDat">
-<meta property="og:updated_time" content="2017-02-22T06:14:05.000Z">
+<meta property="og:description" content="##collectionView 拖动代理的变化
+#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
+####iOS9 之后 collectionView 新增拖动代理
+// Support for reordering
+- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndex">
+<meta property="og:updated_time" content="2017-03-06T10:13:09.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS TableView动画效果">
-<meta name="twitter:description" content="##iOS TableView动画效果
-
-在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。
-在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadDat">
+<meta name="twitter:title" content="collectionView 拖动">
+<meta name="twitter:description" content="##collectionView 拖动代理的变化
+#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
+####iOS9 之后 collectionView 新增拖动代理
+// Support for reordering
+- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndex">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -136,7 +139,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-iOS-TableView动画效果" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-collectionView-拖动" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -146,7 +149,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      iOS TableView动画效果
+      collectionView 拖动
     </h1>
   
 
@@ -154,64 +157,149 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##iOS TableView动画效果</p>
-<ol>
-<li>在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。</li>
-<li>在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadData这个方法。在里面加自己的动画。第二个方案就是不用写子类，在reloadData的时候，使用UIView Animation去实现</li>
-</ol>
-<p>下面记录几个动画</p>
-<pre><code>CATransition *transition = [CATransition animation];
-transition.type = kCATransitionPush;
-transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-transition.fillMode = kCAFillModeForwards;
-transition.duration = 0.5;
-transition.subtype = kCATransitionFromBottom;
-[[self.tableView layer] addAnimation:transition forKey:@&quot;UITableViewReloadDataAnimationKey&quot;];
-</code></pre><hr>
-<pre><code>-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+        <p>##collectionView 拖动代理的变化</p>
+<p>#####附上一demo 仿支付宝: <a href="https://github.com/ongfei/SortModule" target="_blank" rel="external">https://github.com/ongfei/SortModule</a></p>
+<p>####iOS9 之后 collectionView 新增拖动代理</p>
+<pre><code>// Support for reordering
+- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(9_0); // returns NO if reordering was prevented from beginning - otherwise YES
+- (void)updateInteractiveMovementTargetPosition:(CGPoint)targetPosition NS_AVAILABLE_IOS(9_0);
+- (void)endInteractiveMovement NS_AVAILABLE_IOS(9_0);
+- (void)cancelInteractiveMovement NS_AVAILABLE_IOS(9_0);
+</code></pre><p>#####9之后的处理</p>
+<pre><code>#pragma mark - iOS9 之后的方法  
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath  
+{  
+    // 返回YES允许row移动  
+    return YES;  
+}  
 
-        cell.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1);
+- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath  
+{  
+    //取出移动row数据  
+    id color = self.dataArr[sourceIndexPath.row];  
+    //从数据源中移除该数据  
+    [self.dataArr removeObject:color];  
+    //将数据插入到数据源中的目标位置  
+    [self.dataArr insertObject:color atIndex:destinationIndexPath.row];  
+}  
 
-    [UIView animateWithDuration:0.7 animations:^{
+- (void)iOS9_Action:(UILongPressGestureRecognizer *)longPress  
+{  
+    switch (longPress.state) {  
+        case UIGestureRecognizerStateBegan:  
+        { //手势开始  
+            //判断手势落点位置是否在row上  
+            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
+            if (indexPath == nil) {  
+                break;  
+            }  
+            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
+            [self.view bringSubviewToFront:cell];  
+            //iOS9方法 移动cell  
+            [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];  
+        }  
+            break;  
+        case UIGestureRecognizerStateChanged:  
+        { // 手势改变  
+            // iOS9方法 移动过程中随时更新cell位置  
+            [self.collectionView updateInteractiveMovementTargetPosition:[longPress locationInView:self.collectionView]];  
+        }  
+            break;  
+        case UIGestureRecognizerStateEnded:  
+        { // 手势结束  
+            // iOS9方法 移动结束后关闭cell移动  
+            [self.collectionView endInteractiveMovement];  
+        }  
+            break;  
+        default: //手势其他状态  
+            [self.collectionView cancelInteractiveMovement];  
+            break;  
+    }  
+}  
+</code></pre><p>#####9之前的处理</p>
+<pre><code>#pragma mark - iOS9 之前的方法  
+- (void)action:(UILongPressGestureRecognizer *)longPress  
+{  
+    switch (longPress.state) {  
+        case UIGestureRecognizerStateBegan:  
+        { // 手势开始  
+            //判断手势落点位置是否在row上  
+            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
+            self.oldIndexPath = indexPath;  
+            if (indexPath == nil) {  
+                break;  
+            }  
+            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
+            // 使用系统的截图功能,得到cell的截图视图  
+            UIView *snapshotView = [cell snapshotViewAfterScreenUpdates:NO];  
+            snapshotView.frame = cell.frame;  
+            [self.view addSubview:self.snapshotView = snapshotView];  
+            // 截图后隐藏当前cell  
+            cell.hidden = YES;  
 
-        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
-
-    }];
-}
-</code></pre><hr>
-<pre><code>- (void)viewDidLoad{
-    [self.tableView reloadData];
-    self.cellArray = self.tableView.visibleCells;
-
-    //  延迟
-    CGFloat delay =0.05;
-    for (UITableViewCell *cell in self.cellArray) {
-        cell.transform = CGAffineTransformMakeTranslation(0, self.view.bounds.size.height);
-    }
-
-    for (int i = 0; i&lt;self.cellArray.count; i++) {
-        UITableViewCell *cell = self.cellArray[i];
-        CGFloat cellDelay = delay *i;
-
-        [UIView animateWithDuration:1.0 delay:cellDelay usingSpringWithDamping:0.5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            cell.transform = CGAffineTransformMakeTranslation(0, 0);
-        } completion:^(BOOL finished) {
-
-        }];
-}
-}
+            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
+            [UIView animateWithDuration:0.25 animations:^{  
+                snapshotView.transform = CGAffineTransformMakeScale(1.05, 1.05);  
+                snapshotView.center = currentPoint;  
+            }];  
+        }  
+            break;  
+        case UIGestureRecognizerStateChanged:  
+        { // 手势改变  
+            //当前手指位置 截图视图位置随着手指移动而移动  
+            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
+            self.snapshotView.center = currentPoint;  
+            // 计算截图视图和哪个可见cell相交  
+            for (UICollectionViewCell *cell in self.collectionView.visibleCells) {  
+                // 当前隐藏的cell就不需要交换了,直接continue  
+                if ([self.collectionView indexPathForCell:cell] == self.oldIndexPath) {  
+                    continue;  
+                }  
+                // 计算中心距  
+                CGFloat space = sqrtf(pow(self.snapshotView.center.x - cell.center.x, 2) + powf(self.snapshotView.center.y - cell.center.y, 2));  
+                // 如果相交一半就移动  
+                if (space &lt;= self.snapshotView.bounds.size.width / 2) {  
+                    self.moveIndexPath = [self.collectionView indexPathForCell:cell];  
+                    //移动 会调用willMoveToIndexPath方法更新数据源  
+                    [self.collectionView moveItemAtIndexPath:self.oldIndexPath toIndexPath:self.moveIndexPath];  
+                    //设置移动后的起始indexPath  
+                    self.oldIndexPath = self.moveIndexPath;  
+                    break;  
+                }  
+            }  
+        }  
+            break;  
+        default:  
+        { // 手势结束和其他状态  
+            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:self.oldIndexPath];  
+            // 结束动画过程中停止交互,防止出问题  
+            self.collectionView.userInteractionEnabled = NO;  
+            // 给截图视图一个动画移动到隐藏cell的新位置  
+            [UIView animateWithDuration:0.25 animations:^{  
+                self.snapshotView.center = cell.center;  
+                self.snapshotView.transform = CGAffineTransformMakeScale(1.0, 1.0);  
+            } completion:^(BOOL finished) {  
+                // 移除截图视图,显示隐藏的cell并开始交互  
+                [self.snapshotView removeFromSuperview];  
+                cell.hidden = NO;  
+                self.collectionView.userInteractionEnabled = YES;  
+            }];  
+        }  
+            break;  
+    }  
+}  
 </code></pre>
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2015/12/18/iOS-TableView动画效果/" class="archive-article-date">
-  	<time datetime="2015-12-18T10:49:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-12-18</time>
+      <a href="/2017/03/06/collectionView-拖动/" class="archive-article-date">
+  	<time datetime="2017-03-06T10:01:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-06</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tableview/">tableview</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/collectionView/">collectionView</a></li></ul>
 	</div>
 
       
@@ -229,18 +317,9 @@ transition.subtype = kCATransitionFromBottom;
   
 <nav id="article-nav">
   
-    <a href="/2016/04/09/iOS-Runtime/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          iOS Runtime
-        
-      </div>
-    </a>
   
-  
-    <a href="/2015/12/17/动画<一>/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">动画&lt;一&gt;</div>
+    <a href="/2017/02/10/正则表达式link/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">正则表达式link</div>
       <i class="icon-circle-right"></i>
     </a>
   
