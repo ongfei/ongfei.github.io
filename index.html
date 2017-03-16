@@ -128,6 +128,96 @@
       <div class="body-wrap">
         
   
+    <article id="post-RAC简单学习" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/16/RAC简单学习/">RAC简单学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合</p>
+<p>先看个简单的列子 KVO 用RAC实现</p>
+<pre><code>{
+    NSString *username;
+}
+[RACObserve(self, username) subscribeNext:^(NSString *newName) {
+                                NSLog(@&quot;%@&quot;, newName);
+                            }];
+
+//只要你的username有变化。都可以打印出来
+</code></pre><p>例如下面这个代码块 用到了filter 就是过滤器的意思 指定只有以j开头的username能通过 然后才会打印 否则不打印</p>
+<pre><code>[[RACObserve(self, username)
+  filter:^(NSString *newName) {
+        return [newName hasPrefix:@&quot;j&quot;];
+    }]
+ subscribeNext:^(NSString *newName) {
+     NSLog(@&quot;%@&quot;, newName);
+ }];
+</code></pre><p>还有个map的代码块 就是映射 对数据进行一些操作 改变值等</p>
+<pre><code>map:^id(id value) {
+
+    return @([value[0] length] &gt; 0 &amp;&amp; [value[1] length] &gt; 5);
+
+}
+</code></pre><p>以最少的代码实现一个时钟应用<br>设置一个间隔为一秒。从现在开始调用的函数。并把当前实际传入。 这个函数返回一个NSString。 然后把这个NSString和界面上的textField绑定在了一起。从而实现时钟程序。表现了流和绑定响应</p>
+<pre><code>RAC(self, timeLabel.text) = [[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] startWith:[NSDate date]] map:^id (NSDate *value) {
+    NSLog(@&quot;value:%@&quot;, value);
+    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSHourCalendarUnit |
+     NSMinuteCalendarUnit | 
+     NSSecondCalendarUnit fromDate:value];
+    return [NSString stringWithFormat:@&quot;%02ld:%02ld:%02ld&quot;, (long)dateComponents.hour, (long)dateComponents.minute, (long)dateComponents.second];
+}];
+</code></pre><p>flattenMap: 先 map 再 flatten</p>
+<p>合并combineLatest      concat      merge  then 都能合并</p>
+<p>详细看下demo吧 看运行结果说话<br><a href="https://github.com/ongfei/RACDemo" target="_blank" rel="external">https://github.com/ongfei/RACDemo</a></p>
+<p>另外附上一个博客 <a href="http://blog.csdn.net/xdrt81y/article/details/30624469" target="_blank" rel="external">http://blog.csdn.net/xdrt81y/article/details/30624469</a></p>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2017/03/16/RAC简单学习/" class="archive-article-date">
+  	<time datetime="2017-03-16T07:56:56.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-16</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RAC/">RAC</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-collectionView-拖动" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1051,106 +1141,6 @@ objc_getAssociatedObject
 
 
   
-    <article id="post-iOS-TableView动画效果" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/12/18/iOS-TableView动画效果/">iOS TableView动画效果</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##iOS TableView动画效果</p>
-<ol>
-<li>在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。</li>
-<li>在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadData这个方法。在里面加自己的动画。第二个方案就是不用写子类，在reloadData的时候，使用UIView Animation去实现</li>
-</ol>
-<p>下面记录几个动画</p>
-<pre><code>CATransition *transition = [CATransition animation];
-transition.type = kCATransitionPush;
-transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-transition.fillMode = kCAFillModeForwards;
-transition.duration = 0.5;
-transition.subtype = kCATransitionFromBottom;
-[[self.tableView layer] addAnimation:transition forKey:@&quot;UITableViewReloadDataAnimationKey&quot;];
-</code></pre><hr>
-<pre><code>-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
-
-        cell.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1);
-
-    [UIView animateWithDuration:0.7 animations:^{
-
-        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
-
-    }];
-}
-</code></pre><hr>
-<pre><code>- (void)viewDidLoad{
-    [self.tableView reloadData];
-    self.cellArray = self.tableView.visibleCells;
-
-    //  延迟
-    CGFloat delay =0.05;
-    for (UITableViewCell *cell in self.cellArray) {
-        cell.transform = CGAffineTransformMakeTranslation(0, self.view.bounds.size.height);
-    }
-
-    for (int i = 0; i&lt;self.cellArray.count; i++) {
-        UITableViewCell *cell = self.cellArray[i];
-        CGFloat cellDelay = delay *i;
-
-        [UIView animateWithDuration:1.0 delay:cellDelay usingSpringWithDamping:0.5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            cell.transform = CGAffineTransformMakeTranslation(0, 0);
-        } completion:^(BOOL finished) {
-
-        }];
-}
-}
-</code></pre>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2015/12/18/iOS-TableView动画效果/" class="archive-article-date">
-  	<time datetime="2015-12-18T10:49:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-12-18</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tableview/">tableview</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1216,7 +1206,7 @@ transition.subtype = kCATransitionFromBottom;
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/CocoaPods/" style="font-size: 10px;">CocoaPods</a> <a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 20px;">Xcode</a> <a href="/tags/collectionView/" style="font-size: 10px;">collectionView</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/tableview/" style="font-size: 10px;">tableview</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/切角/" style="font-size: 10px;">切角</a> <a href="/tags/动画/" style="font-size: 10px;">动画</a> <a href="/tags/正则/" style="font-size: 10px;">正则</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a> <a href="/tags/美图-视频处理/" style="font-size: 10px;">美图,视频处理</a> <a href="/tags/谓词/" style="font-size: 10px;">谓词</a>
+    				<a href="/tags/CocoaPods/" style="font-size: 10px;">CocoaPods</a> <a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/RAC/" style="font-size: 10px;">RAC</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 20px;">Xcode</a> <a href="/tags/collectionView/" style="font-size: 10px;">collectionView</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/tableview/" style="font-size: 10px;">tableview</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/切角/" style="font-size: 10px;">切角</a> <a href="/tags/动画/" style="font-size: 10px;">动画</a> <a href="/tags/正则/" style="font-size: 10px;">正则</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a> <a href="/tags/美图-视频处理/" style="font-size: 10px;">美图,视频处理</a> <a href="/tags/谓词/" style="font-size: 10px;">谓词</a>
     			</div>
     	</section>
     
@@ -1233,6 +1223,8 @@ transition.subtype = kCATransitionFromBottom;
   	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://baixin.io/archive/">潘柏信个人站</a>
   	        
   	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.devzeng.com/#blog">曾静的技术博客</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://limboy.me">limboy</a>
   	        
   	        </div>
   		

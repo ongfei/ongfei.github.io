@@ -128,6 +128,106 @@
       <div class="body-wrap">
         
   
+    <article id="post-iOS-TableView动画效果" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/18/iOS-TableView动画效果/">iOS TableView动画效果</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>##iOS TableView动画效果</p>
+<ol>
+<li>在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。</li>
+<li>在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadData这个方法。在里面加自己的动画。第二个方案就是不用写子类，在reloadData的时候，使用UIView Animation去实现</li>
+</ol>
+<p>下面记录几个动画</p>
+<pre><code>CATransition *transition = [CATransition animation];
+transition.type = kCATransitionPush;
+transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+transition.fillMode = kCAFillModeForwards;
+transition.duration = 0.5;
+transition.subtype = kCATransitionFromBottom;
+[[self.tableView layer] addAnimation:transition forKey:@&quot;UITableViewReloadDataAnimationKey&quot;];
+</code></pre><hr>
+<pre><code>-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+
+        cell.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1);
+
+    [UIView animateWithDuration:0.7 animations:^{
+
+        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
+
+    }];
+}
+</code></pre><hr>
+<pre><code>- (void)viewDidLoad{
+    [self.tableView reloadData];
+    self.cellArray = self.tableView.visibleCells;
+
+    //  延迟
+    CGFloat delay =0.05;
+    for (UITableViewCell *cell in self.cellArray) {
+        cell.transform = CGAffineTransformMakeTranslation(0, self.view.bounds.size.height);
+    }
+
+    for (int i = 0; i&lt;self.cellArray.count; i++) {
+        UITableViewCell *cell = self.cellArray[i];
+        CGFloat cellDelay = delay *i;
+
+        [UIView animateWithDuration:1.0 delay:cellDelay usingSpringWithDamping:0.5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            cell.transform = CGAffineTransformMakeTranslation(0, 0);
+        } completion:^(BOOL finished) {
+
+        }];
+}
+}
+</code></pre>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2015/12/18/iOS-TableView动画效果/" class="archive-article-date">
+  	<time datetime="2015-12-18T10:49:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-12-18</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tableview/">tableview</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-动画&lt;一&gt;" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1158,7 +1258,7 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/CocoaPods/" style="font-size: 10px;">CocoaPods</a> <a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 20px;">Xcode</a> <a href="/tags/collectionView/" style="font-size: 10px;">collectionView</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/tableview/" style="font-size: 10px;">tableview</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/切角/" style="font-size: 10px;">切角</a> <a href="/tags/动画/" style="font-size: 10px;">动画</a> <a href="/tags/正则/" style="font-size: 10px;">正则</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a> <a href="/tags/美图-视频处理/" style="font-size: 10px;">美图,视频处理</a> <a href="/tags/谓词/" style="font-size: 10px;">谓词</a>
+    				<a href="/tags/CocoaPods/" style="font-size: 10px;">CocoaPods</a> <a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/RAC/" style="font-size: 10px;">RAC</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 20px;">Xcode</a> <a href="/tags/collectionView/" style="font-size: 10px;">collectionView</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/tableview/" style="font-size: 10px;">tableview</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/切角/" style="font-size: 10px;">切角</a> <a href="/tags/动画/" style="font-size: 10px;">动画</a> <a href="/tags/正则/" style="font-size: 10px;">正则</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a> <a href="/tags/美图-视频处理/" style="font-size: 10px;">美图,视频处理</a> <a href="/tags/谓词/" style="font-size: 10px;">谓词</a>
     			</div>
     	</section>
     
@@ -1175,6 +1275,8 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
   	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://baixin.io/archive/">潘柏信个人站</a>
   	        
   	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://blog.devzeng.com/#blog">曾静的技术博客</a>
+  	        
+  	          <a target="_blank" class="main-nav-link switch-friends-link" href="http://limboy.me">limboy</a>
   	        
   	        </div>
   		

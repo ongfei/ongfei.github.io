@@ -4,30 +4,33 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>collectionView 拖动 | ongfei | 一步一步往上爬</title>
+  <title>RAC简单学习 | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##collectionView 拖动代理的变化
-#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
-####iOS9 之后 collectionView 新增拖动代理
-// Support for reordering
-- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndex">
+  <meta name="description" content="RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
+先看个简单的列子 KVO 用RAC实现
+{
+    NSString *username;
+}
+[RACObserve(self, username) subscribeNext:^(NSString *newName) {">
 <meta property="og:type" content="article">
-<meta property="og:title" content="collectionView 拖动">
-<meta property="og:url" content="http://yoursite.com/2017/03/06/collectionView-拖动/index.html">
+<meta property="og:title" content="RAC简单学习">
+<meta property="og:url" content="http://yoursite.com/2017/03/16/RAC简单学习/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="##collectionView 拖动代理的变化
-#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
-####iOS9 之后 collectionView 新增拖动代理
-// Support for reordering
-- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndex">
-<meta property="og:updated_time" content="2017-03-06T10:13:09.000Z">
+<meta property="og:description" content="RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
+先看个简单的列子 KVO 用RAC实现
+{
+    NSString *username;
+}
+[RACObserve(self, username) subscribeNext:^(NSString *newName) {">
+<meta property="og:updated_time" content="2017-03-16T08:50:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="collectionView 拖动">
-<meta name="twitter:description" content="##collectionView 拖动代理的变化
-#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
-####iOS9 之后 collectionView 新增拖动代理
-// Support for reordering
-- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndex">
+<meta name="twitter:title" content="RAC简单学习">
+<meta name="twitter:description" content="RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
+先看个简单的列子 KVO 用RAC实现
+{
+    NSString *username;
+}
+[RACObserve(self, username) subscribeNext:^(NSString *newName) {">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -139,7 +142,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-collectionView-拖动" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-RAC简单学习" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -149,7 +152,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      collectionView 拖动
+      RAC简单学习
     </h1>
   
 
@@ -157,149 +160,54 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##collectionView 拖动代理的变化</p>
-<p>#####附上一demo 仿支付宝: <a href="https://github.com/ongfei/SortModule" target="_blank" rel="external">https://github.com/ongfei/SortModule</a></p>
-<p>####iOS9 之后 collectionView 新增拖动代理</p>
-<pre><code>// Support for reordering
-- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(9_0); // returns NO if reordering was prevented from beginning - otherwise YES
-- (void)updateInteractiveMovementTargetPosition:(CGPoint)targetPosition NS_AVAILABLE_IOS(9_0);
-- (void)endInteractiveMovement NS_AVAILABLE_IOS(9_0);
-- (void)cancelInteractiveMovement NS_AVAILABLE_IOS(9_0);
-</code></pre><p>#####9之后的处理</p>
-<pre><code>#pragma mark - iOS9 之后的方法  
-- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath  
-{  
-    // 返回YES允许row移动  
-    return YES;  
-}  
+        <p>RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合</p>
+<p>先看个简单的列子 KVO 用RAC实现</p>
+<pre><code>{
+    NSString *username;
+}
+[RACObserve(self, username) subscribeNext:^(NSString *newName) {
+                                NSLog(@&quot;%@&quot;, newName);
+                            }];
 
-- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath  
-{  
-    //取出移动row数据  
-    id color = self.dataArr[sourceIndexPath.row];  
-    //从数据源中移除该数据  
-    [self.dataArr removeObject:color];  
-    //将数据插入到数据源中的目标位置  
-    [self.dataArr insertObject:color atIndex:destinationIndexPath.row];  
-}  
+//只要你的username有变化。都可以打印出来
+</code></pre><p>例如下面这个代码块 用到了filter 就是过滤器的意思 指定只有以j开头的username能通过 然后才会打印 否则不打印</p>
+<pre><code>[[RACObserve(self, username)
+  filter:^(NSString *newName) {
+        return [newName hasPrefix:@&quot;j&quot;];
+    }]
+ subscribeNext:^(NSString *newName) {
+     NSLog(@&quot;%@&quot;, newName);
+ }];
+</code></pre><p>还有个map的代码块 就是映射 对数据进行一些操作 改变值等</p>
+<pre><code>map:^id(id value) {
 
-- (void)iOS9_Action:(UILongPressGestureRecognizer *)longPress  
-{  
-    switch (longPress.state) {  
-        case UIGestureRecognizerStateBegan:  
-        { //手势开始  
-            //判断手势落点位置是否在row上  
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
-            if (indexPath == nil) {  
-                break;  
-            }  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
-            [self.view bringSubviewToFront:cell];  
-            //iOS9方法 移动cell  
-            [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];  
-        }  
-            break;  
-        case UIGestureRecognizerStateChanged:  
-        { // 手势改变  
-            // iOS9方法 移动过程中随时更新cell位置  
-            [self.collectionView updateInteractiveMovementTargetPosition:[longPress locationInView:self.collectionView]];  
-        }  
-            break;  
-        case UIGestureRecognizerStateEnded:  
-        { // 手势结束  
-            // iOS9方法 移动结束后关闭cell移动  
-            [self.collectionView endInteractiveMovement];  
-        }  
-            break;  
-        default: //手势其他状态  
-            [self.collectionView cancelInteractiveMovement];  
-            break;  
-    }  
-}  
-</code></pre><p>#####9之前的处理</p>
-<pre><code>#pragma mark - iOS9 之前的方法  
-- (void)action:(UILongPressGestureRecognizer *)longPress  
-{  
-    switch (longPress.state) {  
-        case UIGestureRecognizerStateBegan:  
-        { // 手势开始  
-            //判断手势落点位置是否在row上  
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
-            self.oldIndexPath = indexPath;  
-            if (indexPath == nil) {  
-                break;  
-            }  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
-            // 使用系统的截图功能,得到cell的截图视图  
-            UIView *snapshotView = [cell snapshotViewAfterScreenUpdates:NO];  
-            snapshotView.frame = cell.frame;  
-            [self.view addSubview:self.snapshotView = snapshotView];  
-            // 截图后隐藏当前cell  
-            cell.hidden = YES;  
+    return @([value[0] length] &gt; 0 &amp;&amp; [value[1] length] &gt; 5);
 
-            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
-            [UIView animateWithDuration:0.25 animations:^{  
-                snapshotView.transform = CGAffineTransformMakeScale(1.05, 1.05);  
-                snapshotView.center = currentPoint;  
-            }];  
-        }  
-            break;  
-        case UIGestureRecognizerStateChanged:  
-        { // 手势改变  
-            //当前手指位置 截图视图位置随着手指移动而移动  
-            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
-            self.snapshotView.center = currentPoint;  
-            // 计算截图视图和哪个可见cell相交  
-            for (UICollectionViewCell *cell in self.collectionView.visibleCells) {  
-                // 当前隐藏的cell就不需要交换了,直接continue  
-                if ([self.collectionView indexPathForCell:cell] == self.oldIndexPath) {  
-                    continue;  
-                }  
-                // 计算中心距  
-                CGFloat space = sqrtf(pow(self.snapshotView.center.x - cell.center.x, 2) + powf(self.snapshotView.center.y - cell.center.y, 2));  
-                // 如果相交一半就移动  
-                if (space &lt;= self.snapshotView.bounds.size.width / 2) {  
-                    self.moveIndexPath = [self.collectionView indexPathForCell:cell];  
-                    //移动 会调用willMoveToIndexPath方法更新数据源  
-                    [self.collectionView moveItemAtIndexPath:self.oldIndexPath toIndexPath:self.moveIndexPath];  
-                    //设置移动后的起始indexPath  
-                    self.oldIndexPath = self.moveIndexPath;  
-                    break;  
-                }  
-            }  
-        }  
-            break;  
-        default:  
-        { // 手势结束和其他状态  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:self.oldIndexPath];  
-            // 结束动画过程中停止交互,防止出问题  
-            self.collectionView.userInteractionEnabled = NO;  
-            // 给截图视图一个动画移动到隐藏cell的新位置  
-            [UIView animateWithDuration:0.25 animations:^{  
-                self.snapshotView.center = cell.center;  
-                self.snapshotView.transform = CGAffineTransformMakeScale(1.0, 1.0);  
-            } completion:^(BOOL finished) {  
-                // 移除截图视图,显示隐藏的cell并开始交互  
-                [self.snapshotView removeFromSuperview];  
-                cell.hidden = NO;  
-                self.collectionView.userInteractionEnabled = YES;  
-            }];  
-        }  
-            break;  
-    }  
-}  
-</code></pre>
+}
+</code></pre><p>以最少的代码实现一个时钟应用<br>设置一个间隔为一秒。从现在开始调用的函数。并把当前实际传入。 这个函数返回一个NSString。 然后把这个NSString和界面上的textField绑定在了一起。从而实现时钟程序。表现了流和绑定响应</p>
+<pre><code>RAC(self, timeLabel.text) = [[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] startWith:[NSDate date]] map:^id (NSDate *value) {
+    NSLog(@&quot;value:%@&quot;, value);
+    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSHourCalendarUnit |
+     NSMinuteCalendarUnit | 
+     NSSecondCalendarUnit fromDate:value];
+    return [NSString stringWithFormat:@&quot;%02ld:%02ld:%02ld&quot;, (long)dateComponents.hour, (long)dateComponents.minute, (long)dateComponents.second];
+}];
+</code></pre><p>flattenMap: 先 map 再 flatten</p>
+<p>合并combineLatest      concat      merge  then 都能合并</p>
+<p>详细看下demo吧 看运行结果说话<br><a href="https://github.com/ongfei/RACDemo" target="_blank" rel="external">https://github.com/ongfei/RACDemo</a></p>
+<p>另外附上一个博客 <a href="http://blog.csdn.net/xdrt81y/article/details/30624469" target="_blank" rel="external">http://blog.csdn.net/xdrt81y/article/details/30624469</a></p>
+
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2017/03/06/collectionView-拖动/" class="archive-article-date">
-  	<time datetime="2017-03-06T10:01:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-06</time>
+      <a href="/2017/03/16/RAC简单学习/" class="archive-article-date">
+  	<time datetime="2017-03-16T07:56:56.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-16</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/collectionView/">collectionView</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RAC/">RAC</a></li></ul>
 	</div>
 
       
@@ -317,18 +225,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2017/03/16/RAC简单学习/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          RAC简单学习
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/02/10/正则表达式link/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">正则表达式link</div>
+    <a href="/2017/03/06/collectionView-拖动/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">collectionView 拖动</div>
       <i class="icon-circle-right"></i>
     </a>
   
