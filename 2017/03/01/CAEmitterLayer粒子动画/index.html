@@ -4,27 +4,21 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>iOS TableView动画效果 | ongfei | 一步一步往上爬</title>
+  <title>CAEmitterLayer粒子动画 | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="##iOS TableView动画效果
-
-在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。
-在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadDat">
+  <meta name="description" content="CAEmitterLayer粒子动画一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。
+ 一个或多个CAEmitterLayers，但通常只有一个：这个发射的层主要控制粒子的形状（例如，一个">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS TableView动画效果">
-<meta property="og:url" content="http://yoursite.com/2015/12/18/iOS-TableView动画效果/index.html">
+<meta property="og:title" content="CAEmitterLayer粒子动画">
+<meta property="og:url" content="http://yoursite.com/2017/03/01/CAEmitterLayer粒子动画/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="##iOS TableView动画效果
-
-在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。
-在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadDat">
-<meta property="og:updated_time" content="2017-02-22T06:14:05.000Z">
+<meta property="og:description" content="CAEmitterLayer粒子动画一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。
+ 一个或多个CAEmitterLayers，但通常只有一个：这个发射的层主要控制粒子的形状（例如，一个">
+<meta property="og:updated_time" content="2017-06-01T01:18:53.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS TableView动画效果">
-<meta name="twitter:description" content="##iOS TableView动画效果
-
-在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。
-在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadDat">
+<meta name="twitter:title" content="CAEmitterLayer粒子动画">
+<meta name="twitter:description" content="CAEmitterLayer粒子动画一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。
+ 一个或多个CAEmitterLayers，但通常只有一个：这个发射的层主要控制粒子的形状（例如，一个">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -136,7 +130,7 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-iOS-TableView动画效果" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-CAEmitterLayer粒子动画" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -146,7 +140,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      iOS TableView动画效果
+      CAEmitterLayer粒子动画
     </h1>
   
 
@@ -154,72 +148,131 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>##iOS TableView动画效果</p>
-<ol>
-<li>在willDisplayCell这个Delegate里，去实现刷新时候cell​时，alpha的值变化。但是存在一个问题就是当你reload次数太多的时候，整个界面的动画会出现得特别频繁。</li>
-<li>在reload的时候实现动画。这个方法有两种方案，第一个就是直接创建一个tableView的子类，继承自UITableView，然后override reloadData这个方法。在里面加自己的动画。第二个方案就是不用写子类，在reloadData的时候，使用UIView Animation去实现</li>
-</ol>
-<p>下面记录几个动画</p>
-<pre><code>CATransition *transition = [CATransition animation];
-transition.type = kCATransitionPush;
-transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-transition.fillMode = kCAFillModeForwards;
-transition.duration = 0.5;
-transition.subtype = kCATransitionFromBottom;
-[[self.tableView layer] addAnimation:transition forKey:@&quot;UITableViewReloadDataAnimationKey&quot;];
-</code></pre><hr>
-<pre><code>-(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath{
+        <h4 id="CAEmitterLayer粒子动画"><a href="#CAEmitterLayer粒子动画" class="headerlink" title="CAEmitterLayer粒子动画"></a>CAEmitterLayer粒子动画</h4><p>一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。</p>
+<p> 一个或多个CAEmitterLayers，但通常只有一个：这个发射的层主要控制粒子的形状（例如，一个点，矩形或圆形）和发射的位置（例如，在矩形内，或边缘）。这个层具有全局的乘法器，可以施加到系统内的CAEmitterCells。这些给你一个简单的方法覆盖的所有粒子的变化。比如一个人为的例子将改变x雨来模拟风的速度。</p>
+<p>基础是简单的，但这些参数却是相当微妙的。CAEmitterLayer有超过30种不同的参数进行自定义粒子的行为。</p>
+<pre><code>- (void)emitterAnimation {
 
-        cell.layer.transform = CATransform3DMakeScale(0.5, 0.5, 1);
+    CAEmitterLayer *emitter = [CAEmitterLayer layer];
 
-    [UIView animateWithDuration:0.7 animations:^{
+    emitter.frame = self.view.bounds;
 
-        cell.layer.transform = CATransform3DMakeScale(1, 1, 1);
+    [self.view.layer addSublayer:emitter];
 
-    }];
+
+    emitter.renderMode = kCAEmitterLayerAdditive;//重叠模式
+    emitter.emitterPosition = CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height - 20);//发射中心点
+
+
+    CAEmitterCell *cell = [[CAEmitterCell alloc] init];
+
+    cell.contents = (__bridge id)[UIImage imageNamed:@&quot;heart2.png&quot;].CGImage;//设置图片内容
+
+    cell.yAcceleration = -100.f;     // 粒子的初始加速度
+    cell.xAcceleration = 0.f;
+
+    cell.birthRate = 2;//每秒生成的个数
+
+    cell.lifetime = 10.0;//存活时间
+
+    cell.color = [UIColor redColor].CGColor;
+
+    cell.alphaSpeed = -0.4;//消逝速度
+
+    cell.velocity = 50;//粒子运动的速度均值
+
+    cell.velocityRange = 200;//粒子运动的速度扰动范围
+
+    cell.emissionRange = M_PI * 3.0; // 粒子发射角度, 这里是一个扇形.
+
+    // 将粒子组成的数组赋值给CAEmitterLayer的emitterCells属性即可.
+    emitter.emitterCells = @[cell];
 }
-</code></pre><hr>
-<pre><code>- (void)viewDidLoad{
-    [self.tableView reloadData];
-    self.cellArray = self.tableView.visibleCells;
+</code></pre><p>effectCell 几个重要属性：</p>
+<p>1）.birthRate 顾名思义没有这个也就没有effectCell，这个必须要设置，具体含义是每秒某个点产生的effectCell数量</p>
+<p>2）.lifetime &amp; lifetimeRange 表示effectCell的生命周期，既在屏幕上的显示时间要多长。</p>
+<p>3）.contents 这个和CALayer一样，只是用来设置图片</p>
+<p>4）.name 这个是当effectCell存在caeEmitter 的emitterCells中用来辨认的。用到setValue forKeyPath比较有用</p>
+<p>5）.velocity &amp; velocityRange &amp; emissionRange 表示cell向屏幕右边飞行的速度 &amp; 在右边什么范围内飞行&amp; ＋－角度扩散</p>
+<p>6）.把cell做成array放进caeEmitter.emitterCells里去。caeEmitter.renderMode有个效果很不错，能变成火的就是kCAEmitterLayerAdditive</p>
+<p>属性：</p>
+<p>alphaRange:  一个粒子的颜色alpha能改变的范围；</p>
+<p>alphaSpeed:粒子透明度在生命周期内的改变速度；</p>
+<p>birthrate：粒子参数的速度乘数因子；</p>
+<p>blueRange：一个粒子的颜色blue 能改变的范围；</p>
+<p>blueSpeed: 粒子blue在生命周期内的改变速度；</p>
+<p>color:粒子的颜色</p>
+<p>contents：是个CGImageRef的对象,既粒子要展现的图片；</p>
+<p>contentsRect：应该画在contents里的子rectangle：</p>
+<p>emissionLatitude：发射的z轴方向的角度</p>
+<p>emissionLongitude:x-y平面的发射方向</p>
+<p>emissionRange；周围发射角度</p>
+<p>emitterCells：粒子发射的粒子</p>
+<p>enabled：粒子是否被渲染</p>
+<p>greenrange: 一个粒子的颜色green 能改变的范围；</p>
+<p>greenSpeed: 粒子green在生命周期内的改变速度；</p>
+<p>lifetime：生命周期</p>
+<p>lifetimeRange：生命周期范围</p>
+<p>magnificationFilter：不是很清楚好像增加自己的大小</p>
+<p>minificatonFilter：减小自己的大小</p>
+<p>minificationFilterBias：减小大小的因子</p>
+<p>name：粒子的名字</p>
+<p>redRange：一个粒子的颜色red 能改变的范围；</p>
+<p>redSpeed; 粒子red在生命周期内的改变速度；</p>
+<p>scale：缩放比例：</p>
+<p>scaleRange：缩放比例范围；</p>
+<p>scaleSpeed：缩放比例速度：</p>
+<p>spin：子旋转角度</p>
+<p>spinrange：子旋转角度范围</p>
+<p>style：不是很清楚：</p>
+<p>velocity：速度</p>
+<p>velocityRange：速度范围</p>
+<p>xAcceleration:粒子x方向的加速度分量</p>
+<p>yAcceleration:粒子y方向的加速度分量</p>
+<p>zAcceleration:粒子z方向的加速度分量</p>
+<p>2、CAEmitterLayer<br>CAEmitterLayer提供了一个基于Core Animation的粒子发射系统，粒子用CAEmitterCell来初始化。粒子画在背景层盒边界上</p>
+<p>属性:   </p>
+<p>birthRate:粒子产生系数，默认1.0；</p>
+<p>emitterCells: 装着CAEmitterCell对象的数组，被用于把粒子投放到layer上；</p>
+<p>emitterDepth:决定粒子形状的深度联系：emittershape</p>
+<p>emitterMode:发射模式</p>
+<p>NSString * const kCAEmitterLayerPoints;</p>
+<p>NSString * const kCAEmitterLayerOutline;</p>
+<p>NSString * const kCAEmitterLayerSurface;</p>
+<p>NSString * const kCAEmitterLayerVolume;</p>
+<p>emitterPosition:发射位置</p>
+<p>emitterShape:发射源的形状：</p>
+<p>NSString * const kCAEmitterLayerPoint;</p>
+<p>NSString * const kCAEmitterLayerLine;</p>
+<p>NSString * const kCAEmitterLayerRectangle;</p>
+<p>NSString * const kCAEmitterLayerCuboid;</p>
+<p>NSString * const kCAEmitterLayerCircle;</p>
+<p>NSString * const kCAEmitterLayerSphere;</p>
+<p>emitterSize:发射源的尺寸大；</p>
+<p>emitterZposition:发射源的z坐标位置；</p>
+<p>lifetime:粒子生命周期</p>
+<p>preservesDepth:不是多很清楚（粒子是平展在层上）</p>
+<p>renderMode:渲染模式：</p>
+<p>NSString * const kCAEmitterLayerUnordered;</p>
+<p>NSString * const kCAEmitterLayerOldestFirst;</p>
+<p>NSString * const kCAEmitterLayerOldestLast;</p>
+<p>NSString * const kCAEmitterLayerBackToFront;</p>
+<p>NSString * const kCAEmitterLayerAdditive;</p>
 
-    //  延迟
-    CGFloat delay =0.05;
-    for (UITableViewCell *cell in self.cellArray) {
-        cell.transform = CGAffineTransformMakeTranslation(0, self.view.bounds.size.height);
-    }
-
-    for (int i = 0; i&lt;self.cellArray.count; i++) {
-        UITableViewCell *cell = self.cellArray[i];
-        CGFloat cellDelay = delay *i;
-
-        [UIView animateWithDuration:1.0 delay:cellDelay usingSpringWithDamping:0.5 initialSpringVelocity:10 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            cell.transform = CGAffineTransformMakeTranslation(0, 0);
-        } completion:^(BOOL finished) {
-
-        }];
-}
-}
-</code></pre>
       
     </div>
     <div class="article-info article-info-index">
       
-      <a href="/2015/12/18/iOS-TableView动画效果/" class="archive-article-date">
-  	<time datetime="2015-12-18T10:49:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-12-18</time>
+      <a href="/2017/03/01/CAEmitterLayer粒子动画/" class="archive-article-date">
+  	<time datetime="2017-03-01T01:09:24.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-01</time>
 </a>
       
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tableview/">tableview</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Animation/">Animation</a></li></ul>
 	</div>
 
       
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
 
       <div class="clearfix"></div>
     </div>
@@ -229,18 +282,18 @@ transition.subtype = kCATransitionFromBottom;
   
 <nav id="article-nav">
   
-    <a href="/2016/04/09/iOS-Runtime/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/03/06/collectionView-拖动/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          iOS Runtime
+          collectionView 拖动
         
       </div>
     </a>
   
   
-    <a href="/2015/12/17/动画<一>/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">动画&lt;一&gt;</div>
+    <a href="/2017/02/10/正则表达式link/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">正则表达式link</div>
       <i class="icon-circle-right"></i>
     </a>
   
