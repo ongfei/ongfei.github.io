@@ -20,7 +20,7 @@ backForwardList">
 - (instancetype)initWithFrame:(CGRect)frame configuration:(WKWebViewConfiguration *)configuration NS_DESIGNATED_INITIALIZER;
 4、WKWebView的一些简单属性的介绍
 backForwardList">
-<meta property="og:updated_time" content="2017-02-07T06:17:44.000Z">
+<meta property="og:updated_time" content="2017-06-01T08:26:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WKWebview的使用及遇到的问题">
 <meta name="twitter:description" content="今天试了试WKWebView,试出来很多问题.记录如下
@@ -273,9 +273,9 @@ WKUserScript *userScript = [[WKUserScript alloc]initWithSource:@&quot;js代码&q
 <hr>
 <h3 id="坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答"><a href="#坑-—-gt-页面提示没登陆-或者打开网页白屏-下面做出解答" class="headerlink" title="坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答"></a>坑 —&gt; 页面提示没登陆 或者打开网页白屏 下面做出解答</h3><h3 id="关于Cookie"><a href="#关于Cookie" class="headerlink" title="关于Cookie"></a>关于Cookie</h3><p>同一个应用，不同UIWebView之间的Cookie是自动同步的。它们都是保存在NSHTTPCookieStorage中。 当UIWebView加载一个URL的时候，在加载完成时候，这个URL response中包含的cookie会自动以NSHttpCookie的形式保存到 NSHTTPCookieStorage中。同时，如果在http response中，对cookie进行更新或者删除的话，其结果也会直接反应到NSHTTPCookieStorage 存储的cookie数据中。</p>
 <pre><code>//获取保存的cookie
-NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage]; 
+NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
 //设置
-[storage setCookies:cookies forURL:url mainDocumentURL:nil] 
+[storage setCookies:cookies forURL:url mainDocumentURL:nil]
 //删除
 [storage deleteCookie:cookie]
 </code></pre><h3 id="WKWebView-cookie同步"><a href="#WKWebView-cookie同步" class="headerlink" title="WKWebView cookie同步"></a>WKWebView cookie同步</h3><p>WKWebView的cookie并不会再加载url后自动保存到NSHTTPCookieStorage中。</p>
@@ -316,8 +316,70 @@ for (NSHTTPCookie *cookie in cookies){
                                               mainDocumentURL:nil];
 }
 return str;
-}    
-</code></pre>
+}
+</code></pre><h4 id="共享cookie-评论说-iOS-8-还是不能共享-没实测-来源于奉强的个人博客-http-fengqiang-leanote-com-post-iOS开发-打通UIWebView和WKWebView的Cookie"><a href="#共享cookie-评论说-iOS-8-还是不能共享-没实测-来源于奉强的个人博客-http-fengqiang-leanote-com-post-iOS开发-打通UIWebView和WKWebView的Cookie" class="headerlink" title="共享cookie (评论说 iOS 8 还是不能共享 没实测)  来源于奉强的个人博客 http://fengqiang.leanote.com/post/iOS开发-打通UIWebView和WKWebView的Cookie"></a>共享cookie (评论说 iOS 8 还是不能共享 没实测)  来源于奉强的个人博客 <a href="http://fengqiang.leanote.com/post/iOS开发-打通UIWebView和WKWebView的Cookie" target="_blank" rel="external">http://fengqiang.leanote.com/post/iOS开发-打通UIWebView和WKWebView的Cookie</a></h4><p>1、思路</p>
+<p>思路是这样子的，我们可以通过NSHTTPCookieStorage的一个单例，拿到app中所有的UIWebView的cookie，拿到之后再通过让WKWebView执行一段js代码，把这些cookie设置到WKWebView中，这样就可以实现WKWebView获取UIWebView的cookie了。</p>
+<p>2、代码</p>
+<p>1、新建一个单例</p>
+<pre><code>+ (instancetype)sharedWKCookieSyncManager {
+    static WKCookieSyncManager *sharedWKCookieSyncManagerInstance = nil;
+    static dispatch_once_t predicate;
+    dispatch_once(&amp;predicate, ^{
+        sharedWKCookieSyncManagerInstance = [[self alloc] init];
+    });
+    return sharedWKCookieSyncManagerInstance;
+}
+</code></pre><p>2、在单例中，新建一个WKProcessPool对象，并且，需要保持这个对象为单例，因为在WKWebView中，只有使用了同一个WKProcessPool的WKWebView，才会共享cookie。</p>
+<pre><code>- (WKProcessPool *)processPool {
+    if (!_processPool) {
+        static dispatch_once_t predicate;
+        dispatch_once(&amp;predicate, ^{
+            _processPool = [[WKProcessPool alloc] init];
+        });
+    }
+
+    return _processPool;
+}
+</code></pre><p>3、新建一个setCookie方法，在方法中，请求一个不存在的url，并且在回调中，设置cookie</p>
+<pre><code>- (void)setCookie {
+    //判断系统是否支持wkWebView
+    Class wkWebView = NSClassFromString(@&quot;WKWebView&quot;);
+    if (!wkWebView) {
+        return;
+    }
+    WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+    config.processPool = self.processPool;
+    self.webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:self.testUrl];
+    self.webView.navigationDelegate = self;
+    [self.webView loadRequest:request];
+}
+</code></pre><p>4、在回调中，设置cookie</p>
+<pre><code>#pragma mark - WKNavigationDelegate
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    //取出cookie
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    //js函数
+    NSString *JSFuncString = @&quot;function setCookie(name,value,expires)\
+    {\
+        var oDate=new Date();\
+        oDate.setDate(oDate.getDate()+expires);\
+        document.cookie=name+&apos;=&apos;+value+&apos;;expires=&apos;+oDate;\
+    }&quot;;
+
+    //拼凑js字符串
+    NSMutableString *JSCookieString = JSFuncString.mutableCopy;
+    for (NSHTTPCookie *cookie in cookieStorage.cookies) {
+        NSString *excuteJSString = [NSString stringWithFormat:@&quot;setCookie(&apos;%@&apos;, &apos;%@&apos;, 1);&quot;, cookie.name, cookie.value];
+        [JSCookieString appendString:excuteJSString];
+    }
+    //执行js
+    [webView evaluateJavaScript:JSCookieString completionHandler:nil];
+}
+</code></pre><p>四、补充<br>在后面的开发中，需要设置所有的WKWebView都使用前面那个单例processPool，否则，cookie是不会在WKWebView之间共享的。</p>
+<h3 id="再次补充"><a href="#再次补充" class="headerlink" title="再次补充"></a>再次补充</h3><p><a href="https://github.com/fq050766/WKWebViewAndUIWebViewCookiesDemo" target="_blank" rel="external">https://github.com/fq050766/WKWebViewAndUIWebViewCookiesDemo</a></p>
+<p>在这里 作者说 在iOS9和iOS10上面测试，发现uiwebView和wkwebview、AFN的cookies都是互通的了 (没测试)</p>
+
       
     </div>
     <div class="article-info article-info-index">
