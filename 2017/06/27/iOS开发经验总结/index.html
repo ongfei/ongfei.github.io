@@ -4,17 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>ongfei | 一步一步往上爬</title>
+  <title>iOS开发经验总结 | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="低调做事 快乐做人">
-<meta property="og:type" content="website">
-<meta property="og:title" content="ongfei | 一步一步往上爬">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="看到的一篇iOS开发经验总结的文章 做下记录iOS开发经验总结原文章地址 :    http://www.jianshu.com/p/1ff9e44ccc78
+1、禁止手机睡眠
+[UIApplication sharedApplication].idleTimerDisabled = YES;
+2、隐藏某行cell
+- (CGFloat)tableView:(UITableView *)table">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发经验总结">
+<meta property="og:url" content="http://yoursite.com/2017/06/27/iOS开发经验总结/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="低调做事 快乐做人">
+<meta property="og:description" content="看到的一篇iOS开发经验总结的文章 做下记录iOS开发经验总结原文章地址 :    http://www.jianshu.com/p/1ff9e44ccc78
+1、禁止手机睡眠
+[UIApplication sharedApplication].idleTimerDisabled = YES;
+2、隐藏某行cell
+- (CGFloat)tableView:(UITableView *)table">
+<meta property="og:updated_time" content="2017-06-27T08:46:57.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ongfei | 一步一步往上爬">
-<meta name="twitter:description" content="低调做事 快乐做人">
+<meta name="twitter:title" content="iOS开发经验总结">
+<meta name="twitter:description" content="看到的一篇iOS开发经验总结的文章 做下记录iOS开发经验总结原文章地址 :    http://www.jianshu.com/p/1ff9e44ccc78
+1、禁止手机睡眠
+[UIApplication sharedApplication].idleTimerDisabled = YES;
+2、隐藏某行cell
+- (CGFloat)tableView:(UITableView *)table">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -126,9 +139,7 @@
 </nav>
 
       <div class="body-wrap">
-        
-  
-    <article id="post-iOS开发经验总结" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-iOS开发经验总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <input type="hidden" class="isFancy" />
@@ -137,8 +148,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/27/iOS开发经验总结/">iOS开发经验总结</a>
+    <h1 class="article-title" itemprop="name">
+      iOS开发经验总结
     </h1>
   
 
@@ -1411,855 +1422,44 @@ UIGraphicsEndImageContext();
   </div>
 </article>
 
-
-
-
-
-
-
-
-
-
   
-    <article id="post-内存分配-复习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/04/24/内存分配-复习/">内存分配-复习</a>
-    </h1>
   
+    <a href="/2017/04/24/内存分配-复习/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">内存分配-复习</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h6 id="一-栈"><a href="#一-栈" class="headerlink" title="一 栈"></a>一 栈</h6><p> 栈区(stack) 由编译器自动分配并释放，存放函数的参数值，局部变量等。栈是系统数据结构，对应线程/进程是唯一的。</p>
-<p>优点是快速高效，缺点时有限制，数据不灵活。［先进后出］</p>
-<p>栈空间分静态分配 和动态分配两种。</p>
-<h6 id="二-堆"><a href="#二-堆" class="headerlink" title="二 堆"></a>二 堆</h6><p>堆区(heap) 由程序员分配和释放，如果程序员不释放，程序结束时，可能会由操作系统回收 ，比如在ios 中 alloc 都是存放在堆中。</p>
-<p>优点是灵活方便，数据适应面广泛，但是效率有一定降低。［顺序随意］</p>
-<blockquote>
-<p>堆是函数库内部数据结构，不一定唯一。<br> 不同堆分配的内存无法互相操作。<br> 堆空间的分配总是动态的</p>
-</blockquote>
-<h6 id="三-静态"><a href="#三-静态" class="headerlink" title="三 静态"></a>三 静态</h6><p> 全局区(静态区) (static) 全局变量和静态变量的存储是放在一起的，初始化的全局变量和静态变量存放在一块区域，未初始化的全局变量和静态变量在相邻的另一块区域，程序结束后有系统释放。</p>
-<blockquote>
-<p>注意：全局区又可分为未初始化全局区：<br>     .bss段和初始化全局区：data段。<br>     举例：int a;未初始化的。int a = 10;已初始化的<br>     。</p>
-</blockquote>
-<h6 id="四-文字常量区"><a href="#四-文字常量区" class="headerlink" title="四 文字常量区"></a>四 文字常量区</h6><p>文字常量区 存放常量字符串，程序结束后由系统释放</p>
-<h6 id="五-程序代码区"><a href="#五-程序代码区" class="headerlink" title="五 程序代码区"></a>五 程序代码区</h6><p>程序代码区 存放函数的二进制代码</p>
-<h4 id="堆（heap）和栈（stack）区别"><a href="#堆（heap）和栈（stack）区别" class="headerlink" title="堆（heap）和栈（stack）区别"></a>堆（heap）和栈（stack）区别</h4><h5 id="申请方式和回收方式"><a href="#申请方式和回收方式" class="headerlink" title="申请方式和回收方式"></a>申请方式和回收方式</h5><p>栈区（stack） ：由编译器自动分配并释放<br>堆区（heap）：由程序员分配和释放</p>
-<h5 id="申请后的系统响应"><a href="#申请后的系统响应" class="headerlink" title="申请后的系统响应"></a>申请后的系统响应</h5><p>栈：存储每一个函数在执行的时候都会向操作系统索要资源，栈区就是函数运行时的内存，栈区中的变量由编译器负责分配和释放，内存随着函数的运行分配，随着函数的结束而释放，由系统自动完成。</p>
-<p>注意：只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。</p>
-<p>堆：<br>1.首先应该知道操作系统有一个记录空闲内存地址的链表。<br>2.当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序。<br>3 .由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中</p>
-<h5 id="申请大小的限制"><a href="#申请大小的限制" class="headerlink" title="申请大小的限制"></a>申请大小的限制</h5><p>栈区（stack）：栈是向低地址扩展的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，栈的大小是2M（也可能是1M，我看网上说得，我也不清楚），如果申请的空间超过栈的剩余空间时，将提示栈溢出。因此，能从栈获得的空间较小。</p>
-<p>堆区（stack）：堆是向高地址扩展的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。</p>
-<h5 id="申请效率的比较"><a href="#申请效率的比较" class="headerlink" title="申请效率的比较"></a>申请效率的比较</h5><p>栈区（stack）：由系统自动分配，速度较快。但程序员是无法控制的。</p>
-<p>堆区（stack）：是由alloc分配的内存，一般速度比较慢，而且容易产生内存碎片,不过用起来最方便.</p>
-<h5 id="分配方式的比较"><a href="#分配方式的比较" class="headerlink" title="分配方式的比较"></a>分配方式的比较</h5><p>栈区（stack）：有2种分配方式：静态分配和动态分配。静态分配是编译器完成的，比如局部变量的分配。动态分配由alloc函数进行分配，但是栈的动态分配和堆是不同的，他的动态分配是由编译器进行释放，无需我们手工实现。</p>
-<p>堆区（stack）：堆都是动态分配的，没有静态分配的堆。</p>
-<h5 id="分配效率的比较"><a href="#分配效率的比较" class="headerlink" title="分配效率的比较"></a>分配效率的比较</h5><p>栈区（stack）：栈是操作系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。</p>
-<p>堆区（stack）：堆则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多。</p>
 
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/04/24/内存分配-复习/" class="archive-article-date">
-  	<time datetime="2017-04-24T03:43:53.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-04-24</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/内存/">内存</a></li></ul>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+	    <a class="jiathis_button_twitter"></a>
+	    <a class="jiathis_button_plus"></a> 
+	    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-      
 
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
 
 
 
 
 
-
-
-
-
-
-  
-    <article id="post-RAC简单学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/16/RAC简单学习/">RAC简单学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合</p>
-<p>先看个简单的列子 KVO 用RAC实现</p>
-<pre><code>{
-    NSString *username;
-}
-[RACObserve(self, username) subscribeNext:^(NSString *newName) {
-                                NSLog(@&quot;%@&quot;, newName);
-                            }];
-
-//只要你的username有变化。都可以打印出来
-</code></pre><p>例如下面这个代码块 用到了filter 就是过滤器的意思 指定只有以j开头的username能通过 然后才会打印 否则不打印</p>
-<pre><code>[[RACObserve(self, username)
-  filter:^(NSString *newName) {
-        return [newName hasPrefix:@&quot;j&quot;];
-    }]
- subscribeNext:^(NSString *newName) {
-     NSLog(@&quot;%@&quot;, newName);
- }];
-</code></pre><p>还有个map的代码块 就是映射 对数据进行一些操作 改变值等</p>
-<pre><code>map:^id(id value) {
-
-    return @([value[0] length] &gt; 0 &amp;&amp; [value[1] length] &gt; 5);
-
-}
-</code></pre><p>以最少的代码实现一个时钟应用<br>设置一个间隔为一秒。从现在开始调用的函数。并把当前实际传入。 这个函数返回一个NSString。 然后把这个NSString和界面上的textField绑定在了一起。从而实现时钟程序。表现了流和绑定响应</p>
-<pre><code>RAC(self, timeLabel.text) = [[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] startWith:[NSDate date]] map:^id (NSDate *value) {
-    NSLog(@&quot;value:%@&quot;, value);
-    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSHourCalendarUnit |
-     NSMinuteCalendarUnit | 
-     NSSecondCalendarUnit fromDate:value];
-    return [NSString stringWithFormat:@&quot;%02ld:%02ld:%02ld&quot;, (long)dateComponents.hour, (long)dateComponents.minute, (long)dateComponents.second];
-}];
-</code></pre><p>flattenMap: 先 map 再 flatten</p>
-<p>合并combineLatest      concat      merge  then 都能合并</p>
-<p>详细看下demo吧 看运行结果说话<br><a href="https://github.com/ongfei/RACDemo" target="_blank" rel="external">https://github.com/ongfei/RACDemo</a></p>
-<p>另外附上一个博客 <a href="http://blog.csdn.net/xdrt81y/article/details/30624469" target="_blank" rel="external">http://blog.csdn.net/xdrt81y/article/details/30624469</a></p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/03/16/RAC简单学习/" class="archive-article-date">
-  	<time datetime="2017-03-16T07:56:56.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-16</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RAC/">RAC</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-collectionView-拖动" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/06/collectionView-拖动/">collectionView 拖动</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##collectionView 拖动代理的变化</p>
-<p>#####附上一demo 仿支付宝: <a href="https://github.com/ongfei/SortModule" target="_blank" rel="external">https://github.com/ongfei/SortModule</a></p>
-<p>####iOS9 之后 collectionView 新增拖动代理</p>
-<pre><code>// Support for reordering
-- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(9_0); // returns NO if reordering was prevented from beginning - otherwise YES
-- (void)updateInteractiveMovementTargetPosition:(CGPoint)targetPosition NS_AVAILABLE_IOS(9_0);
-- (void)endInteractiveMovement NS_AVAILABLE_IOS(9_0);
-- (void)cancelInteractiveMovement NS_AVAILABLE_IOS(9_0);
-</code></pre><p>#####9之后的处理</p>
-<pre><code>#pragma mark - iOS9 之后的方法  
-- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath  
-{  
-    // 返回YES允许row移动  
-    return YES;  
-}  
-
-- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath  
-{  
-    //取出移动row数据  
-    id color = self.dataArr[sourceIndexPath.row];  
-    //从数据源中移除该数据  
-    [self.dataArr removeObject:color];  
-    //将数据插入到数据源中的目标位置  
-    [self.dataArr insertObject:color atIndex:destinationIndexPath.row];  
-}  
-
-- (void)iOS9_Action:(UILongPressGestureRecognizer *)longPress  
-{  
-    switch (longPress.state) {  
-        case UIGestureRecognizerStateBegan:  
-        { //手势开始  
-            //判断手势落点位置是否在row上  
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
-            if (indexPath == nil) {  
-                break;  
-            }  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
-            [self.view bringSubviewToFront:cell];  
-            //iOS9方法 移动cell  
-            [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];  
-        }  
-            break;  
-        case UIGestureRecognizerStateChanged:  
-        { // 手势改变  
-            // iOS9方法 移动过程中随时更新cell位置  
-            [self.collectionView updateInteractiveMovementTargetPosition:[longPress locationInView:self.collectionView]];  
-        }  
-            break;  
-        case UIGestureRecognizerStateEnded:  
-        { // 手势结束  
-            // iOS9方法 移动结束后关闭cell移动  
-            [self.collectionView endInteractiveMovement];  
-        }  
-            break;  
-        default: //手势其他状态  
-            [self.collectionView cancelInteractiveMovement];  
-            break;  
-    }  
-}  
-</code></pre><p>#####9之前的处理</p>
-<pre><code>#pragma mark - iOS9 之前的方法  
-- (void)action:(UILongPressGestureRecognizer *)longPress  
-{  
-    switch (longPress.state) {  
-        case UIGestureRecognizerStateBegan:  
-        { // 手势开始  
-            //判断手势落点位置是否在row上  
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
-            self.oldIndexPath = indexPath;  
-            if (indexPath == nil) {  
-                break;  
-            }  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
-            // 使用系统的截图功能,得到cell的截图视图  
-            UIView *snapshotView = [cell snapshotViewAfterScreenUpdates:NO];  
-            snapshotView.frame = cell.frame;  
-            [self.view addSubview:self.snapshotView = snapshotView];  
-            // 截图后隐藏当前cell  
-            cell.hidden = YES;  
-
-            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
-            [UIView animateWithDuration:0.25 animations:^{  
-                snapshotView.transform = CGAffineTransformMakeScale(1.05, 1.05);  
-                snapshotView.center = currentPoint;  
-            }];  
-        }  
-            break;  
-        case UIGestureRecognizerStateChanged:  
-        { // 手势改变  
-            //当前手指位置 截图视图位置随着手指移动而移动  
-            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
-            self.snapshotView.center = currentPoint;  
-            // 计算截图视图和哪个可见cell相交  
-            for (UICollectionViewCell *cell in self.collectionView.visibleCells) {  
-                // 当前隐藏的cell就不需要交换了,直接continue  
-                if ([self.collectionView indexPathForCell:cell] == self.oldIndexPath) {  
-                    continue;  
-                }  
-                // 计算中心距  
-                CGFloat space = sqrtf(pow(self.snapshotView.center.x - cell.center.x, 2) + powf(self.snapshotView.center.y - cell.center.y, 2));  
-                // 如果相交一半就移动  
-                if (space &lt;= self.snapshotView.bounds.size.width / 2) {  
-                    self.moveIndexPath = [self.collectionView indexPathForCell:cell];  
-                    //移动 会调用willMoveToIndexPath方法更新数据源  
-                    [self.collectionView moveItemAtIndexPath:self.oldIndexPath toIndexPath:self.moveIndexPath];  
-                    //设置移动后的起始indexPath  
-                    self.oldIndexPath = self.moveIndexPath;  
-                    break;  
-                }  
-            }  
-        }  
-            break;  
-        default:  
-        { // 手势结束和其他状态  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:self.oldIndexPath];  
-            // 结束动画过程中停止交互,防止出问题  
-            self.collectionView.userInteractionEnabled = NO;  
-            // 给截图视图一个动画移动到隐藏cell的新位置  
-            [UIView animateWithDuration:0.25 animations:^{  
-                self.snapshotView.center = cell.center;  
-                self.snapshotView.transform = CGAffineTransformMakeScale(1.0, 1.0);  
-            } completion:^(BOOL finished) {  
-                // 移除截图视图,显示隐藏的cell并开始交互  
-                [self.snapshotView removeFromSuperview];  
-                cell.hidden = NO;  
-                self.collectionView.userInteractionEnabled = YES;  
-            }];  
-        }  
-            break;  
-    }  
-}  
-</code></pre>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/03/06/collectionView-拖动/" class="archive-article-date">
-  	<time datetime="2017-03-06T10:01:59.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-06</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/collectionView/">collectionView</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-渐变" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/04/渐变/">渐变</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="渐变"><a href="#渐变" class="headerlink" title="渐变"></a>渐变</h4><p>推荐一篇博客 很详细: <a href="http://www.cocoachina.com/ios/20161009/17704.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20161009/17704.html</a></p>
-<ol>
-<li>colors    渐变的颜色</li>
-<li>locations    渐变颜色的分割点</li>
-<li><p>startPoint&amp;endPoint    颜色渐变的方向，范围在(0,0)与(1.0,1.0)之间，如(0,0)(1.0,0)代表水平方向渐变,(0,0)(0,1.0)代表竖直方向渐变</p>
-<p> CAGradientLayer *gradientLayer = [CAGradientLayer layer];<br> gradientLayer.colors = @[(<strong>bridge id)[UIColor redColor].CGColor, (</strong>bridge id)[UIColor yellowColor].CGColor, (__bridge id)[UIColor blueColor].CGColor];<br> gradientLayer.locations = @[@0.3, @0.5, @1.0];<br> gradientLayer.startPoint = CGPointMake(0, 0);<br> gradientLayer.endPoint = CGPointMake(1.0, 0);<br> gradientLayer.frame = CGRectMake(0, 100, 300, 100);<br> [self.view.layer addSublayer:gradientLayer];</p>
-</li>
-</ol>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/03/04/渐变/" class="archive-article-date">
-  	<time datetime="2017-03-04T01:29:39.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-04</time>
-</a>
-      
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-CAEmitterLayer粒子动画" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/01/CAEmitterLayer粒子动画/">CAEmitterLayer粒子动画</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="CAEmitterLayer粒子动画"><a href="#CAEmitterLayer粒子动画" class="headerlink" title="CAEmitterLayer粒子动画"></a>CAEmitterLayer粒子动画</h4><p>一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。</p>
-<p> 一个或多个CAEmitterLayers，但通常只有一个：这个发射的层主要控制粒子的形状（例如，一个点，矩形或圆形）和发射的位置（例如，在矩形内，或边缘）。这个层具有全局的乘法器，可以施加到系统内的CAEmitterCells。这些给你一个简单的方法覆盖的所有粒子的变化。比如一个人为的例子将改变x雨来模拟风的速度。</p>
-<p>基础是简单的，但这些参数却是相当微妙的。CAEmitterLayer有超过30种不同的参数进行自定义粒子的行为。</p>
-<pre><code>- (void)emitterAnimation {
-
-    CAEmitterLayer *emitter = [CAEmitterLayer layer];
-
-    emitter.frame = self.view.bounds;
-
-    [self.view.layer addSublayer:emitter];
-
-
-    emitter.renderMode = kCAEmitterLayerAdditive;//重叠模式
-    emitter.emitterPosition = CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height - 20);//发射中心点
-
-
-    CAEmitterCell *cell = [[CAEmitterCell alloc] init];
-
-    cell.contents = (__bridge id)[UIImage imageNamed:@&quot;heart2.png&quot;].CGImage;//设置图片内容
-
-    cell.yAcceleration = -100.f;     // 粒子的初始加速度
-    cell.xAcceleration = 0.f;
-
-    cell.birthRate = 2;//每秒生成的个数
-
-    cell.lifetime = 10.0;//存活时间
-
-    cell.color = [UIColor redColor].CGColor;
-
-    cell.alphaSpeed = -0.4;//消逝速度
-
-    cell.velocity = 50;//粒子运动的速度均值
-
-    cell.velocityRange = 200;//粒子运动的速度扰动范围
-
-    cell.emissionRange = M_PI * 3.0; // 粒子发射角度, 这里是一个扇形.
-
-    // 将粒子组成的数组赋值给CAEmitterLayer的emitterCells属性即可.
-    emitter.emitterCells = @[cell];
-}
-</code></pre><p>effectCell 几个重要属性：</p>
-<p>1）.birthRate 顾名思义没有这个也就没有effectCell，这个必须要设置，具体含义是每秒某个点产生的effectCell数量</p>
-<p>2）.lifetime &amp; lifetimeRange 表示effectCell的生命周期，既在屏幕上的显示时间要多长。</p>
-<p>3）.contents 这个和CALayer一样，只是用来设置图片</p>
-<p>4）.name 这个是当effectCell存在caeEmitter 的emitterCells中用来辨认的。用到setValue forKeyPath比较有用</p>
-<p>5）.velocity &amp; velocityRange &amp; emissionRange 表示cell向屏幕右边飞行的速度 &amp; 在右边什么范围内飞行&amp; ＋－角度扩散</p>
-<p>6）.把cell做成array放进caeEmitter.emitterCells里去。caeEmitter.renderMode有个效果很不错，能变成火的就是kCAEmitterLayerAdditive</p>
-<p>属性：</p>
-<p>alphaRange:  一个粒子的颜色alpha能改变的范围；</p>
-<p>alphaSpeed:粒子透明度在生命周期内的改变速度；</p>
-<p>birthrate：粒子参数的速度乘数因子；</p>
-<p>blueRange：一个粒子的颜色blue 能改变的范围；</p>
-<p>blueSpeed: 粒子blue在生命周期内的改变速度；</p>
-<p>color:粒子的颜色</p>
-<p>contents：是个CGImageRef的对象,既粒子要展现的图片；</p>
-<p>contentsRect：应该画在contents里的子rectangle：</p>
-<p>emissionLatitude：发射的z轴方向的角度</p>
-<p>emissionLongitude:x-y平面的发射方向</p>
-<p>emissionRange；周围发射角度</p>
-<p>emitterCells：粒子发射的粒子</p>
-<p>enabled：粒子是否被渲染</p>
-<p>greenrange: 一个粒子的颜色green 能改变的范围；</p>
-<p>greenSpeed: 粒子green在生命周期内的改变速度；</p>
-<p>lifetime：生命周期</p>
-<p>lifetimeRange：生命周期范围</p>
-<p>magnificationFilter：不是很清楚好像增加自己的大小</p>
-<p>minificatonFilter：减小自己的大小</p>
-<p>minificationFilterBias：减小大小的因子</p>
-<p>name：粒子的名字</p>
-<p>redRange：一个粒子的颜色red 能改变的范围；</p>
-<p>redSpeed; 粒子red在生命周期内的改变速度；</p>
-<p>scale：缩放比例：</p>
-<p>scaleRange：缩放比例范围；</p>
-<p>scaleSpeed：缩放比例速度：</p>
-<p>spin：子旋转角度</p>
-<p>spinrange：子旋转角度范围</p>
-<p>style：不是很清楚：</p>
-<p>velocity：速度</p>
-<p>velocityRange：速度范围</p>
-<p>xAcceleration:粒子x方向的加速度分量</p>
-<p>yAcceleration:粒子y方向的加速度分量</p>
-<p>zAcceleration:粒子z方向的加速度分量</p>
-<p>2、CAEmitterLayer<br>CAEmitterLayer提供了一个基于Core Animation的粒子发射系统，粒子用CAEmitterCell来初始化。粒子画在背景层盒边界上</p>
-<p>属性:   </p>
-<p>birthRate:粒子产生系数，默认1.0；</p>
-<p>emitterCells: 装着CAEmitterCell对象的数组，被用于把粒子投放到layer上；</p>
-<p>emitterDepth:决定粒子形状的深度联系：emittershape</p>
-<p>emitterMode:发射模式</p>
-<p>NSString * const kCAEmitterLayerPoints;</p>
-<p>NSString * const kCAEmitterLayerOutline;</p>
-<p>NSString * const kCAEmitterLayerSurface;</p>
-<p>NSString * const kCAEmitterLayerVolume;</p>
-<p>emitterPosition:发射位置</p>
-<p>emitterShape:发射源的形状：</p>
-<p>NSString * const kCAEmitterLayerPoint;</p>
-<p>NSString * const kCAEmitterLayerLine;</p>
-<p>NSString * const kCAEmitterLayerRectangle;</p>
-<p>NSString * const kCAEmitterLayerCuboid;</p>
-<p>NSString * const kCAEmitterLayerCircle;</p>
-<p>NSString * const kCAEmitterLayerSphere;</p>
-<p>emitterSize:发射源的尺寸大；</p>
-<p>emitterZposition:发射源的z坐标位置；</p>
-<p>lifetime:粒子生命周期</p>
-<p>preservesDepth:不是多很清楚（粒子是平展在层上）</p>
-<p>renderMode:渲染模式：</p>
-<p>NSString * const kCAEmitterLayerUnordered;</p>
-<p>NSString * const kCAEmitterLayerOldestFirst;</p>
-<p>NSString * const kCAEmitterLayerOldestLast;</p>
-<p>NSString * const kCAEmitterLayerBackToFront;</p>
-<p>NSString * const kCAEmitterLayerAdditive;</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/03/01/CAEmitterLayer粒子动画/" class="archive-article-date">
-  	<time datetime="2017-03-01T01:09:24.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-01</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Animation/">Animation</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-正则表达式link" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/10/正则表达式link/">正则表达式link</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h4><p><a href="http://www.bejson.com/knownjson/regexJiaocheng/" target="_blank" rel="external">正则表达式</a></p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/02/10/正则表达式link/" class="archive-article-date">
-  	<time datetime="2017-02-10T08:55:43.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-10</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/正则/">正则</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-美图SDK-Open-Framework" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/10/美图SDK-Open-Framework/">美图SDK &amp; Open Framework</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h4 id="记录一个SDK还有一个Open-framework"><a href="#记录一个SDK还有一个Open-framework" class="headerlink" title="记录一个SDK还有一个Open framework"></a>记录一个SDK还有一个Open framework</h4><p><a href="https://tusdk.com/doc" target="_blank" rel="external">涂图SDK</a></p>
-<p><a href="https://github.com/BradLarson/GPUImage" target="_blank" rel="external">GPUImage</a></p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/02/10/美图SDK-Open-Framework/" class="archive-article-date">
-  	<time datetime="2017-02-10T08:48:53.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-02-10</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/美图-视频处理/">美图,视频处理</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-发布自己的代码到CocoaPods" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/07/发布自己的代码到CocoaPods/">发布自己的代码到CocoaPods</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>##如何发布自己的开源代码到CocoaPods<br>在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。</p>
-<p>如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？</p>
-<p>如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：<a href="http://blog.devtang.com/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></p>
-<p>####第一步 注册trunk</p>
-<p>在注册trunk之前，我们需要确认当前的CocoaPods版本是否足够新。trunk需要pod在0.33及以上版本，如果你不满足要求，打开Terminal使用ruby的gem命令更新pod:</p>
-<pre><code>sudo gem install cocoapods
-</code></pre><p>注册trunk：</p>
-<pre><code>pod trunk register 邮箱地址@ &quot;用户名&quot;
-</code></pre><p>用户名这里我是用的github上的用户名</p>
-<p>注册成功之后</p>
-<pre><code>pod trunk me 
-</code></pre><p>可以查询到你的个人信息:邮箱,姓名,注册时间,开源库,session</p>
-<p>添加其他维护者（如果你的pod是由多人维护的，你也可以添加其他维护者）</p>
-<pre><code>pod trunk add-owner 名字 邮件@
-</code></pre><p>####第二步 建立PodSpec文件并通过trunk推送给CocoaPods服务器</p>
-<p>通过下面命令可以创建一个PodSpec文件</p>
-<pre><code>pod spec create 文件名
-</code></pre><p>执行完该命令之后会在工程目录生成XPRACSignal.podspec文件，然后编辑这个文件！里面注释很多</p>
-<pre><code>Pod::Spec.new do |s|
-  s.name             = &quot;ongfei&quot;    #名称
-  s.version          = &quot;0.0.1&quot;             #版本号
-  s.summary          = &quot;Just Testing.&quot;     #简短介绍，下面是详细介绍
-  ##s.description      = &lt;&lt;-DESC
-                       Testing Private Podspec.
-
-                       * Markdown format.
-                       * Don&apos;t worry about the indent, we strip it!
-                       DESC
-  s.homepage          = &quot;https://github.com/ongfei/DfPodTest&quot;  #主页,这里要填写可以访问到的地址，不然验证不通过
-  # s.screenshots     = &quot;www.example.com/screenshots_1&quot;, &quot;www.example.com/screenshots_2&quot;           #截图
-  s.license          = &apos;MIT&apos;   #开源协议
-  s.author           = { &quot;ongfei&quot; =&gt; &quot;ong_fei@163.com&quot; }  #作者信息
-  s.source           = { :git =&gt; &quot;https://github.com/ongfei/DfPodTest.git&quot;, :tag =&gt; s.version.to_s }     #项目地址，这里不支持ssh的地址，验证不通过，只支持HTTP和HTTPS，最好使用HTTPS
-  # s.social_media_url = &apos;https://twitter.com/&lt;twitter_username&gt;&apos;                       #多媒体介绍地址
-
-  s.platform     = :ios, &apos;7.0&apos;            #支持的平台及版本
-  s.requires_arc = true                   #是否使用ARC，如果指定具体文件，则具体的问题使用ARC
-
-  s.source_files = &apos;ToolTest/*.{h,m}&apos;     #代码源文件地址，**/*表示Classes目录及其子目录下所有文件，如果有多个目录下则用逗号分开，如果需要在项目中分组显示，这里也要做相应的设置
-  ##s.resource_bundles = {
-    &apos;PodTestLibrary&apos; =&gt; [&apos;Pod/Assets/*.png&apos;]
-  }                                       #资源文件地址
-  s.frameworks = &apos;UIKit&apos;                  #所需的framework，多个用逗号隔开
-  s.dependency &apos;FMDB&apos;, &apos;~&gt; 2.5&apos;   #依赖关系，该项目所依赖的其他库，如果有多个需要填写多个s.dependency
-end
-</code></pre><p>编辑完podspec文件后，需要验证一下这个文件是否可用，验证需要执行一下命令</p>
-<pre><code>pod lib lint
-</code></pre><p>当出现     PodTestLibrary passed validation 的时候 说明 podspec可用 </p>
-<p>如果出现了错误可以看下这篇文章<a href="http://blog.csdn.net/blog_jihq/article/details/52614156" target="_blank" rel="external">pod创建问题</a></p>
-<p>####提交code到git仓库中，并打上tag版本号</p>
-<pre><code>git add -A
-git commit -m &quot;first commit&quot;
-git push origin master
-git tag &apos;1.0.0&apos; 
-git push --tags 
-</code></pre><p>####提交到CocoaPods trunk</p>
-<pre><code>pod trunk push podspec文件名
-</code></pre><p>如果没有错误 就会提示 successfully published<br>说明cocoapod库已接收</p>
-<p>这个时候要更新一下本地的依赖库</p>
-<pre><code>pod setup
-</code></pre><p>然后用pod search 查询一下吧</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/12/07/发布自己的代码到CocoaPods/" class="archive-article-date">
-  	<time datetime="2016-12-07T06:19:55.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-12-07</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CocoaPods/">CocoaPods</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-iOS10-JPush" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/10/iOS10-JPush/">iOS10 JPush</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h5 id="苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录"><a href="#苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录" class="headerlink" title="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录."></a>苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.</h5><h5 id="先来看下改动的地方"><a href="#先来看下改动的地方" class="headerlink" title="先来看下改动的地方"></a>先来看下改动的地方</h5><p><img src="http://p1.bpimg.com/4851/6f841220056fde40.png" alt=""><br>我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.</p>
-<hr>
-<h4 id="下面直接堆代码"><a href="#下面直接堆代码" class="headerlink" title="下面直接堆代码"></a>下面直接堆代码</h4><h5 id="首先头文件"><a href="#首先头文件" class="headerlink" title="首先头文件"></a>首先头文件</h5><figure class="highlight plain"><figcaption><span>极光推送  </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#import &quot;JPUSHService.h&quot;  </div><div class="line">#import &lt;AdSupport/AdSupport.h&gt;//用不到就不需要导入  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">#import &lt;UserNotifications/UserNotifications.h&gt; // 这里是iOS10需要用到的框架  </div><div class="line">#endif</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;  </div><div class="line">      </div><div class="line">    // 注册apns通知  </div><div class="line">    if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 10.0) // iOS10  </div><div class="line">    &#123;  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">        JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];  </div><div class="line">        entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge | UNAuthorizationOptionSound;  </div><div class="line">        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];  </div><div class="line">#endif  </div><div class="line">    &#125;  </div><div class="line">    else if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 8.0) // iOS8, iOS9  </div><div class="line">    &#123;  </div><div class="line">        //可以添加自定义categories  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    else // iOS7  </div><div class="line">    &#123;  </div><div class="line">        //categories 必须为nil  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    /* </div><div class="line">     *  launchingOption 启动参数. </div><div class="line">     *  appKey 一个JPush 应用必须的,唯一的标识. </div><div class="line">     *  channel 发布渠道. 可选. </div><div class="line">     *  isProduction 是否生产环境. 如果为开发状态,设置为 NO; 如果为生产状态,应改为 YES. </div><div class="line">     *  advertisingIdentifier 广告标识符（IDFA） 如果不需要使用IDFA，传nil. </div><div class="line">     * 此接口必须在 App 启动时调用, 否则 JPush SDK 将无法正常工作. </div><div class="line">     */  </div><div class="line">    // 广告标识符  </div><div class="line">    NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];  </div><div class="line">      </div><div class="line">    // 如不需要使用IDFA，advertisingIdentifier 可为nil  </div><div class="line">    // 注册极光推送  </div><div class="line">    [JPUSHService setupWithOption:launchOptions appKey:JPUSHAPPKEY channel:channel apsForProduction:isProduction advertisingIdentifier:advertisingId];  </div><div class="line">      </div><div class="line">    //2.1.9版本新增获取registration id block接口。  </div><div class="line">    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) &#123;  </div><div class="line">        if(resCode == 0)  </div><div class="line">        &#123;  </div><div class="line">            // iOS10获取registrationID放到这里了, 可以存到缓存里, 用来标识用户单独发送推送  </div><div class="line">            NSLog(@&quot;registrationID获取成功：%@&quot;,registrationID);  </div><div class="line">            [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@&quot;registrationID&quot;];  </div><div class="line">            [[NSUserDefaults standardUserDefaults] synchronize];  </div><div class="line">        &#125;  </div><div class="line">        else  </div><div class="line">        &#123;  </div><div class="line">            NSLog(@&quot;registrationID获取失败，code：%d&quot;,resCode);  </div><div class="line">        &#125;  </div><div class="line">    &#125;];  </div><div class="line">      </div><div class="line">    return YES;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="对角标的一些处理"><a href="#对角标的一些处理" class="headerlink" title="对角标的一些处理"></a>对角标的一些处理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)applicationDidEnterBackground:(UIApplication *)application &#123;  </div><div class="line">    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">- (void)applicationWillEnterForeground:(UIApplication *)application &#123;  </div><div class="line">    [application setApplicationIconBadgeNumber:0];  </div><div class="line">    [application cancelAllLocalNotifications];  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#pragma mark - 注册推送回调获取 DeviceToken  </div><div class="line">#pragma mark -- 成功  </div><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken  </div><div class="line">&#123;  </div><div class="line">    // 注册成功  </div><div class="line">    // 极光: Required - 注册 DeviceToken  </div><div class="line">    [JPUSHService registerDeviceToken:deviceToken];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">#pragma mark -- 失败  </div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error  </div><div class="line">&#123;  </div><div class="line">    // 注册失败  </div><div class="line">    NSLog(@&quot;did Fail To Register For Remote Notifications With Error: %@&quot;, error);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h5 id="这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了"><a href="#这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了" class="headerlink" title="这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了"></a>这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo &#123;</div><div class="line">    </div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    [application setApplicationIconBadgeNumber:[userInfo[@&quot;badge&quot;] integerValue]];</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:  (NSDictionary *)userInfo fetchCompletionHandler:(void (^)   (UIBackgroundFetchResult))completionHandler &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;this is iOS7 Remote Notification&quot;);</div><div class="line">    </div><div class="line">    // Required</div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    completionHandler(UIBackgroundFetchResultNewData);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#pragma mark - iOS10: 收到推送消息调用(iOS10是通过Delegate实现的回调)  </div><div class="line">#pragma mark- JPUSHRegisterDelegate  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">// 当程序在前台时, 收到推送弹出的通知  </div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = notification.request.content.userInfo; if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    completionHandler(UNNotificationPresentationOptionAlert); //                    Badge Sound Alert</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = response.notification.request.content.userInfo; if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    </div><div class="line">    completionHandler();</div><div class="line">&#125;</div><div class="line">#endif</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2016/10/10/iOS10-JPush/" class="archive-article-date">
-  	<time datetime="2016-10-10T07:56:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-10</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JPush/">JPush</a></li></ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
-
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-    </nav>
-  
 
 
       </div>
@@ -2281,8 +1481,8 @@ git push --tags
 		fancybox: true,
 		mathjax: false,
 		animate: true,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
