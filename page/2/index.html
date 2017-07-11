@@ -128,6 +128,68 @@
       <div class="body-wrap">
         
   
+    <article id="post-iOS10-JPush" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/10/iOS10-JPush/">iOS10 JPush</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h5 id="苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录"><a href="#苹果在iOS10上对apns推送做了修改-极光也是很给力的-在第一时间就对sdk进行了更新-下面对iOS10注册极光推送进行一下记录" class="headerlink" title="苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录."></a>苹果在iOS10上对apns推送做了修改, 极光也是很给力的, 在第一时间就对sdk进行了更新, 下面对iOS10注册极光推送进行一下记录.</h5><h5 id="先来看下改动的地方"><a href="#先来看下改动的地方" class="headerlink" title="先来看下改动的地方"></a>先来看下改动的地方</h5><p><img src="http://p1.bpimg.com/4851/6f841220056fde40.png" alt=""><br>我们需要在xcode中把推送功能打开,一定要确保下面两项是 √ 的状态.</p>
+<hr>
+<h4 id="下面直接堆代码"><a href="#下面直接堆代码" class="headerlink" title="下面直接堆代码"></a>下面直接堆代码</h4><h5 id="首先头文件"><a href="#首先头文件" class="headerlink" title="首先头文件"></a>首先头文件</h5><figure class="highlight plain"><figcaption><span>极光推送  </span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#import &quot;JPUSHService.h&quot;  </div><div class="line">#import &lt;AdSupport/AdSupport.h&gt;//用不到就不需要导入  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">#import &lt;UserNotifications/UserNotifications.h&gt; // 这里是iOS10需要用到的框架  </div><div class="line">#endif</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line">- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions &#123;  </div><div class="line">      </div><div class="line">    // 注册apns通知  </div><div class="line">    if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 10.0) // iOS10  </div><div class="line">    &#123;  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">        JPUSHRegisterEntity * entity = [[JPUSHRegisterEntity alloc] init];  </div><div class="line">        entity.types = UNAuthorizationOptionAlert|UNAuthorizationOptionBadge | UNAuthorizationOptionSound;  </div><div class="line">        [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];  </div><div class="line">#endif  </div><div class="line">    &#125;  </div><div class="line">    else if ([[UIDevice currentDevice].systemVersion floatValue] &gt;= 8.0) // iOS8, iOS9  </div><div class="line">    &#123;  </div><div class="line">        //可以添加自定义categories  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    else // iOS7  </div><div class="line">    &#123;  </div><div class="line">        //categories 必须为nil  </div><div class="line">        [JPUSHService registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert) categories:nil];  </div><div class="line">    &#125;  </div><div class="line">    /* </div><div class="line">     *  launchingOption 启动参数. </div><div class="line">     *  appKey 一个JPush 应用必须的,唯一的标识. </div><div class="line">     *  channel 发布渠道. 可选. </div><div class="line">     *  isProduction 是否生产环境. 如果为开发状态,设置为 NO; 如果为生产状态,应改为 YES. </div><div class="line">     *  advertisingIdentifier 广告标识符（IDFA） 如果不需要使用IDFA，传nil. </div><div class="line">     * 此接口必须在 App 启动时调用, 否则 JPush SDK 将无法正常工作. </div><div class="line">     */  </div><div class="line">    // 广告标识符  </div><div class="line">    NSString *advertisingId = [[[ASIdentifierManager sharedManager] advertisingIdentifier] UUIDString];  </div><div class="line">      </div><div class="line">    // 如不需要使用IDFA，advertisingIdentifier 可为nil  </div><div class="line">    // 注册极光推送  </div><div class="line">    [JPUSHService setupWithOption:launchOptions appKey:JPUSHAPPKEY channel:channel apsForProduction:isProduction advertisingIdentifier:advertisingId];  </div><div class="line">      </div><div class="line">    //2.1.9版本新增获取registration id block接口。  </div><div class="line">    [JPUSHService registrationIDCompletionHandler:^(int resCode, NSString *registrationID) &#123;  </div><div class="line">        if(resCode == 0)  </div><div class="line">        &#123;  </div><div class="line">            // iOS10获取registrationID放到这里了, 可以存到缓存里, 用来标识用户单独发送推送  </div><div class="line">            NSLog(@&quot;registrationID获取成功：%@&quot;,registrationID);  </div><div class="line">            [[NSUserDefaults standardUserDefaults] setObject:registrationID forKey:@&quot;registrationID&quot;];  </div><div class="line">            [[NSUserDefaults standardUserDefaults] synchronize];  </div><div class="line">        &#125;  </div><div class="line">        else  </div><div class="line">        &#123;  </div><div class="line">            NSLog(@&quot;registrationID获取失败，code：%d&quot;,resCode);  </div><div class="line">        &#125;  </div><div class="line">    &#125;];  </div><div class="line">      </div><div class="line">    return YES;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="对角标的一些处理"><a href="#对角标的一些处理" class="headerlink" title="对角标的一些处理"></a>对角标的一些处理</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">- (void)applicationDidEnterBackground:(UIApplication *)application &#123;  </div><div class="line">    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">  </div><div class="line">- (void)applicationWillEnterForeground:(UIApplication *)application &#123;  </div><div class="line">    [application setApplicationIconBadgeNumber:0];  </div><div class="line">    [application cancelAllLocalNotifications];  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#pragma mark - 注册推送回调获取 DeviceToken  </div><div class="line">#pragma mark -- 成功  </div><div class="line">- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken  </div><div class="line">&#123;  </div><div class="line">    // 注册成功  </div><div class="line">    // 极光: Required - 注册 DeviceToken  </div><div class="line">    [JPUSHService registerDeviceToken:deviceToken];  </div><div class="line">&#125;  </div><div class="line">  </div><div class="line">#pragma mark -- 失败  </div><div class="line">- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error  </div><div class="line">&#123;  </div><div class="line">    // 注册失败  </div><div class="line">    NSLog(@&quot;did Fail To Register For Remote Notifications With Error: %@&quot;, error);  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了"><a href="#这是之前7-8-的时候用的方法-不过这次升级-相应的这些方法也变了" class="headerlink" title="这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了"></a>这是之前7 8 的时候用的方法 不过这次升级 相应的这些方法也变了</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo &#123;</div><div class="line">    </div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    [application setApplicationIconBadgeNumber:[userInfo[@&quot;badge&quot;] integerValue]];</div><div class="line"></div><div class="line">&#125;</div><div class="line">- (void)application:(UIApplication *)application didReceiveRemoteNotification:  (NSDictionary *)userInfo fetchCompletionHandler:(void (^)   (UIBackgroundFetchResult))completionHandler &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;this is iOS7 Remote Notification&quot;);</div><div class="line">    </div><div class="line">    // Required</div><div class="line">    [JPUSHService handleRemoteNotification:userInfo];</div><div class="line">    completionHandler(UIBackgroundFetchResultNewData);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">#pragma mark - iOS10: 收到推送消息调用(iOS10是通过Delegate实现的回调)  </div><div class="line">#pragma mark- JPUSHRegisterDelegate  </div><div class="line">#ifdef NSFoundationVersionNumber_iOS_9_x_Max  </div><div class="line">// 当程序在前台时, 收到推送弹出的通知  </div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = notification.request.content.userInfo; if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    completionHandler(UNNotificationPresentationOptionAlert); //                    Badge Sound Alert</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler &#123;</div><div class="line">    // Required</div><div class="line">    NSDictionary * userInfo = response.notification.request.content.userInfo; if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) &#123;</div><div class="line">        [JPUSHService handleRemoteNotification:userInfo]; &#125;</div><div class="line">    </div><div class="line">    completionHandler();</div><div class="line">&#125;</div><div class="line">#endif</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      <a href="/2016/10/10/iOS10-JPush/" class="archive-article-date">
+  	<time datetime="2016-10-10T07:56:50.000Z" itemprop="datePublished"><i class="icon-clock"></i>2016-10-10</time>
+</a>
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags"></i>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JPush/">JPush</a></li></ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+	<i class="icon-price-tags"></i>
+	<a class="article-category-link" href="/categories/iOS/">iOS</a>
+	</div>
+
+
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+
+
+  
     <article id="post-Xcode8-权限问题" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1499,57 +1561,6 @@ return _avatarImage;
 
 
   
-    <article id="post-利用Javascript去操作UIWebView的内容" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/21/利用Javascript去操作UIWebView的内容/">利用Javascript去操作UIWebView的内容</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="利用Javascript去操作UIWebView的内容"><a href="#利用Javascript去操作UIWebView的内容" class="headerlink" title="利用Javascript去操作UIWebView的内容"></a>利用Javascript去操作UIWebView的内容</h3><p><a href="http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/" target="_blank" rel="external">http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/</a></p>
-<p>博客还是不错的 有的可以借鉴下</p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2015/10/21/利用Javascript去操作UIWebView的内容/" class="archive-article-date">
-  	<time datetime="2015-10-21T04:31:14.000Z" itemprop="datePublished"><i class="icon-clock"></i>2015-10-21</time>
-</a>
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xcode/">xcode</a></li></ul>
-	</div>
-
-      
-
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">Next &raquo;</a>
@@ -1615,7 +1626,7 @@ return _avatarImage;
     
     	<section class="tools-section tools-section-tag">
     			<div class="widget tagcloud" id="js-tagcloud">
-    				<a href="/tags/Animation/" style="font-size: 10px;">Animation</a> <a href="/tags/CocoaPods/" style="font-size: 10px;">CocoaPods</a> <a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/RAC/" style="font-size: 10px;">RAC</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 20px;">Xcode</a> <a href="/tags/collectionView/" style="font-size: 10px;">collectionView</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/tableview/" style="font-size: 10px;">tableview</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/内存/" style="font-size: 10px;">内存</a> <a href="/tags/切角/" style="font-size: 10px;">切角</a> <a href="/tags/动画/" style="font-size: 10px;">动画</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/正则/" style="font-size: 10px;">正则</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a> <a href="/tags/美图-视频处理/" style="font-size: 10px;">美图,视频处理</a> <a href="/tags/谓词/" style="font-size: 10px;">谓词</a>
+    				<a href="/tags/Animation/" style="font-size: 10px;">Animation</a> <a href="/tags/CocoaPods/" style="font-size: 10px;">CocoaPods</a> <a href="/tags/JPush/" style="font-size: 10px;">JPush</a> <a href="/tags/RAC/" style="font-size: 10px;">RAC</a> <a href="/tags/Runtime/" style="font-size: 10px;">Runtime</a> <a href="/tags/Xcode/" style="font-size: 20px;">Xcode</a> <a href="/tags/collectionView/" style="font-size: 10px;">collectionView</a> <a href="/tags/iOS/" style="font-size: 10px;">iOS</a> <a href="/tags/tableview/" style="font-size: 10px;">tableview</a> <a href="/tags/xcode/" style="font-size: 10px;">xcode</a> <a href="/tags/事件穿透/" style="font-size: 10px;">事件穿透</a> <a href="/tags/内存/" style="font-size: 10px;">内存</a> <a href="/tags/切角/" style="font-size: 10px;">切角</a> <a href="/tags/动画/" style="font-size: 10px;">动画</a> <a href="/tags/总结/" style="font-size: 10px;">总结</a> <a href="/tags/正则/" style="font-size: 10px;">正则</a> <a href="/tags/网站/" style="font-size: 10px;">网站</a> <a href="/tags/美图-视频处理/" style="font-size: 10px;">美图,视频处理</a> <a href="/tags/谓词/" style="font-size: 10px;">谓词</a>
     			</div>
     	</section>
     

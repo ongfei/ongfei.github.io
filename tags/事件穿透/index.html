@@ -4,33 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>RAC简单学习 | ongfei | 一步一步往上爬</title>
+  <title>Tag: 事件穿透 | ongfei | 一步一步往上爬</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
-先看个简单的列子 KVO 用RAC实现
-{
-    NSString *username;
-}
-[RACObserve(self, username) subscribeNext:^(NSString *newName) {">
-<meta property="og:type" content="article">
-<meta property="og:title" content="RAC简单学习">
-<meta property="og:url" content="http://yoursite.com/2017/03/16/RAC简单学习/index.html">
+  <meta name="description" content="低调做事 快乐做人">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ongfei | 一步一步往上爬">
+<meta property="og:url" content="http://yoursite.com/tags/事件穿透/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
-先看个简单的列子 KVO 用RAC实现
-{
-    NSString *username;
-}
-[RACObserve(self, username) subscribeNext:^(NSString *newName) {">
-<meta property="og:updated_time" content="2017-03-16T08:50:32.000Z">
+<meta property="og:description" content="低调做事 快乐做人">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="RAC简单学习">
-<meta name="twitter:description" content="RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
-先看个简单的列子 KVO 用RAC实现
-{
-    NSString *username;
-}
-[RACObserve(self, username) subscribeNext:^(NSString *newName) {">
+<meta name="twitter:title" content="ongfei | 一步一步往上爬">
+<meta name="twitter:description" content="低调做事 快乐做人">
   
     <link rel="alternative" href="/atom.xml" title="ongfei | 一步一步往上爬" type="application/atom+xml">
   
@@ -142,133 +126,54 @@
 </nav>
 
       <div class="body-wrap">
-        <article id="post-RAC简单学习" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      RAC简单学习
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2017/04/11/事件穿透/" class="archive-article-date">
+  	<time datetime="2017-04-11T08:38:33.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-04-11</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/04/11/事件穿透/">事件穿透</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合</p>
-<p>先看个简单的列子 KVO 用RAC实现</p>
-<pre><code>{
-    NSString *username;
-}
-[RACObserve(self, username) subscribeNext:^(NSString *newName) {
-                                NSLog(@&quot;%@&quot;, newName);
-                            }];
-
-//只要你的username有变化。都可以打印出来
-</code></pre><p>例如下面这个代码块 用到了filter 就是过滤器的意思 指定只有以j开头的username能通过 然后才会打印 否则不打印</p>
-<pre><code>[[RACObserve(self, username)
-  filter:^(NSString *newName) {
-        return [newName hasPrefix:@&quot;j&quot;];
-    }]
- subscribeNext:^(NSString *newName) {
-     NSLog(@&quot;%@&quot;, newName);
- }];
-</code></pre><p>还有个map的代码块 就是映射 对数据进行一些操作 改变值等</p>
-<pre><code>map:^id(id value) {
-
-    return @([value[0] length] &gt; 0 &amp;&amp; [value[1] length] &gt; 5);
-
-}
-</code></pre><p>以最少的代码实现一个时钟应用<br>设置一个间隔为一秒。从现在开始调用的函数。并把当前实际传入。 这个函数返回一个NSString。 然后把这个NSString和界面上的textField绑定在了一起。从而实现时钟程序。表现了流和绑定响应</p>
-<pre><code>RAC(self, timeLabel.text) = [[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] startWith:[NSDate date]] map:^id (NSDate *value) {
-    NSLog(@&quot;value:%@&quot;, value);
-    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSHourCalendarUnit |
-     NSMinuteCalendarUnit | 
-     NSSecondCalendarUnit fromDate:value];
-    return [NSString stringWithFormat:@&quot;%02ld:%02ld:%02ld&quot;, (long)dateComponents.hour, (long)dateComponents.minute, (long)dateComponents.second];
-}];
-</code></pre><p>flattenMap: 先 map 再 flatten</p>
-<p>合并combineLatest      concat      merge  then 都能合并</p>
-<p>详细看下demo吧 看运行结果说话<br><a href="https://github.com/ongfei/RACDemo" target="_blank" rel="external">https://github.com/ongfei/RACDemo</a></p>
-<p>另外附上一个博客 <a href="http://blog.csdn.net/xdrt81y/article/details/30624469" target="_blank" rel="external">http://blog.csdn.net/xdrt81y/article/details/30624469</a></p>
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      <a href="/2017/03/16/RAC简单学习/" class="archive-article-date">
-  	<time datetime="2017-03-16T07:56:56.000Z" itemprop="datePublished"><i class="icon-clock"></i>2017-03-16</time>
-</a>
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags"></i>
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/RAC/">RAC</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/事件穿透/">事件穿透</a></li></ul>
 	</div>
 
-      
-	<div class="article-category tagcloud">
-	<i class="icon-price-tags"></i>
-	<a class="article-category-link" href="/categories/iOS/">iOS</a>
-	</div>
+          
 
-
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2017/04/11/事件穿透/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          事件穿透
-        
-      </div>
-    </a>
   
   
-    <a href="/2017/03/06/collectionView-拖动/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">collectionView 拖动</div>
-      <i class="icon-circle-right"></i>
-    </a>
+    </div></section>
   
-</nav>
 
-
-
-
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-	    <a class="jiathis_button_twitter"></a>
-	    <a class="jiathis_button_plus"></a> 
-	    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="//v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
-
-
-
-
-
-
-
+    
 
 
       </div>
@@ -291,9 +196,9 @@
 		mathjax: false,
 		animate: true,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		root: "/",
