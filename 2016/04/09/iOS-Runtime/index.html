@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+
+<script type="text/javascript" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"></script>
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Runtime" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="RuntimeRuntime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。
+面向对象：Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。Class *class = [[Class alloc] i">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS Runtime">
+<meta property="og:url" content="http://yoursite.com/2016/04/09/iOS-Runtime/index.html">
+<meta property="og:site_name" content="ongfei | 一步一步往上爬">
+<meta property="og:description" content="RuntimeRuntime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。
+面向对象：Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。Class *class = [[Class alloc] i">
+<meta property="og:updated_time" content="2017-02-07T06:17:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS Runtime">
+<meta name="twitter:description" content="RuntimeRuntime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。
+面向对象：Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。Class *class = [[Class alloc] i">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/04/09/iOS-Runtime/"/>
+
+
+
+
+
+  <title>iOS Runtime | ongfei | 一步一步往上爬</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ongfei | 一步一步往上爬</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ongfei | 一步一步往上爬</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+
+  <a href="https://github.com/ongfei"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/04/09/iOS-Runtime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ongfei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ico.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ongfei | 一步一步往上爬">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS Runtime</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-04-09T15:43:22+08:00">
+                2016-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Runtime"><a href="#Runtime" class="headerlink" title="Runtime"></a>Runtime</h2><p>Runtime 是一个运行时库，主要使用 C 和汇编写的库，为 C 添加了面向对象的能力并创造了 Objective-C，并且拥有消息分发，消息转发等功能。<br>也就是 Runtime 涉及三个点，面向对象，消息分发，消息转发。</p>
+<h4 id="面向对象："><a href="#面向对象：" class="headerlink" title="面向对象："></a>面向对象：</h4><p>Objective-C 的对象是基于 Runtime 创建的结构体。先从代码层面分析一下。<br>Class *class = [[Class alloc] init];<br>alloc 方法会为对象分配一块内存空间，空间的大小为 isa_t（8 字节）的大小加上所有成员变量所需的空间，再进行一次内存对齐。分配完空间后会初始化 isa_t isa_t 是一个 union 类型的结构体（或者称之为联合体），它的结构是在 Runtime 里被定义的。</p>
+<pre><code>union isa_t {  
+isa_t() { }
+isa_t(uintptr_t value) :                     bits(value) { }
+
+Class cls;
+uintptr_t bits;
+
+struct {
+   uintptr_t indexed           : 1;
+   uintptr_t has_assoc         : 1;
+   uintptr_t has_cxx_dtor      : 1;
+   uintptr_t shiftcls          : 33;
+   uintptr_t magic             : 6;
+   uintptr_t weakly_referenced : 1;
+   uintptr_t deallocating      : 1;
+   uintptr_t has_sidetable_rc  : 1;
+   uintptr_t extra_rc          : 19;
+ };
+};
+</code></pre><p>init 方法就直接返回了初始化好的对象，class 指针指向这个初始化好的对象。</p>
+<p>也就是在 Runtime 的协助之下，一个对象完成了创建。<br>你可能想知道，这个对象只存放了一个 isa_t 结构体和成员变量，对象的方法在哪里？</p>
+<p>在编译的时候，类在内存中的位置就已经确定，而在 main 方法之前，Runtime 将可执行文件中和动态库所有的符号（Class，Protocol，Selector，IMP，…）加载到内存中，由 Runtime 管理，这里也包括了也是一个对象的类。</p>
+<p>类对象里储存着一个 isa_t 的结构体，super_class 指针，cache_t 结构体，class_data_bits_t 指针。</p>
+<pre><code>struct objc_class : objc_object {
+    isa_t isa;
+    Class superclass;
+    cache_t cache;            
+    class_data_bits_t bits;    
+｝
+</code></pre><p>class_data_bits_t 指向类对象的数据区域，数据区域存放着这个类的实例方法链表。而类方法存在元类对象的数据区域。也就是有对象，类对象，元类对象三个概念，对象是在运行时动态创建的，可以有无数个，类对象和元类对象在 main 方法之前创建的，分别只会有一个。</p>
+<h4 id="消息分发："><a href="#消息分发：" class="headerlink" title="消息分发："></a>消息分发：</h4><p>在 Objective-C 中的“方法调用”其实应该叫做消息传递，[object message] 会被编译器翻译为 objc_msgSend(object, @selector(message))，这是一个 C 方法，首先看它的两个参数，第一个是 object ，既方法调用者，第二个参数称为选择子 SEL，Objective-C 为我们维护了一个巨大的选择子表，在使用 @selector() 时会从这个选择子表中根据选择子的名字查找对应的 SEL。如果没有找到，则会生成一个 SEL 并添加到表中，在编译期间会扫描全部的头文件和实现文件将其中的方法以及使用 @selector() 生成的选择子加入到选择子表中。</p>
+<p>通过第一个参数 object，可以找到 object 对象的 isa_t 结构体，从上文中能看 isa_t 结构体的结构，在 isa_t 结构体中，shiftcls 存放的是一个 33 位的地址，用于指向 object 对象的类对象，而类对象里有一个 cache_t 结构体，来看一下 cache_t 的具体代码，</p>
+<pre><code>struct cache_t {
+    struct bucket_t *_buckets;
+    mask_t _mask;
+    mask_t _occupied;
+｝
+</code></pre><p>_mask：分配用来缓存 bucket 的总数。<br>_occupied：表明目前实际占用的缓存 bucket 的个数。<br>_buckets：一个散列表，用来方法缓存，bucket_t 类型，包含 key 以及方法实现 IMP。</p>
+<pre><code>struct bucket_t {
+private:
+ cache_key_t _key;
+  IMP _imp;
+｝
+</code></pre><p>objc_msgSend() 方法会先从缓存表里，查找是否有该 SEL 对应的 IMP，有的话算命中缓存，直接通过函数指针 IMP ，找到方法的具体实现函数，执行。<br>当然缓存表里可能并不会命中，则此时会根据类对象的 class_data_bits_t 指针找到数据区域，数据区域里用链表存放着类的实例方法，实例方法也是一个结构体，其结构为：</p>
+<pre><code>struct method_t {  
+ SEL name;
+ const char *types;
+ IMP imp;
+};
+</code></pre><p>编译器将每个方法的返回值和参数类型编码为一个字符串，types 指向的就是这样一个字符串，objc_msgSend() 会在类对象的方法链表里按链表顺序去匹配 SEL，匹配成功则停止，并将此方法加入到类对象的 _buckets 里缓存起来。如果没找到则会通过类对象的 superclass 指针找到其父类，去父类的方法列表里寻找（也会从父类的方法缓存列表开始）。</p>
+<p>如果继续没有找到会一直向父类寻找，直到遇见 NSObject，NSObject 的 superclass 指向 nil。也就意味着寻找结束，并没有找到实现方法。（如果这个过程找到了，也同样会在 object 的类对象的 _buckets 里缓存起来）。</p>
+<p>选择子在当前类和父类中都没有找到实现，就进入了方法决议（method resolve），首先判断当前 object 的类对象是否实现了 resolveInstanceMethod: 方法，如果实现的话，会调用 resolveInstanceMethod：方法，这个时候我们可以在 resolveInstanceMethod：方法里动态的添加该 SEL 对应的方法（也可以去做点别的，比如写入日志）。之后会重新执行查找方法实现的流程，如果依旧没找到方法，或者没有实现 resolveInstanceMethod: 方法，Runtime 还有另一套机制，消息转发。</p>
+<h4 id="消息转发："><a href="#消息转发：" class="headerlink" title="消息转发："></a>消息转发：</h4><p>消息转发分为以下几步：<br>1.调用 forwardingTargetForSelector: 方法，尝试找到一个能响应该消息的对象。如果获取到，则直接转发给它。如果返回了 nil，继续下面的动作。<br>2.调用 methodSignatureForSelector: 方法，尝试获得一个方法签名。如果获取不到，则直接调用 doesNotRecognizeSelector 抛出异常。<br>3.调用 forwardInvocation: 方法，将第 3 步获取到的方法签名包装成 Invocation 传入，如何处理就在这里面了。</p>
+<p>以上三个方法都可以通过在 object 的类对象里实现， forwardingTargetForSelector: 可以通过对参数 SEL 的判断，返回一个可以响应该消息的对象。这样则会重新从该对象开始执行查找方法实现的流程，找到了也同样会在 object 的类对象的 _buckets 里缓存起来。而 2，3 方法则一般是配套使用，实现 methodSignatureForSelector: 方法根据参数 SEL ，做相应处理，返回 NSMethodSignature (方法签名) 对象，NSMethodSignature 对象会被包装成 NSInvocation 对象，forwardInvocation: 方法里就可以对 NSInvocation 进行处理了。</p>
+<p>上面是讲的是实例方法，类方法没什么区别，类方法储存在元类对象的数据区域里，通过类对象的 isa_t 找到元类对象，执行查找方法实现的流程，元类对象的 superclass 最终也会指向 NSObject。没找到的话，也会有方法决议以及消息转发。</p>
+<h3 id="runtime-可以做什么："><a href="#runtime-可以做什么：" class="headerlink" title="runtime 可以做什么："></a>runtime 可以做什么：</h3><p>实现多继承：从 forwardingTargetForSelector: 方法就能知道，一个类可以做到继承多个类的效果，只需要在这一步将消息转发给正确的类对象就可以模拟多继承的效果。</p>
+<h4 id="交换两个方法的实现："><a href="#交换两个方法的实现：" class="headerlink" title="交换两个方法的实现："></a>交换两个方法的实现：</h4><pre><code>Method m1 = class_getInstanceMethod([M1 class], @selector(hello1));
+Method m2 = class_getInstanceMethod([M2 class], @selector(hello2));
+method_exchangeImplementations(m2, m1);
+</code></pre><h4 id="关联对象："><a href="#关联对象：" class="headerlink" title="关联对象："></a>关联对象：</h4><p>通过下面两个方法，可以给 category 实现添加成员变量的效果。</p>
+<pre><code>objc_setAssociatedObject
+objc_getAssociatedObject
+</code></pre><h4 id="动态添加类和方法："><a href="#动态添加类和方法：" class="headerlink" title="动态添加类和方法："></a>动态添加类和方法：</h4><p>objc_allocateClassPair 函数与 objc_registerClassPair 函数可以完成一个新类的添加，class_addMethod 给类添加方法，class_addIvar 添加成员变量，objc_registerClassPair 来注册类，其中成员变量的添加必须在类注册之前，类注册后就可以创建该类的对象了，而再添加成员变量就会破坏创建的对象的内存结构。</p>
+<h4 id="将-json-转换为-model："><a href="#将-json-转换为-model：" class="headerlink" title="将 json 转换为 model："></a>将 json 转换为 model：</h4><p>用到了 Runtime 获取某一个类的全部属性的名字，以及 Runtime 获取属性的类型。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Runtime/" rel="tag"># Runtime</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/18/iOS-TableView动画效果/" rel="next" title="iOS TableView动画效果">
+                <i class="fa fa-chevron-left"></i> iOS TableView动画效果
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/02/IOS中webview捕捉js中的alert 并修改标题和按钮/" rel="prev" title="IOS中webview捕捉js中的alert 并修改标题和按钮">
+                IOS中webview捕捉js中的alert 并修改标题和按钮 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ico.jpg"
+               alt="ongfei" />
+          <p class="site-author-name" itemprop="name">ongfei</p>
+           
+              <p class="site-description motion-element" itemprop="description">低调做事 快乐做人</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ongfei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情连接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devtang.com" title="唐巧的技术博客" target="_blank">唐巧的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com" title="廖雪峰的官方网站" target="_blank">廖雪峰的官方网站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://baixin.io/archive/" title="潘柏信个人站" target="_blank">潘柏信个人站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devzeng.com/#blog" title="曾静的技术博客" target="_blank">曾静的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://limboy.me" title="limboy" target="_blank">limboy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://liuyanwei.jumppo.com" title="liuyanwei" target="_blank">liuyanwei</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Runtime"><span class="nav-number">1.</span> <span class="nav-text">Runtime</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#面向对象："><span class="nav-number">1.0.1.</span> <span class="nav-text">面向对象：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息分发："><span class="nav-number">1.0.2.</span> <span class="nav-text">消息分发：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#消息转发："><span class="nav-number">1.0.3.</span> <span class="nav-text">消息转发：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-可以做什么："><span class="nav-number">1.1.</span> <span class="nav-text">runtime 可以做什么：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#交换两个方法的实现："><span class="nav-number">1.1.1.</span> <span class="nav-text">交换两个方法的实现：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关联对象："><span class="nav-number">1.1.2.</span> <span class="nav-text">关联对象：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态添加类和方法："><span class="nav-number">1.1.3.</span> <span class="nav-text">动态添加类和方法：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将-json-转换为-model："><span class="nav-number">1.1.4.</span> <span class="nav-text">将 json 转换为 model：</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ongfei</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="true"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>
