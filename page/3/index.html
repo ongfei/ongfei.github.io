@@ -5,12 +5,13 @@
   
 
 
-<!-- 背景动画 -->
-
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
 
 <head>
+  <!-- 背景动画 -->
+  
+
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -242,16 +243,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-link">
-          <a href="/link" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
-            
-            链接
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
@@ -358,110 +349,17 @@
       
         
           
-            <p>###iOS 开发切圆之 View 只切指定的角</p>
-<p>如果需要将UIView的4个角全部都为圆角，做法相当简单，只需设置其Layer的cornerRadius属性即可（项目需要使用QuartzCore框架）。而若要指定某几个角（小于4）为圆角而别的不变时，这种方法就不好用了。</p>
-<pre><code>UIView *view2 = [[UIView alloc] initWithFrame:CGRectMake(120, 10, 80, 80)];
-view2.backgroundColor = [UIColor redColor];
-[self.view addSubview:view2];
-
-UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view2.bounds byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight cornerRadii:CGSizeMake(10, 10)];
-CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-maskLayer.frame = view2.bounds;
-maskLayer.path = maskPath.CGPath;
-view2.layer.mask = maskLayer;
-</code></pre><p>其中</p>
-<pre><code>byRoundingCorners:UIRectCornerBottomLeft | UIRectCornerBottomRight
-指定了需要成为圆角的角。该参数是UIRectCorner类型的，可选的值有
-* UIRectCornerTopLeft
-* UIRectCornerTopRight
-* UIRectCornerBottomLeft
-* UIRectCornerBottomRight
-* UIRectCornerAllCorners
-</code></pre><p>从名字很容易看出来代表的意思，使用“|”来组合就好了。</p>
-<p> #####view的layer的实现<br>通过view的layer直接设置的方式，是所有的方法中最简单的，代码如下：</p>
-<pre><code> - (UIImageView  *)avatarImage { 
-
- if (!_avatarImage) { 
-
-    _avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)];
-    _avatarImage.backgroundColor = [UIColor grayColor];
-    _avatarImage.contentMode = UIViewContentModeScaleAspectFit;
-    _avatarImage.layer.cornerRadius = avatarDiameter/2.0;
-    _avatarImage.layer.masksToBounds = YES;
-    [_avatarImage setImage:[UIImage imageNamed:@&quot;test.jpg&quot;]];
-  }
-return _avatarImage;
-}
-</code></pre><p> #####shapeLayer的实现<br>通过bezizerpath设置一个路径，加到目标视图的layer上。代码如下：</p>
-<pre><code>// 创建一个view
- UIView *showView = [[UIView alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
- [self.view addSubview:showView];
- showView.backgroundColor = [UIColor whiteColor];
- showView.alpha = 0.5;
-
-  // 贝塞尔曲线(创建一个圆)
-   UIBezierPath *path = [UIBezierPath     bezierPathWithArcCenter:CGPointMake(100 / 2.f, 100 / 2.f)
-                                                       radius:100 / 2.f
-                                                      startAngle:0 
-                                                      endAngle:M_PI * 2
-                                                     clockwise:YES];
-
- CAShapeLayer *layer = [CAShapeLayer layer];
- layer.frame = showView.bounds;
- layer.path = path.CGPath;
- [showView.layer addSublayer:layer];
-</code></pre><p> #####BezierPath的实现<br>BezierPath的实现方式继承UIView，自己实现一个customview,代码如下。</p>
-<pre><code>- (instancetype)initWithFrame:(CGRect)frame {
-
-    if (self = [super initWithFrame:frame]) {
-
-    }
-    return self;
-}
-- (void)drawRect:(CGRect)rect { 
-     // Drawing code 
-    CGRect bounds = self.bounds;
-    [[UIColor whiteColor] set];
-    UIRectFill(bounds);
-
-    [[UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:CGRectGetWidth(bounds)/2.0] addClip];
-    [self.image drawInRect:bounds];
-}
-</code></pre><p>#####贴图的实现<br>贴图的方式是使用一个中间是圆形镂空的图覆盖在需要圆角化的图片的上方。代码如下：</p>
-<pre><code>- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
-
- if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-
-     [self.contentView addSubview:self.avatarImage];
-     [self.contentView addSubview:self.maskImage];
- }
- return self;
-}
-
-- (UIImageView *)avatarImage {
-
- if (!_avatarImage) { 
-
-    _avatarImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)];
-    _avatarImage.backgroundColor = [UIColor grayColor];
-    _avatarImage.contentMode = UIViewContentModeScaleAspectFit;
-     [_avatarImage setImage:[UIImage imageNamed:@&quot;test.jpg&quot;]];
- }
- return _avatarImage;
-</code></pre><p> }</p>
-<pre><code> //中心镂空的图
- - (UIImageView *)maskImage {  
-
- if (!_maskImage) { 
-
-   _maskImage = [[UIImageView alloc] initWithFrame:CGRectMake(20,10, avatarDiameter, avatarDiameter)]; 
-    _maskImage.contentMode = UIViewContentModeScaleAspectFit; 
-   [_maskImage setImage:[UIImage imageNamed:@&quot;corner_circle.png&quot;]]; 
- }
- return _maskImage;
-}
-</code></pre>
-          
+          ###iOS 开发切圆之 View 只切指定的角
+如果需要将UIView的4个角全部都为圆角，做法相当简单，只需设置其Layer的cornerRadius属性即可（项目需要使用QuartzCore框架）。而若要指定某几个角（小于4）为圆角而别的不变时，这种方法就不好用了。
+UIView *view2
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/11/04/iOS-开发切圆之-View-只切指定的角/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -571,10 +469,17 @@ return _avatarImage;
       
         
           
-            <h3 id="利用Javascript去操作UIWebView的内容"><a href="#利用Javascript去操作UIWebView的内容" class="headerlink" title="利用Javascript去操作UIWebView的内容"></a>利用Javascript去操作UIWebView的内容</h3><p><a href="http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/" target="_blank" rel="external">http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/</a></p>
-<p>博客还是不错的 有的可以借鉴下</p>
+          利用Javascript去操作UIWebView的内容http://jwdev.cn/2015/09/28/use-javascript-to-delete-web-element/
+博客还是不错的 有的可以借鉴下
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/10/21/利用Javascript去操作UIWebView的内容/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -684,129 +589,17 @@ return _avatarImage;
       
         
           
-            <hr>
-<h2 id="什么是Hexo"><a href="#什么是Hexo" class="headerlink" title="什么是Hexo"></a>什么是Hexo</h2><p>Hexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便的生成静态网页托管在github和Heroku上</p>
-<h2 id="GitHub-Pages是什么？"><a href="#GitHub-Pages是什么？" class="headerlink" title="GitHub Pages是什么？"></a>GitHub Pages是什么？</h2><p>GitHub Pages 可以被认为是用户编写的、托管在github上的静态网页。由于它的空间免费稳定， 可以用于介绍托管在github上的Project或者搭建网站。有两种形式: Project Site 和 User/Org Site，二者之间的差异可以戳 GitHub Pages 。基于 GP 创建Site是很方便的，这有一个简单的教程： 学习 Github Page 教你分分钟搭建自己的博客</p>
-<p>gp 生成的网站的默认域名是 username.github.io 或者 username.github.io/project-name ，但gp是支持自定义域名的： Custom Domain Name 。购买域名之后，可以和默认的二级域名进行绑定，教程参考： 购买域名、设置DNS</p>
-<hr>
-<h2 id="Hexo-的安装"><a href="#Hexo-的安装" class="headerlink" title="Hexo 的安装"></a>Hexo 的安装</h2><ol>
-<li>由于 Hexo 是基于 Node ，安装前要先安装 Node. 进入官网(<a href="https://nodejs.org/en/" target="_blank" rel="external">https://nodejs.org/en/</a>) 下载安装包，直接点击安装就可以了</li>
-<li>安装Git以及申请git账号,相信这步就不用多说了</li>
-<li>安装Hexo</li>
-</ol>
-<pre><code>Node和Git都安装好后，可执行如下命令安装hexo：
-</code></pre><hr>
-<p>安装:</p>
-<blockquote>
-<pre><code>$ sudo npm install -g hexo
-</code></pre></blockquote>
-<p>初始化:<br>创建一个文件夹，如：MyBlog，cd到MyBlog里执行hexo init的。命令：</p>
-<blockquote>
-<pre><code>$ hexo init
-</code></pre></blockquote>
-<p>生成静态页面</p>
-<p>继续再MyBlog目录下执行如下命令，生成静态页面</p>
-<blockquote>
-<pre><code>$ hexo generate （hexo g  也可以） 
-</code></pre></blockquote>
-<p>本地启动</p>
-<p>启动本地服务，进行文章预览调试，命令：</p>
-<blockquote>
-<pre><code>$ hexo server  
-</code></pre></blockquote>
-<p>浏览器输入<a href="http://localhost:4000" target="_blank" rel="external">http://localhost:4000</a> 访问试试看,如果没错误 你就会访问到你的网页了</p>
-<hr>
-<h3 id="下面就是要将-hexo-部署至Git"><a href="#下面就是要将-hexo-部署至Git" class="headerlink" title="下面就是要将 hexo 部署至Git"></a>下面就是要将 hexo 部署至Git</h3><ul>
-<li><ol>
-<li>首先在github上建立一个工程,名字就是 —&gt;  你的github名.github.io</li>
-</ol>
-</li>
-<li><ol>
-<li>配置_config.yml文件，来建立关联.</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>$ vim _config.yml
-</code></pre></blockquote>
-<p>翻到最下面，改成我这样子的，注意： : 后面要有空格</p>
-<p>deploy:<br>  type: git<br>  repository: <a href="https://github.com/ongfei/ongfei.github.io.git" target="_blank" rel="external">https://github.com/ongfei/ongfei.github.io.git</a><br>  branch: master</p>
-<ul>
-<li><ol>
-<li>执行如下命令才能使用git部署</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>$ npm install hexo-deployer-git --save
-</code></pre></blockquote>
-<ul>
-<li><ol>
-<li>然后，执行配置命令：</li>
-</ol>
-</li>
-</ul>
-<blockquote>
-<pre><code>$ hexo deploy
-</code></pre></blockquote>
-<p>然后再浏览器中输入<br><a href="http://ongfei.github.io/" target="_blank" rel="external">http://ongfei.github.io/</a></p>
-<hr>
-<p>部署步骤 每次部署的步骤，可按以下三步来进行。</p>
-<pre><code>$ hexo clean
-$ hexo generate
-$ hexo deploy
-</code></pre><hr>
-<hr>
-<p>一些常用命令：</p>
-<pre><code>$ hexo new &quot;postName&quot; #新建文章
-$ hexo new page &quot;pageName&quot; #新建页面
-$ hexo generate #生成静态页面至public目录
-$ hexo server #开启预览访问端口（默认端口4000，&apos;ctrl + c&apos;关闭server）
-$ hexo deploy #将.deploy目录部署到GitHub
-$ hexo help  # 查看帮助
-$ hexo version  #查看Hexo的版本
-</code></pre><h2 id="关于主题的更改"><a href="#关于主题的更改" class="headerlink" title="关于主题的更改"></a>关于主题的更改</h2><p>附上一个git地址 <a href="https://github.com/litten/hexo-theme-yilia" target="_blank" rel="external">https://github.com/litten/hexo-theme-yilia</a></p>
-<h2 id="创建和发布文章"><a href="#创建和发布文章" class="headerlink" title="创建和发布文章"></a>创建和发布文章</h2><p>想要发布新的文章，首先创建<br>cd到Hexo文件夹</p>
-<pre><code>$ hexo new &quot;文章标题&quot;
-</code></pre><p>你可以在Hexo-&gt;Source-&gt;_post目录下看到你新创建的那个文章，还有一个配套的文件夹，里面放这边博文的图片资源</p>
-<p>使用支持MarkDown编辑器编写的打开新创建的文件，就可以写文章了，要根据MarkDown语法写出来的文章才会好看</p>
-<p>markdown具体语法参考(<a href="http://www.appinn.com/markdown/#code" target="_blank" rel="external">http://www.appinn.com/markdown/#code</a>)</p>
-<pre><code>title:  #文章标题
-date:  #时间，一般不用改
-categories:  #目录分类
-tags:  #标签，格式可以是[Hexo,总结]，中间用英文逗号分开
-keywords:  #文章关键词，多个关键词用英文逗号隔开 
-</code></pre><p>文章写好直接执行下面命令即可直接发布文章</p>
-<pre><code>$ hexo d -g
-</code></pre><p>如果发布时候出现错误</p>
-<h6 id="ERROR-Deployer-not-found-git"><a href="#ERROR-Deployer-not-found-git" class="headerlink" title="ERROR Deployer not found: git"></a>ERROR Deployer not found: git</h6><p>执行</p>
-<pre><code>$ npm install hexo-deployer-git --save
-</code></pre><p>关于文章图片的插入<br>这个有必要说一下怎么做<br>文章插入图片需要用到Hexo的一个插件，首先cd到hexo的根目录</p>
-<pre><code>$ npm install https://github.com/CodeFalling/hexo-asset-image --save
-</code></pre><p>然后把图片放入对应文章的配套文件夹下，比如1.png</p>
-<pre><code>[站外图片上传中……(17)]
-</code></pre><p>推荐两个比较好用的可以把图片存到网络上：</p>
-<p><a href="http://tuchuang.org/" target="_blank" rel="external">图床</a>；无需注册，方便快捷。<br><a href="https://portal.qiniu.com/signup?code=3lglas6pgi2qa" target="_blank" rel="external">七牛云存储</a>；需要注册，免费，空间大，速度快。</p>
-<hr>
-<hr>
-<h3 id="关于"><a href="#关于" class="headerlink" title="关于"></a>关于</h3><ol>
-<li>家里电脑使用博客 <br><br>建立git远端仓库管理博客,并使用家里的电脑把本地博客的配置推送到远端仓库。 </li>
-<li>公司电脑使用博客<br><br>到了公司只需要执行sudo npm install -g hexo,然后cd到你的博客目录下,如我cd 到Hexo目录下, 然后执行 hexo server 就可以在本地预览博客了。 </li>
-<li>使用Git保存 <br><br>修改好博客后记得先使用git来提交下, 即使下次把博客的样式修改坏了, 也可以使用 git reset –hard 来回退。如: 我cd 到 Blog-Growing 目录下使用git提交。 </li>
-<li>博客提交<br><br>1、修改好的博客使用 hexo d 展示到博客页上。  <br><br>2、git push 整个本地博客。</li>
-</ol>
-<hr>
-<hr>
-<h4 id="为什么使用百度搜索不到-Github-Page-上的博客？"><a href="#为什么使用百度搜索不到-Github-Page-上的博客？" class="headerlink" title="为什么使用百度搜索不到 Github Page 上的博客？"></a>为什么使用百度搜索不到 Github Page 上的博客？</h4><p>有人联系过 Github Support 部门 , 给出大致的意思就是: 百度爬虫爬得太猛烈，已经对很多 Github 用户造成了问题。所以 Github 将禁止百度爬虫的爬取。</p>
-<h4 id="如何让百度能搜索你的博客"><a href="#如何让百度能搜索你的博客" class="headerlink" title="如何让百度能搜索你的博客?"></a>如何让百度能搜索你的博客?</h4><p>　　根据上面说的, 目前发现只是Github Page禁止了百度搜索, 所以让百度能搜索到你的博客还是有一些方法的。例如: <em> 自己搞个VPS,博客部署在VPS上。 </em> 博客部署 Coding.net 上, GitCafe已经合并到 Coding 。 我使用的是第二种方法, 博客部署在 Coding.net 上也相对简单些。</p>
-<p>在Coding上部署你的博客。<br>　　Coding同样支持Hexo、Jekyll等博客的部署, Coding 跟Github还是挺像的,而且是中文。 同样的在Coding里面建一个项目,项目名字跟你的用户名一样,这里我就不啰嗦了, 说几个需要注意的地方:<br>注意一:<br>　　在Coding Page 上部署博客,需要把博客推送到coding-pages 分支上, 分支名字是固定的。<br>注意二:<br>　　Coding Page 不支持自定义CNAME, 你需要点击到Page模块,然后添加一个域名来绑定。</p>
-<p>更详细的请看Coding Pages 官网介绍.</p>
-<h4 id="此过程中总会遇到大大小小的坑-查资料也是学习的过程-共勉"><a href="#此过程中总会遇到大大小小的坑-查资料也是学习的过程-共勉" class="headerlink" title="此过程中总会遇到大大小小的坑 , 查资料也是学习的过程. 共勉."></a>此过程中总会遇到大大小小的坑 , 查资料也是学习的过程. 共勉.</h4><hr>
-<p><a href="http://baixin.io/2015/08/HEXO搭建个人博客/" target="_blank" rel="external">参考链接</a></p>
-<hr>
-<p><a href="http://ibruce.info/2013/11/22/hexo-your-blog/?utm_source=tuicool" target="_blank" rel="external">更详细的教程请移步</a></p>
-
           
+什么是HexoHexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便的生成静态网页托管在github和Heroku上
+GitHub Pages是什么？GitHub Pages 可以被认为是用户编写的、托管在github上的静态网页。由于它的空间免费稳定， 可以用于介绍托管在git
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2015/10/09/Hexo-搭建自己的博客/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -899,10 +692,10 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
             
             
             <div class="site-state-item site-state-categories">
-              
+              <a href="/categories/index.html">
                 <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">分类</span>
-              
+              </a>
             </div>
           
 
@@ -910,10 +703,10 @@ keywords:  #文章关键词，多个关键词用英文逗号隔开
             
             
             <div class="site-state-item site-state-tags">
-              
-                <span class="site-state-item-count">20</span>
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 

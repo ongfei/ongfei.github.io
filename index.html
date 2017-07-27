@@ -5,12 +5,13 @@
   
 
 
-<!-- 背景动画 -->
-
 
 <html class="theme-next muse use-motion" lang="zh-Hans">
 
 <head>
+  <!-- 背景动画 -->
+  
+
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
@@ -242,16 +243,6 @@
         </li>
       
         
-        <li class="menu-item menu-item-link">
-          <a href="/link" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-link"></i> <br />
-            
-            链接
-          </a>
-        </li>
-      
-        
         <li class="menu-item menu-item-about">
           <a href="/about/" rel="section">
             
@@ -358,1252 +349,18 @@
       
         
           
-            <h3 id="看到的一篇iOS开发经验总结的文章-做下记录"><a href="#看到的一篇iOS开发经验总结的文章-做下记录" class="headerlink" title="看到的一篇iOS开发经验总结的文章 做下记录"></a>看到的一篇iOS开发经验总结的文章 做下记录</h3><h2 id="iOS开发经验总结"><a href="#iOS开发经验总结" class="headerlink" title="iOS开发经验总结"></a>iOS开发经验总结</h2><p>原文章地址 :    <a href="http://www.jianshu.com/p/1ff9e44ccc78" target="_blank" rel="external">http://www.jianshu.com/p/1ff9e44ccc78</a></p>
-<p>1、禁止手机睡眠</p>
-<pre><code>[UIApplication sharedApplication].idleTimerDisabled = YES;
-</code></pre><p>2、隐藏某行cell</p>
-<pre><code>- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-// 如果是你需要隐藏的那一行，返回高度为0
-    if(indexPath.row == YouWantToHideRow)
-        return 0; 
-    return 44;
-}
-
-// 然后再你需要隐藏cell的时候调用
-[self.tableView beginUpdates];
-[self.tableView endUpdates];
-</code></pre><p>3、禁用button高亮</p>
-<pre><code>button.adjustsImageWhenHighlighted = NO;
-或者在创建的时候
- UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-</code></pre><p>4、tableview遇到这种报错failed to obtain a cell from its dataSource</p>
-<p>是因为你的cell被调用的早了。先循环使用了cell，后又创建cell。顺序错了</p>
-<p>可能原因：1、xib的cell没有注册 2、内存中已经有这个cell的缓存了(也就是说通过你的cellId找到的cell并不是你想要的类型)，这时候需要改下cell的标识</p>
-<p>5、cocoa pods报这个错误：unable to access ‘<a href="https://github.com/facebook/pop.git/" target="_blank" rel="external">https://github.com/facebook/pop.git/</a>‘: Operation timed out after 0 milliseconds with 0 out of 0 bytes received</p>
-<p>解决办法：原因可能是网络问题，网络请求超时了，只需要重试就行了</p>
-<p>6、cocoa pods 出现ERROR: While executing gem … (Errno::EPERM)</p>
-<p>解决办法：<br><a href="https://segmentfault.com/q/1010000002926243" target="_blank" rel="external">https://segmentfault.com/q/1010000002926243</a></p>
-<p>7、动画切换window的根控制器</p>
-<pre><code>// options是动画选项
-[UIView transitionWithView:[UIApplication sharedApplication].keyWindow duration:0.5f options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
-        BOOL oldState = [UIView areAnimationsEnabled];
-        [UIView setAnimationsEnabled:NO];
-        [UIApplication sharedApplication].keyWindow.rootViewController = [RootViewController new];
-        [UIView setAnimationsEnabled:oldState];
-    } completion:^(BOOL finished) {
-
-    }];
-</code></pre><p>8、去除数组中重复的对象</p>
-<pre><code>NSArray *newArr = [oldArr valueForKeyPath:@“@distinctUnionOfObjects.self&quot;];
-</code></pre><p>9、编译的时候遇到 no such file or directory: ／users／apple／XXX</p>
-<p>是因为编译的时候，在此路径下找不到这个文件，解决这个问题，首先是是要检查缺少的文件是不是在工程中，如果不在工程中，需要从本地拖进去，如果发现已经存在工程中了，或者拖进去还是报错，这时候需要去build phases中搜索这个文件，这时候很可能会搜出现两个相同的文件，这时候，有一个路径是正确的，删除另外一个即可。如果删除了还是不行，需要把两个都删掉，然后重新往工程里拖进这个文件即可</p>
-<p>build phases</p>
-<p>10、iOS8系统中，tableView最好实现下-tableView: heightForRowAtIndexPath:这个代理方法，要不然在iOS8中可能就会出现显示不全或者无法响应事件的问题</p>
-<p>11、iOS8中实现侧滑功能的时候这个方法必须实现，要不然在iOS8中无法侧滑</p>
-<p>// 必须写的方法，和editActionsForRowAtIndexPath配对使用，里面什么不写也行</p>
-<pre><code>- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-
-}
-</code></pre><p>12、三个通知</p>
-<p>NSSystemTimeZoneDidChangeNotification监听修改时间界面的两个按钮状态变化<br>UIApplicationSignificantTimeChangeNotification 监听用户改变时间 （只要点击自动设置按钮就会调用） NSSystemClockDidChangeNotification 监听用户修改时间（时间不同才会调用）</p>
-<p>13、SDWebImage本地缓存有时候会害人。如果之前缓存过一张图片，即使下次服务器换了这张图片，但是图片url没换，用sdwebimage下载下来的还是以前那张,所以遇到这种问题，不要先去怼服务器，清空下缓存再试就好了。</p>
-<p>14、上线前注意：</p>
-<p>1）、删掉代码中所有的测试代码<br>2）、如果后台有审核模式，提醒后台开启此模式<br>3）、主流程再跑一跑<br>4）、全局搜索waring，检查所有标记waring的地方</p>
-<p>15、跳进app权限设置</p>
-<pre><code>// 跳进app设置
-            if (UIApplicationOpenSettingsURLString != NULL) {
-                NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
-                [[UIApplication sharedApplication] openURL:url];
-            }
-        }
-</code></pre><p>16、给一个view截图</p>
-<pre><code>UIGraphicsBeginImageContextWithOptions(view.bounds.size, YES, 0.0);
-    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-</code></pre><p>17、开发中如果要动态修改tableView的tableHeaderView或者tableFooterView的高度，需要给tableView重新设置，而不是直接更改高度。正确的做法是重新设置一下tableView.tableFooterView = 更改过高度的view。为什么？其实在iOS8以上直接改高度是没有问题的，在iOS8中出现了contentSize不准确的问题，这是解决办法。</p>
-<p>18、注意对象为nil的时候，调用此对象分类的方法不会执行</p>
-<p>19、collectionView的内容小于其宽高的时候是不能滚动的，设置可以滚动：</p>
-<pre><code>collectionView.alwaysBounceHorizontal = YES;
-collectionView.alwaysBounceVertical = YES;
-</code></pre><p>20、设置navigationBar上的title颜色和大小</p>
-<pre><code>[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor youColor], NSFontAttributeName : [UIFont systemFontOfSize:15]}]
-</code></pre><p>21、颜色转图片</p>
-<pre><code>+ (UIImage *)cl_imageWithColor:(UIColor *)color {
-  CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-  UIGraphicsBeginImageContext(rect.size);
-  CGContextRef context = UIGraphicsGetCurrentContext();
-
-  CGContextSetFillColorWithColor(context, [color CGColor]);
-  CGContextFillRect(context, rect);
-
-  UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-  UIGraphicsEndImageContext();
-
-  return image;
-}
-</code></pre><p>22、view设置圆角</p>
-<pre><code>#define ViewBorderRadius(View, Radius, Width, Color)\
-\
-[View.layer setCornerRadius:(Radius)];\
-[View.layer setMasksToBounds:YES];\
-[View.layer setBorderWidth:(Width)];\
-[View.layer setBorderColor:[Color CGColor]] // view圆角
-</code></pre><p>23、强／弱引用</p>
-<pre><code>#define WeakSelf(type)  __weak typeof(type) weak##type = type; // weak
-#define StrongSelf(type)  __strong typeof(type) type = weak##type; // strong
-</code></pre><p>24、由角度转换弧度</p>
-<pre><code>#define DegreesToRadian(x) (M_PI * (x) / 180.0)
-</code></pre><p>25、由弧度转换角度</p>
-<pre><code>#define RadianToDegrees(radian) (radian*180.0)/(M_PI)
-</code></pre><p>26、获取图片资源</p>
-<pre><code>#define GetImage(imageName) [UIImage imageNamed:[NSString stringWithFormat:@&quot;%@&quot;,imageName]]
-</code></pre><p>27、获取temp</p>
-<pre><code>#define PathTemp NSTemporaryDirectory()
-</code></pre><p>28、获取沙盒 Document</p>
-<pre><code>#define PathDocument [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]
-</code></pre><p>29、获取沙盒 Cache</p>
-<pre><code>#define PathCache [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]
-</code></pre><p>30、GCD代码只执行一次</p>
-<pre><code>#define kDISPATCH_ONCE_BLOCK(onceBlock) static dispatch_once_t onceToken; dispatch_once(&amp;onceToken, onceBlock);
-</code></pre><p>31、自定义NSLog</p>
-<pre><code>#ifdef DEBUG
-#define NSLog(fmt, ...) NSLog((@&quot;%s [Line %d] &quot; fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
-#else
-#define NSLog(...)
-#endif
-</code></pre><p>32、Font</p>
-<pre><code>#define FontL(s)             [UIFont systemFontOfSize:s weight:UIFontWeightLight]
-#define FontR(s)             [UIFont systemFontOfSize:s weight:UIFontWeightRegular]
-#define FontB(s)             [UIFont systemFontOfSize:s weight:UIFontWeightBold]
-#define FontT(s)             [UIFont systemFontOfSize:s weight:UIFontWeightThin]
-#define Font(s)              FontL(s)
-</code></pre><p>33、FORMAT</p>
-<pre><code>#define FORMAT(f, ...)      [NSString stringWithFormat:f, ## __VA_ARGS__]
-</code></pre><p>34、在主线程上运行</p>
-<pre><code>#define kDISPATCH_MAIN_THREAD(mainQueueBlock) dispatch_async(dispatch_get_main_queue(), mainQueueBlock);
-</code></pre><p>35、开启异步线程</p>
-<pre><code>#define kDISPATCH_GLOBAL_QUEUE_DEFAULT(globalQueueBlock) dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), globalQueueBlocl);
-</code></pre><p>36、通知</p>
-<pre><code>#define NOTIF_ADD(n, f)     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(f) name:n object:nil]
-#define NOTIF_POST(n, o)    [[NSNotificationCenter defaultCenter] postNotificationName:n object:o]
-#define NOTIF_REMV()        [[NSNotificationCenter defaultCenter] removeObserver:self]
-</code></pre><p>37、随机颜色</p>
-<pre><code>+ (UIColor *)RandomColor {
-    NSInteger aRedValue = arc4random() % 255;
-    NSInteger aGreenValue = arc4random() % 255;
-    NSInteger aBlueValue = arc4random() % 255;
-    UIColor *randColor = [UIColor colorWithRed:aRedValue / 255.0f green:aGreenValue / 255.0f blue:aBlueValue / 255.0f alpha:1.0f];
-    return randColor;
-}
-</code></pre><p>38、获取window</p>
-<pre><code>+(UIWindow*)getWindow {
-    UIWindow* win = nil; //[UIApplication sharedApplication].keyWindow;
-    for (id item in [UIApplication sharedApplication].windows) {
-        if ([item class] == [UIWindow class]) {
-            if (!((UIWindow*)item).hidden) {
-                win = item;
-                break;
-            }
-        }
-    }
-    return win;
-}
-</code></pre><p>39、修改textField的placeholder的字体颜色、大小</p>
-<pre><code>[textField setValue:[UIColor redColor] forKeyPath:@&quot;_placeholderLabel.textColor&quot;];
-[textField setValue:[UIFont boldSystemFontOfSize:16] forKeyPath:@&quot;_placeholderLabel.font&quot;];
-</code></pre><p>40、统一收起键盘</p>
-<pre><code>[[[UIApplication sharedApplication] keyWindow] endEditing:YES];
-</code></pre><p>41、控制屏幕旋转，在控制器中写</p>
-<pre><code>/** 是否支持自动转屏 */
-- (BOOL)shouldAutorotate {
-    return YES;
-}
-
-/** 支持哪些屏幕方向 */
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskLandscapeLeft | UIInterfaceOrientationMaskLandscapeRight;
-}
-
-/** 默认的屏幕方向（当前ViewController必须是通过模态出来的UIViewController（模态带导航的无效）方式展现出来的，才会调用这个方法） */
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationLandscapeLeft | UIInterfaceOrientationLandscapeRight;
-}
-</code></pre><p>42、获取app缓存大小</p>
-<pre><code>- (CGFloat)getCachSize {
-
-    NSUInteger imageCacheSize = [[SDImageCache sharedImageCache] getSize];
-    //获取自定义缓存大小
-    //用枚举器遍历 一个文件夹的内容
-    //1.获取 文件夹枚举器
-    NSString *myCachePath = [NSHomeDirectory() stringByAppendingPathComponent:@&quot;Library/Caches&quot;];
-    NSDirectoryEnumerator *enumerator = [[NSFileManager defaultManager] enumeratorAtPath:myCachePath];
-    __block NSUInteger count = 0;
-    //2.遍历
-    for (NSString *fileName in enumerator) {
-        NSString *path = [myCachePath stringByAppendingPathComponent:fileName];
-        NSDictionary *fileDict = [[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil];
-        count += fileDict.fileSize;//自定义所有缓存大小
-    }
-    // 得到是字节  转化为M
-    CGFloat totalSize = ((CGFloat)imageCacheSize+count)/1024/1024;
-    return totalSize;
-}
-</code></pre><p>43、清理app缓存</p>
-<pre><code>- (void)handleClearView {
-    //删除两部分
-    //1.删除 sd 图片缓存
-    //先清除内存中的图片缓存
-    [[SDImageCache sharedImageCache] clearMemory];
-    //清除磁盘的缓存
-    [[SDImageCache sharedImageCache] clearDisk];
-    //2.删除自己缓存
-    NSString *myCachePath = [NSHomeDirectory() stringByAppendingPathComponent:@&quot;Library/Caches&quot;];
-    [[NSFileManager defaultManager] removeItemAtPath:myCachePath error:nil];
-}
-</code></pre><p>44、模型转字典</p>
-<pre><code>static NSSet *classes;
-
-- (NSMutableDictionary *)getParameterDictionary {
-
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-
-    Class c = self.class;
-
-    while (c) {
-        unsigned count;
-        objc_property_t *properties = class_copyPropertyList([c class], &amp;count);
-
-        for (int i = 0; i &lt; count; i++) {
-            NSString *key = [NSString stringWithUTF8String:property_getName(properties[i])];
-            dict[key] = [self valueForKey:key];
-        }
-        free(properties);
-
-        // 获得父类
-        c = class_getSuperclass(c);
-
-        if ([self isClassFromFoundation:c]) break;
-    }
-    return dict;
-}
-
-- (BOOL)isClassFromFoundation:(Class)c
-{
-    if (c == [NSObject class] || c == [NSManagedObject class]) return YES;
-
-    __block BOOL result = NO;
-    [[self foundationClasses] enumerateObjectsUsingBlock:^(Class foundationClass, BOOL *stop) {
-        if ([c isSubclassOfClass:foundationClass]) {
-            result = YES;
-            *stop = YES;
-        }
-    }];
-    return result;
-}
-
-- (NSSet *)foundationClasses
-{
-    if (classes == nil) {
-        // 集合中没有NSObject，因为几乎所有的类都是继承自NSObject，具体是不是NSObject需要特殊判断
-        classes = [NSSet setWithObjects:
-                              [NSURL class],
-                              [NSDate class],
-                              [NSValue class],
-                              [NSData class],
-                              [NSError class],
-                              [NSArray class],
-                              [NSDictionary class],
-                              [NSString class],
-                              [NSAttributedString class], nil];
-    }
-    return classes;
-}
-</code></pre><p>45、交换两个方法实现</p>
-<pre><code>Class aClass = [self class]; 
-
-        SEL originalSelector = @selector(viewWillAppear:); 
-        SEL swizzledSelector = @selector(xxx_viewWillAppear:); 
-
-        Method originalMethod = class_getInstanceMethod(aClass, originalSelector); 
-        Method swizzledMethod = class_getInstanceMethod(aClass, swizzledSelector); 
-
-        BOOL didAddMethod = 
-            class_addMethod(aClass, 
-                originalSelector, 
-                method_getImplementation(swizzledMethod), 
-                method_getTypeEncoding(swizzledMethod)); 
-
-        if (didAddMethod) { 
-            class_replaceMethod(aClass, 
-                swizzledSelector, 
-                method_getImplementation(originalMethod), 
-                method_getTypeEncoding(originalMethod)); 
-        } else { 
-            method_exchangeImplementations(originalMethod, swizzledMethod); 
-        }
-</code></pre><p>46、打印百分号和引号</p>
-<pre><code>NSLog(@&quot;%%&quot;);
-NSLog(@&quot;\&quot;&quot;);
-</code></pre><p>47、几个常用权限判断</p>
-<pre><code>if ([CLLocationManager authorizationStatus] ==kCLAuthorizationStatusDenied) {
-    NSLog(@&quot;没有定位权限&quot;);
-}
-AVAuthorizationStatus statusVideo = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
-if (statusVideo == AVAuthorizationStatusDenied) {
-    NSLog(@&quot;没有摄像头权限&quot;);
-}
-//是否有麦克风权限
-AVAuthorizationStatus statusAudio = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeAudio];
-if (statusAudio == AVAuthorizationStatusDenied) {
-    NSLog(@&quot;没有录音权限&quot;);
-}
-[PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-    if (status == PHAuthorizationStatusDenied) {
-        NSLog(@&quot;没有相册权限&quot;);
-    }
-}];
-</code></pre><p>48、获取手机型号</p>
-<pre><code>+ (NSString *)getDeviceInfo {
-struct utsname systemInfo;
-uname(&amp;systemInfo);
-NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
-if ([platform isEqualToString:@&quot;iPhone1,1&quot;]) return @&quot;iPhone 2G&quot;;
-if ([platform isEqualToString:@&quot;iPhone1,2&quot;]) return @&quot;iPhone 3G&quot;;
-if ([platform isEqualToString:@&quot;iPhone2,1&quot;]) return @&quot;iPhone 3GS&quot;;
-if ([platform isEqualToString:@&quot;iPhone3,1&quot;]) return @&quot;iPhone 4&quot;;
-if ([platform isEqualToString:@&quot;iPhone3,2&quot;]) return @&quot;iPhone 4&quot;;
-if ([platform isEqualToString:@&quot;iPhone3,3&quot;]) return @&quot;iPhone 4&quot;;
-if ([platform isEqualToString:@&quot;iPhone4,1&quot;]) return @&quot;iPhone 4S&quot;;
-if ([platform isEqualToString:@&quot;iPhone5,1&quot;]) return @&quot;iPhone 5&quot;;
-if ([platform isEqualToString:@&quot;iPhone5,2&quot;]) return @&quot;iPhone 5&quot;;
-if ([platform isEqualToString:@&quot;iPhone5,3&quot;]) return @&quot;iPhone 5c&quot;;
-if ([platform isEqualToString:@&quot;iPhone5,4&quot;]) return @&quot;iPhone 5c&quot;;
-if ([platform isEqualToString:@&quot;iPhone6,1&quot;]) return @&quot;iPhone 5s&quot;;
-if ([platform isEqualToString:@&quot;iPhone6,2&quot;]) return @&quot;iPhone 5s&quot;;
-if ([platform isEqualToString:@&quot;iPhone7,1&quot;]) return @&quot;iPhone 6 Plus&quot;;
-if ([platform isEqualToString:@&quot;iPhone7,2&quot;]) return @&quot;iPhone 6&quot;;
-if ([platform isEqualToString:@&quot;iPhone8,1&quot;]) return @&quot;iPhone 6s&quot;;
-if ([platform isEqualToString:@&quot;iPhone8,2&quot;]) return @&quot;iPhone 6s Plus&quot;;
-// 日行两款手机型号均为日本独占，可能使用索尼FeliCa支付方案而不是苹果支付
-if ([platform isEqualToString:@&quot;iPhone9,1&quot;])    return @&quot;国行、日版、港行iPhone 7&quot;;
-if ([platform isEqualToString:@&quot;iPhone9,2&quot;])    return @&quot;港行、国行iPhone 7 Plus&quot;;
-if ([platform isEqualToString:@&quot;iPhone9,3&quot;])    return @&quot;美版、台版iPhone 7&quot;;
-if ([platform isEqualToString:@&quot;iPhone9,4&quot;])    return @&quot;美版、台版iPhone 7 Plus&quot;;
-if ([platform isEqualToString:@&quot;iPhone8,4&quot;]) return @&quot;iPhone SE&quot;;
-if ([platform isEqualToString:@&quot;iPod1,1&quot;]) return @&quot;iPod Touch 1G&quot;;
-if ([platform isEqualToString:@&quot;iPod2,1&quot;]) return @&quot;iPod Touch 2G&quot;;
-if ([platform isEqualToString:@&quot;iPod3,1&quot;]) return @&quot;iPod Touch 3G&quot;;
-if ([platform isEqualToString:@&quot;iPod4,1&quot;]) return @&quot;iPod Touch 4G&quot;;
-if ([platform isEqualToString:@&quot;iPod5,1&quot;]) return @&quot;iPod Touch 5G&quot;;
-if ([platform isEqualToString:@&quot;iPad1,1&quot;]) return @&quot;iPad 1G&quot;;
-if ([platform isEqualToString:@&quot;iPad2,1&quot;]) return @&quot;iPad 2&quot;;
-if ([platform isEqualToString:@&quot;iPad2,2&quot;]) return @&quot;iPad 2&quot;;
-if ([platform isEqualToString:@&quot;iPad2,3&quot;]) return @&quot;iPad 2&quot;;
-if ([platform isEqualToString:@&quot;iPad2,4&quot;]) return @&quot;iPad 2&quot;;
-if ([platform isEqualToString:@&quot;iPad2,5&quot;]) return @&quot;iPad Mini 1G&quot;;
-if ([platform isEqualToString:@&quot;iPad2,6&quot;]) return @&quot;iPad Mini 1G&quot;;
-if ([platform isEqualToString:@&quot;iPad2,7&quot;]) return @&quot;iPad Mini 1G&quot;;
-if ([platform isEqualToString:@&quot;iPad3,1&quot;]) return @&quot;iPad 3&quot;;
-if ([platform isEqualToString:@&quot;iPad3,2&quot;]) return @&quot;iPad 3&quot;;
-if ([platform isEqualToString:@&quot;iPad3,3&quot;]) return @&quot;iPad 3&quot;;
-if ([platform isEqualToString:@&quot;iPad3,4&quot;]) return @&quot;iPad 4&quot;;
-if ([platform isEqualToString:@&quot;iPad3,5&quot;]) return @&quot;iPad 4&quot;;
-if ([platform isEqualToString:@&quot;iPad3,6&quot;]) return @&quot;iPad 4&quot;;
-if ([platform isEqualToString:@&quot;iPad4,1&quot;]) return @&quot;iPad Air&quot;;
-if ([platform isEqualToString:@&quot;iPad4,2&quot;]) return @&quot;iPad Air&quot;;
-if ([platform isEqualToString:@&quot;iPad4,3&quot;]) return @&quot;iPad Air&quot;;
-if ([platform isEqualToString:@&quot;iPad4,4&quot;]) return @&quot;iPad Mini 2G&quot;;
-if ([platform isEqualToString:@&quot;iPad4,5&quot;]) return @&quot;iPad Mini 2G&quot;;
-if ([platform isEqualToString:@&quot;iPad4,6&quot;]) return @&quot;iPad Mini 2G&quot;;
-if ([platform isEqualToString:@&quot;i386&quot;]) return @&quot;iPhone Simulator&quot;;
-if ([platform isEqualToString:@&quot;x86_64&quot;]) return @&quot;iPhone Simulator&quot;;
-return platform;
-}
-</code></pre><p>49、长按复制功能</p>
-<pre><code>- (void)viewDidLoad
-{
-    [self.view addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(pasteBoard:)]];
-}
-- (void)pasteBoard:(UILongPressGestureRecognizer *)longPress {
-    if (longPress.state == UIGestureRecognizerStateBegan) {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        pasteboard.string = @&quot;需要复制的文本&quot;;
-    }
-}
-</code></pre><p>50、cocoapods升级</p>
-<p>在终端执行 sudo gem install -n / usr / local / bin cocoapods –pre<br>51、设置启动页后，依然显示之前的</p>
-<p>删除app，手机重启，重新安装</p>
-<p>52、判断图片类型</p>
-<pre><code>//通过图片Data数据第一个字节 来获取图片扩展名
-- (NSString *)contentTypeForImageData:(NSData *)data
-{
-    uint8_t c;
-    [data getBytes:&amp;c length:1];
-    switch (c)
-    {
-        case 0xFF:
-            return @&quot;jpeg&quot;;
-
-        case 0x89:
-            return @&quot;png&quot;;
-
-        case 0x47:
-            return @&quot;gif&quot;;
-
-        case 0x49:
-        case 0x4D:
-            return @&quot;tiff&quot;;
-
-        case 0x52:
-        if ([data length] &lt; 12) {
-            return nil;
-        }
-
-        NSString *testString = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
-        if ([testString hasPrefix:@&quot;RIFF&quot;]
-            &amp;&amp; [testString hasSuffix:@&quot;WEBP&quot;])
-        {
-            return @&quot;webp&quot;;
-        }
-
-        return nil;
-    }
-
-    return nil;
-}
-</code></pre><p>53、获取手机和app信息</p>
-<pre><code>NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];  
- CFShow(infoDictionary);  
-// app名称  
- NSString *app_Name = [infoDictionary objectForKey:@&quot;CFBundleDisplayName&quot;];  
- // app版本  
- NSString *app_Version = [infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];  
- // app build版本  
- NSString *app_build = [infoDictionary objectForKey:@&quot;CFBundleVersion&quot;];  
-
-
-
-    //手机序列号  
-    NSString* identifierNumber = [[UIDevice currentDevice] uniqueIdentifier];  
-    NSLog(@&quot;手机序列号: %@&quot;,identifierNumber);  
-    //手机别名： 用户定义的名称  
-    NSString* userPhoneName = [[UIDevice currentDevice] name];  
-    NSLog(@&quot;手机别名: %@&quot;, userPhoneName);  
-    //设备名称  
-    NSString* deviceName = [[UIDevice currentDevice] systemName];  
-    NSLog(@&quot;设备名称: %@&quot;,deviceName );  
-    //手机系统版本  
-    NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];  
-    NSLog(@&quot;手机系统版本: %@&quot;, phoneVersion);  
-    //手机型号  
-    NSString* phoneModel = [[UIDevice currentDevice] model];  
-    NSLog(@&quot;手机型号: %@&quot;,phoneModel );  
-    //地方型号  （国际化区域名称）  
-    NSString* localPhoneModel = [[UIDevice currentDevice] localizedModel];  
-    NSLog(@&quot;国际化区域名称: %@&quot;,localPhoneModel );  
-
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];  
-    // 当前应用名称  
-    NSString *appCurName = [infoDictionary objectForKey:@&quot;CFBundleDisplayName&quot;];  
-    NSLog(@&quot;当前应用名称：%@&quot;,appCurName);  
-    // 当前应用软件版本  比如：1.0.1  
-    NSString *appCurVersion = [infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];  
-    NSLog(@&quot;当前应用软件版本:%@&quot;,appCurVersion);  
-    // 当前应用版本号码   int类型  
-    NSString *appCurVersionNum = [infoDictionary objectForKey:@&quot;CFBundleVersion&quot;];  
-    NSLog(@&quot;当前应用版本号码：%@&quot;,appCurVersionNum);
-</code></pre><p>54、获取一个类的所有属性</p>
-<pre><code>id LenderClass = objc_getClass(&quot;Lender&quot;);
-unsigned int outCount, i;
-objc_property_t *properties = class_copyPropertyList(LenderClass, &amp;outCount);
-for (i = 0; i &lt; outCount; i++) {
-    objc_property_t property = properties[i];
-    fprintf(stdout, &quot;%s %s\n&quot;, property_getName(property), property_getAttributes(property));
-}
-</code></pre><p>55、image圆角</p>
-<pre><code>- (UIImage *)circleImage
-{
-    // NO代表透明
-    UIGraphicsBeginImageContextWithOptions(self.size, NO, 1);
-    // 获得上下文
-    CGContextRef ctx = UIGraphicsGetCurrentContext();
-    // 添加一个圆
-    CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
-    // 方形变圆形
-    CGContextAddEllipseInRect(ctx, rect);
-    // 裁剪
-    CGContextClip(ctx);
-    // 将图片画上去
-    [self drawInRect:rect];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-</code></pre><p>56、image拉伸</p>
-<pre><code>+ (UIImage *)resizableImage:(NSString *)imageName
-{
-    UIImage *image = [UIImage imageNamed:imageName];
-    CGFloat imageW = image.size.width;
-    CGFloat imageH = image.size.height;
-    return [image resizableImageWithCapInsets:UIEdgeInsetsMake(imageH * 0.5, imageW * 0.5, imageH * 0.5, imageW * 0.5) resizingMode:UIImageResizingModeStretch];
-}
-</code></pre><p>57、JSON字符串转字典</p>
-<pre><code>+ (NSDictionary *)parseJSONStringToNSDictionary:(NSString *)JSONString {
-    NSData *JSONData = [JSONString dataUsingEncoding:NSUTF8StringEncoding];
-    NSDictionary *responseJSON = [NSJSONSerialization JSONObjectWithData:JSONData options:NSJSONReadingMutableLeaves error:nil];
-    return responseJSON;
-}
-</code></pre><p>58、身份证号验证</p>
-<pre><code>- (BOOL)validateIdentityCard {
-    BOOL flag;
-    if (self.length &lt;= 0) {
-        flag = NO;
-        return flag;
-    }
-    NSString *regex2 = @&quot;^(\\d{14}|\\d{17})(\\d|[xX])$&quot;;
-    NSPredicate *identityCardPredicate = [NSPredicate predicateWithFormat:@&quot;SELF MATCHES %@&quot;,regex2];
-    return [identityCardPredicate evaluateWithObject:self];
-}
-</code></pre><p>59、获取设备mac地址</p>
-<pre><code>+ (NSString *)macAddress {
-    int                 mib[6];
-    size_t              len;
-    char                *buf;
-    unsigned char       *ptr;
-    struct if_msghdr    *ifm;
-    struct sockaddr_dl  *sdl;
-
-    mib[0] = CTL_NET;
-    mib[1] = AF_ROUTE;
-    mib[2] = 0;
-    mib[3] = AF_LINK;
-    mib[4] = NET_RT_IFLIST;
-
-    if((mib[5] = if_nametoindex(&quot;en0&quot;)) == 0) {
-        printf(&quot;Error: if_nametoindex error\n&quot;);
-        return NULL;
-    }
-
-    if(sysctl(mib, 6, NULL, &amp;len, NULL, 0) &lt; 0) {
-        printf(&quot;Error: sysctl, take 1\n&quot;);
-        return NULL;
-    }
-
-    if((buf = malloc(len)) == NULL) {
-        printf(&quot;Could not allocate memory. Rrror!\n&quot;);
-        return NULL;
-    }
-
-    if(sysctl(mib, 6, buf, &amp;len, NULL, 0) &lt; 0) {
-        printf(&quot;Error: sysctl, take 2&quot;);
-        return NULL;
-    }
-
-    ifm = (struct if_msghdr *)buf;
-    sdl = (struct sockaddr_dl *)(ifm + 1);
-    ptr = (unsigned char *)LLADDR(sdl);
-    NSString *outstring = [NSString stringWithFormat:@&quot;%02X:%02X:%02X:%02X:%02X:%02X&quot;,
-                           *ptr, *(ptr+1), *(ptr+2), *(ptr+3), *(ptr+4), *(ptr+5)];
-    free(buf);
-
-    return outstring;
-}
-</code></pre><p>60、导入自定义字体库</p>
-<p>1、找到你想用的字体的 ttf 格式，拖入工程<br>2、在工程的plist中增加一行数组，“Fonts provided by application”<br>3、为这个key添加一个item，value为你刚才导入的ttf文件名<br>4、直接使用即可：label.font = [UIFont fontWithName:@”你刚才导入的ttf文件名” size:20.0]；</p>
-<p>61、拿到当前正在显示的控制器，不管是push进去的，还是present进去的都能拿到</p>
-<pre><code>- (UIViewController *)getVisibleViewControllerFrom:(UIViewController*)vc {
-    if ([vc isKindOfClass:[UINavigationController class]]) {
-        return [self getVisibleViewControllerFrom:[((UINavigationController*) vc) visibleViewController]];
-    }else if ([vc isKindOfClass:[UITabBarController class]]){
-        return [self getVisibleViewControllerFrom:[((UITabBarController*) vc) selectedViewController]];
-    } else {
-        if (vc.presentedViewController) {
-            return [self getVisibleViewControllerFrom:vc.presentedViewController];
-        } else {
-            return vc;
-        }
-    }
-}
-</code></pre><p>62、runtime为一个类动态添加属性</p>
-<p>// 动态添加属性的本质是: 让对象的某个属性与值产生关联</p>
-<pre><code>objc_setAssociatedObject(self, WZBPlaceholderViewKey, placeholderView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-</code></pre><p>63、获取runtime为一个类动态添加的属性</p>
-<pre><code>objc_getAssociatedObject(self, WZBPlaceholderViewKey);
-</code></pre><p>64、KVO监听某个对象的属性</p>
-<pre><code>// 添加监听者
-[self addObserver:self forKeyPath:property options:NSKeyValueObservingOptionNew context:nil];
-
-// 当监听的属性值变化的时候会来到这个方法
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@&quot;property&quot;]) {
-       [self textViewTextChange];
-       } else {
-     }
-}
-</code></pre><p>65、Reachability判断网络状态</p>
-<pre><code>NetworkStatus status = [[Reachability reachabilityForInternetConnection] currentReachabilityStatus];
-    if (status == NotReachable) {
-        NSLog(@&quot;当前设备无网络&quot;);
-    }
-    if (status == ReachableViaWiFi) {
-        NSLog(@&quot;当前wifi网络&quot;);
-    }
-    if (status == ReachableViaWWAN) {
-        NSLog(@&quot;当前蜂窝移动网络&quot;);
-    }
-</code></pre><p>66、AFNetworking监听网络状态</p>
-<pre><code>// 监听网络状况
-    AFNetworkReachabilityManager *mgr = [AFNetworkReachabilityManager sharedManager];
-    [mgr setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
-        switch (status) {
-            case AFNetworkReachabilityStatusUnknown:
-                break;
-            case AFNetworkReachabilityStatusNotReachable: {
-                [SVProgressHUD showInfoWithStatus:@&quot;当前设备无网络&quot;];
-            }
-                break;
-            case AFNetworkReachabilityStatusReachableViaWiFi:
-                [SVProgressHUD showInfoWithStatus:@&quot;当前Wi-Fi网络&quot;];
-                break;
-            case AFNetworkReachabilityStatusReachableViaWWAN:
-                [SVProgressHUD showInfoWithStatus:@&quot;当前蜂窝移动网络&quot;];
-                break;
-            default:
-                break;
-        }
-    }];
-    [mgr startMonitoring];
-</code></pre><p>67、透明颜色不影响子视图透明度</p>
-<pre><code>[UIColor colorWithRed:&lt;#(CGFloat)#&gt; green:&lt;#(CGFloat)#&gt; blue:&lt;#(CGFloat)#&gt; alpha:&lt;#(CGFloat)#&gt;];
-</code></pre><p>68、取图片某一点的颜色</p>
-<pre><code>if (point.x &lt; 0 || point.y &lt; 0) return nil;
-
-CGImageRef imageRef = self.CGImage;
-NSUInteger width = CGImageGetWidth(imageRef);
-NSUInteger height = CGImageGetHeight(imageRef);
-if (point.x &gt;= width || point.y &gt;= height) return nil;
-
-unsigned char *rawData = malloc(height * width * 4);
-if (!rawData) return nil;
-
-CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-NSUInteger bytesPerPixel = 4;
-NSUInteger bytesPerRow = bytesPerPixel * width;
-NSUInteger bitsPerComponent = 8;
-CGContextRef context = CGBitmapContextCreate(rawData,
-                                             width,
-                                             height,
-                                             bitsPerComponent,
-                                             bytesPerRow,
-                                             colorSpace,
-                                             kCGImageAlphaPremultipliedLast
-                                             | kCGBitmapByteOrder32Big);
-if (!context) {
-    free(rawData);
-    return nil;
-}
-CGColorSpaceRelease(colorSpace);
-CGContextDrawImage(context, CGRectMake(0, 0, width, height), imageRef);
-CGContextRelease(context);
-
-int byteIndex = (bytesPerRow * point.y) + point.x * bytesPerPixel;
-CGFloat red   = (rawData[byteIndex]     * 1.0) / 255.0;
-CGFloat green = (rawData[byteIndex + 1] * 1.0) / 255.0;
-CGFloat blue  = (rawData[byteIndex + 2] * 1.0) / 255.0;
-CGFloat alpha = (rawData[byteIndex + 3] * 1.0) / 255.0;
-
-UIColor *result = nil;
-result = [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
-free(rawData);
-return result;
-</code></pre><p>69、判断该图片是否有透明度通道</p>
-<pre><code>  - (BOOL)hasAlphaChannel
-{
-    CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage);
-    return (alpha == kCGImageAlphaFirst ||
-            alpha == kCGImageAlphaLast ||
-            alpha == kCGImageAlphaPremultipliedFirst ||
-            alpha == kCGImageAlphaPremultipliedLast);
-}
-</code></pre><p>70、获得灰度图</p>
-<pre><code>+ (UIImage*)covertToGrayImageFromImage:(UIImage*)sourceImage
-{
-    int width = sourceImage.size.width;
-    int height = sourceImage.size.height;
-
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-    CGContextRef context = CGBitmapContextCreate (nil,width,height,8,0,colorSpace,kCGImageAlphaNone);
-    CGColorSpaceRelease(colorSpace);
-
-    if (context == NULL) {
-        return nil;
-    }
-
-    CGContextDrawImage(context,CGRectMake(0, 0, width, height), sourceImage.CGImage);
-    CGImageRef contextRef = CGBitmapContextCreateImage(context);
-    UIImage *grayImage = [UIImage imageWithCGImage:contextRef];
-    CGContextRelease(context);
-    CGImageRelease(contextRef);
-
-    return grayImage;
-}
-</code></pre><p>71、根据bundle中的文件名读取图片</p>
-<pre><code>   + (UIImage *)imageWithFileName:(NSString *)name {
-    NSString *extension = @&quot;png&quot;;
-
-    NSArray *components = [name componentsSeparatedByString:@&quot;.&quot;];
-    if ([components count] &gt;= 2) {
-        NSUInteger lastIndex = components.count - 1;
-        extension = [components objectAtIndex:lastIndex];
-
-        name = [name substringToIndex:(name.length-(extension.length+1))];
-    }
-
-    // 如果为Retina屏幕且存在对应图片，则返回Retina图片，否则查找普通图片
-    if ([UIScreen mainScreen].scale == 2.0) {
-        name = [name stringByAppendingString:@&quot;@2x&quot;];
-
-        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:extension];
-        if (path != nil) {
-            return [UIImage imageWithContentsOfFile:path];
-        }
-    }
-
-    if ([UIScreen mainScreen].scale == 3.0) {
-        name = [name stringByAppendingString:@&quot;@3x&quot;];
-
-        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:extension];
-        if (path != nil) {
-            return [UIImage imageWithContentsOfFile:path];
-        }
-    }
-
-    NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:extension];
-    if (path) {
-        return [UIImage imageWithContentsOfFile:path];
-    }
-
-    return nil;
-}
-</code></pre><p>72、合并两个图片</p>
-<pre><code>+ (UIImage*)mergeImage:(UIImage*)firstImage withImage:(UIImage*)secondImage {
-    CGImageRef firstImageRef = firstImage.CGImage;
-    CGFloat firstWidth = CGImageGetWidth(firstImageRef);
-    CGFloat firstHeight = CGImageGetHeight(firstImageRef);
-    CGImageRef secondImageRef = secondImage.CGImage;
-    CGFloat secondWidth = CGImageGetWidth(secondImageRef);
-    CGFloat secondHeight = CGImageGetHeight(secondImageRef);
-    CGSize mergedSize = CGSizeMake(MAX(firstWidth, secondWidth), MAX(firstHeight, secondHeight));
-    UIGraphicsBeginImageContext(mergedSize);
-    [firstImage drawInRect:CGRectMake(0, 0, firstWidth, firstHeight)];
-    [secondImage drawInRect:CGRectMake(0, 0, secondWidth, secondHeight)];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-</code></pre><p>73、根据bundle中的图片名创建imageview</p>
-<pre><code>+ (id)imageViewWithImageNamed:(NSString*)imageName
-{
-    return [[UIImageView alloc] initWithImage:[UIImage imageNamed:imageName]];
-}
-</code></pre><p>74、为imageView添加倒影</p>
-<pre><code>CGRect frame = self.frame;
-frame.origin.y += (frame.size.height + 1);
-
-UIImageView *reflectionImageView = [[UIImageView alloc] initWithFrame:frame];
-self.clipsToBounds = TRUE;
-reflectionImageView.contentMode = self.contentMode;
-[reflectionImageView setImage:self.image];
-reflectionImageView.transform = CGAffineTransformMakeScale(1.0, -1.0);
-
-CALayer *reflectionLayer = [reflectionImageView layer];
-
-CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-gradientLayer.bounds = reflectionLayer.bounds;
-gradientLayer.position = CGPointMake(reflectionLayer.bounds.size.width / 2, reflectionLayer.bounds.size.height * 0.5);
-gradientLayer.colors = [NSArray arrayWithObjects:
-                        (id)[[UIColor clearColor] CGColor],
-                        (id)[[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.3] CGColor], nil];
-
-gradientLayer.startPoint = CGPointMake(0.5,0.5);
-gradientLayer.endPoint = CGPointMake(0.5,1.0);
-reflectionLayer.mask = gradientLayer;
-
-[self.superview addSubview:reflectionImageView];
-</code></pre><p>75、画水印</p>
-<pre><code>// 画水印
-- (void) setImage:(UIImage *)image withWaterMark:(UIImage *)mark inRect:(CGRect)rect
-{
-    if ([[[UIDevice currentDevice] systemVersion] floatValue] &gt;= 4.0)
-    {
-        UIGraphicsBeginImageContextWithOptions(self.frame.size, NO, 0.0);
-    }
-    //原图
-    [image drawInRect:self.bounds];
-    //水印图
-    [mark drawInRect:rect];
-    UIImage *newPic = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    self.image = newPic;
-}
-</code></pre><p>76、让label的文字内容显示在左上／右上／左下／右下／中心顶／中心底部</p>
-<pre><code>自定义UILabel
-// 重写label的textRectForBounds方法
-- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
-    CGRect rect = [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
-    switch (self.textAlignmentType) {
-        case WZBTextAlignmentTypeLeftTop: {
-            rect.origin = bounds.origin;
-        }
-            break;
-        case WZBTextAlignmentTypeRightTop: {
-            rect.origin = CGPointMake(CGRectGetMaxX(bounds) - rect.size.width, bounds.origin.y);
-        }
-            break;
-        case WZBTextAlignmentTypeLeftBottom: {
-            rect.origin = CGPointMake(bounds.origin.x, CGRectGetMaxY(bounds) - rect.size.height);
-        }
-            break;
-        case WZBTextAlignmentTypeRightBottom: {
-            rect.origin = CGPointMake(CGRectGetMaxX(bounds) - rect.size.width, CGRectGetMaxY(bounds) - rect.size.height);
-        }
-            break;
-        case WZBTextAlignmentTypeTopCenter: {
-            rect.origin = CGPointMake((CGRectGetWidth(bounds) - CGRectGetWidth(rect)) / 2, CGRectGetMaxY(bounds) - rect.origin.y);
-        }
-            break;
-        case WZBTextAlignmentTypeBottomCenter: {
-            rect.origin = CGPointMake((CGRectGetWidth(bounds) - CGRectGetWidth(rect)) / 2, CGRectGetMaxY(bounds) - CGRectGetMaxY(bounds) - rect.size.height);
-        }
-            break;
-        case WZBTextAlignmentTypeLeft: {
-            rect.origin = CGPointMake(0, rect.origin.y);
-        }
-            break;
-        case WZBTextAlignmentTypeRight: {
-            rect.origin = CGPointMake(rect.origin.x, 0);
-        }
-            break;
-        case WZBTextAlignmentTypeCenter: {
-            rect.origin = CGPointMake((CGRectGetWidth(bounds) - CGRectGetWidth(rect)) / 2, (CGRectGetHeight(bounds) - CGRectGetHeight(rect)) / 2);
-        }
-            break;
-
-        default:
-            break;
-    }
-    return rect;
-}
-- (void)drawTextInRect:(CGRect)rect {
-    CGRect textRect = [self textRectForBounds:rect limitedToNumberOfLines:self.numberOfLines];
-    [super drawTextInRect:textRect];
-}
-</code></pre><p>77、scrollView上的输入框，键盘挡住的问题</p>
-<p>推荐用IQKeyboardManager这个框架！<br>手动解决如下<br>1、监听键盘弹出／消失的通知<br>2、在通知中加入代码：<br>    NSDictionary* info = [aNotification userInfo];<br>    CGRect keyPadFrame=[[UIApplication sharedApplication].keyWindow convertRect:[[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue] fromView:self.view];<br>    CGSize kbSize =keyPadFrame.size;<br>    CGRect activeRect=[self.view convertRect:activeField.frame fromView:activeField.superview];<br>    CGRect aRect = self.view.bounds;<br>    aRect.size.height -= (kbSize.height);</p>
-<pre><code>CGPoint origin =  activeRect.origin;
-origin.y -= backScrollView.contentOffset.y;
-if (!CGRectContainsPoint(aRect, origin)) {
-    CGPoint scrollPoint = CGPointMake(0.0,CGRectGetMaxY(activeRect)-(aRect.size.height));
-    [backScrollView setContentOffset:scrollPoint animated:YES];
-}
-</code></pre><p>78、frame布局的cell动态高度</p>
-<p>这种通常在你的模型中添加一个辅助属性cellHeight，在模型中重写这个属性的get方法，根据你的布局和模型中的其他属性值计算出总高度。最后在tableView：heightForRow方法中，根据indexPath找出对应的模型，返回这个高度即可。</p>
-<p>79、AutoLayout布局的cell动态高度</p>
-<pre><code>// 1、设置tableView的属性
-self.tableView.rowHeight = UITableViewAutomaticDimension;
-self.tableView.estimatedRowHeight = 44.0; // 这个属性非0，估计cell高度
-// 2、至上而下设置cell的约束，注意，上下左右最好都要顶到cell的四周
-
-cell
-</code></pre><p>80、使用performSelector:调用函数，内存泄漏问题</p>
-<p>当我们在开发中使用[obj performSelector:NSSelectorFromString(@”aMethod”)];这类方法时可能会收到一个警告”performSelector may cause a leak because its selector is unknown”.<br>是因为编译器不清楚这个对象能不能相应这个方法，如果不能，则是不安全的，而且编译器也不清楚该怎么处理这个方法的返回值！<br>使用以下代码调用即可：<br>    if (! obj) { return; }<br>    SEL selector = NSSelectorFromString(@”aMethod”);<br>    IMP imp = [obj methodForSelector:selector];<br>    void (<em>func)(id, SEL) = (void </em>)imp;<br>    func(obj, selector);</p>
-<pre><code>或者：
-SEL selector = NSSelectorFromString(@&quot;aMethod&quot;);
-((void (*)(id, SEL))[obj methodForSelector:selector])(obj, selector);
-</code></pre><p>81、一个字符串是否包含另一个字符串</p>
-<pre><code>// 方法1
-if ([str1 containsString:str2]) {
-        NSLog(@&quot;str1包含str2&quot;);
-    } else {
-        NSLog(@&quot;str1不包含str2&quot;);
-    }
-
-// 方法2
-if ([str1 rangeOfString: str2].location == NSNotFound) {
-        NSLog(@&quot;str1不包含str2&quot;);
-    } else {
-        NSLog(@&quot;str1包含str2&quot;);
-    }
-</code></pre><p>82、cell去除选中效果</p>
-<pre><code>cell.selectionStyle = UITableViewCellSelectionStyleNone;
-</code></pre><p>83、cell点按效果</p>
-<pre><code>- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-</code></pre><p>84、当删除一个从xib拖出来的属性时，一定记得把xib中对应的线也删掉，不然会报类似[<viewcontroller 0x7fea6ed05980=""> setValue:forUndefinedKey:]: this class is not key value coding-compliant for the key的crash</viewcontroller></p>
-<p>点击这个叉号删除</p>
-<p>85、真机测试的时候报错：Could not launch “你的 App”，process launch failed: Security</p>
-<p>因为你的app没有上线，iOS9开始，需要手动信任Xcode生成的描述文件，打开手机设置-&gt;通用-&gt;描述文件-&gt;点击你的app的描述文件-&gt;点击信任</p>
-<p>86、真机测试的时候报错：Could not find Developer Disk Image</p>
-<p>这是因为你的设备系统版本大于Xcode能兼容的系统版本，比如你的设备是iOS10.3，而Xcode版本是8.2（Xcode8.2最大兼容iOS10.2），就会报这个错误。解决办法就是升级Xcode！</p>
-<p>87、UITextView没有placeholder的问题？</p>
-<p>网上有很多此类自定义控件，也可以参考下我写的一个UITextView分类 UITextView-WZB<br>88、移除字符串中的空格和换行</p>
-<pre><code>+ (NSString *)removeSpaceAndNewline:(NSString *)str {
-    NSString *temp = [str stringByReplacingOccurrencesOfString:@&quot; &quot; withString:@&quot;&quot;];
-    temp = [temp stringByReplacingOccurrencesOfString:@&quot;\r&quot; withString:@&quot;&quot;];
-    temp = [temp stringByReplacingOccurrencesOfString:@&quot;\n&quot; withString:@&quot;&quot;];
-    return temp;
-}
-</code></pre><p>89、判断字符串中是否有空格</p>
-<pre><code>+ (BOOL)isBlank:(NSString *)str {
-    NSRange _range = [str rangeOfString:@&quot; &quot;];
-    if (_range.location != NSNotFound) {
-        //有空格
-        return YES;
-    } else {
-        //没有空格
-        return NO;
-    }
-}
-</code></pre><p>90、获取一个视频的第一帧图片</p>
-<pre><code>NSURL *url = [NSURL URLWithString:filepath];
-AVURLAsset *asset1 = [[AVURLAsset alloc] initWithURL:url options:nil];
-AVAssetImageGenerator *generate1 = [[AVAssetImageGenerator alloc] initWithAsset:asset1];
-generate1.appliesPreferredTrackTransform = YES;
-NSError *err = NULL;
-CMTime time = CMTimeMake(1, 2);
-CGImageRef oneRef = [generate1 copyCGImageAtTime:time actualTime:NULL error:&amp;err];
-UIImage *one = [[UIImage alloc] initWithCGImage:oneRef];
-
-return one;
-</code></pre><p>91、获取视频的时长</p>
-<pre><code>+ (NSInteger)getVideoTimeByUrlString:(NSString *)urlString {
-    NSURL *videoUrl = [NSURL URLWithString:urlString];
-    AVURLAsset *avUrl = [AVURLAsset assetWithURL:videoUrl];
-    CMTime time = [avUrl duration];
-    int seconds = ceil(time.value/time.timescale);
-    return seconds;
-}
-</code></pre><p>92、字符串是否为空</p>
-<pre><code>+ (BOOL)isEqualToNil:(NSString *)str {
-    return str.length &lt;= 0 || [str isEqualToString:@&quot;&quot;] || !str;
-}
-</code></pre><p>93、将app上传到App Store的时候通常会遇到这个问题</p>
-<p>try again<br>很多人说这事苹果爸爸服务器问题，重复尝试几次，总会成功的！<br>但是经过尝试发现如果使用Application Loader上传成功率就非常高，所以还是推荐把ipa文件导出直接用Application Loader上传。<br>如果Application Loader也不行，需要检查下自己的网络，有时候vpn也会提高速度。</p>
-<p>94、当tableView占不满一屏时，去除下边多余的单元格</p>
-<pre><code>self.tableView.tableHeaderView = [UIView new];
-self.tableView.tableFooterView = [UIView new];
-</code></pre><p>95、isKindOfClass和isMemberOfClass的区别</p>
-<p>isKindOfClass可以判断某个对象是否属于某个类，或者这个类的子类。<br>isMemberOfClass更加精准，它只能判断这个对象类型是否为这个类(不能判断子类)</p>
-<p>96、__block</p>
-<p>当一个局部变量需要在block里改变时，需要在定义时加上__block修饰，具体请看官方文档 <a href="http://developer.apple.com/library/ios/documentation/cocoa/Conceptual/Blocks/Articles/bxVariables.html#//apple_ref/doc/uid/TP40007502-CH6-SW6" target="_blank" rel="external">http://developer.apple.com/library/ios/documentation/cocoa/Conceptual/Blocks/Articles/bxVariables.html#//apple_ref/doc/uid/TP40007502-CH6-SW6</a></p>
-<p>97、-[ViewController aMethod:]: unrecognized selector sent to instance 0x7fe91e607fb0</p>
-<p>这是一个经典错误，ViewController不能响应aMethod这个方法，错误原因可能viewController文件中没有实现aMethod这个方法</p>
-<p>98、UITableView (<uitableview: 0x7ff19b027000;="">) failed to obtain a cell from its dataSource (<viewcontroller: 0x7ff19a507520="">)</viewcontroller:></uitableview:></p>
-<p>这个错误原因是tableView的代理方法-tableView:cellForRowAtIndexPath:需要返回一个UITableViewCell,而你返回了一个nil。另外这个地方返回值不是UITableViewCell类型也会导致崩溃</p>
-<p>99、约束如何做UIView动画？</p>
-<p>1、把需要改的约束Constraint拖条线出来，成为属性<br>2、在需要动画的地方加入代码，改变此属性的constant属性<br>3、开始做UIView动画，动画里边调用layoutIfNeeded方法</p>
-<pre><code>@property (weak, nonatomic) IBOutlet NSLayoutConstraint *buttonTopConstraint;
-self.buttonTopConstraint.constant = 100;
-    [UIView animateWithDuration:.5 animations:^{
-        [self.view layoutIfNeeded];
-    }];
-</code></pre><p>100、从NSURL中拿到链接字符串</p>
-<pre><code>NSString *urlString = myURL.absoluteString;
-</code></pre><p>101、将tableView滚动到顶部</p>
-<pre><code>[tableView setContentOffset:CGPointZero animated:YES];
-或者
-[tableView scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:YES];
-</code></pre><p>102、如果用addTarget:action:forControlEvents:方法为一个button添加了很多点击事件，在某个时刻想一次删除怎么办？只需要调用下边这句代码</p>
-<pre><code>[youButton removeTarget:nil action:nil forControlEvents:UIControlEventAllEvents];
-</code></pre><p>103、某个字体的高度</p>
-<pre><code>font.lineHeight;
-</code></pre><p>104、删除某个view所有的子视图</p>
-<pre><code>[[someView subviews]
-         makeObjectsPerformSelector:@selector(removeFromSuperview)];
-</code></pre><p>105、删除NSUserDefaults所有记录</p>
-<pre><code>//方法一
-  NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
- [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];   
- //方法二  
-- (void)resetDefaults {   
-  NSUserDefaults * defs = [NSUserDefaults standardUserDefaults];
-     NSDictionary * dict = [defs dictionaryRepresentation];
-     for (id key in dict) {
-          [defs removeObjectForKey:key];
-     }
-      [defs synchronize];
- }
-// 方法三
-[[NSUserDefaults standardUserDefaults] setPersistentDomain:[NSDictionary dictionary] forName:[[NSBundle mainBundle] bundleIdentifier]];
-</code></pre><p>106、禁用系统滑动返回功能</p>
-<pre><code>- (void)viewDidAppear:(BOOL)animated
-{
-     [super viewDidAppear:animated];
-if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {self.navigationController.interactivePopGestureRecognizer.delegate = self;
-    }
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    if ([self.navigationController respondsToSelector:@selector(interactivePopGestureRecognizer)]) {self.navigationController.interactivePopGestureRecognizer.delegate = nil;
-    }
-}
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
-{
-     return NO;
-}
-</code></pre><p>107、模拟器报错</p>
-<p>模拟器报错<br>解决办法：<br>打开模拟器-&gt;Simulator-&gt;Reset Content and Settings…<br>如果不行，就重启试试！</p>
-<p>108、自定义cell选中背景颜色</p>
-<pre><code>UIView *bgColorView = [[UIView alloc] init];
-bgColorView.backgroundColor = [UIColor redColor];
-[cell setSelectedBackgroundView:bgColorView];
-</code></pre><p>109、UILabel设置内边距</p>
-<pre><code>子类化UILabel，重写drawTextInRect方法
-- (void)drawTextInRect:(CGRect)rect {
-    // 边距，上左下右
-    UIEdgeInsets insets = {0, 5, 0, 5};
-    [super drawTextInRect:UIEdgeInsetsInsetRect(rect, insets)];
-}
-</code></pre><p>110、UILabel设置文字描边</p>
-<pre><code>子类化UILabel，重写drawTextInRect方法
-- (void)drawTextInRect:(CGRect)rect
-{
-    CGContextRef c = UIGraphicsGetCurrentContext();
-    // 设置描边宽度
-    CGContextSetLineWidth(c, 1);
-    CGContextSetLineJoin(c, kCGLineJoinRound);
-    CGContextSetTextDrawingMode(c, kCGTextStroke);
-    // 描边颜色
-    self.textColor = [UIColor redColor];
-    [super drawTextInRect:rect];
-    // 文本颜色
-    self.textColor = [UIColor yellowColor];
-    CGContextSetTextDrawingMode(c, kCGTextFill);
-    [super drawTextInRect:rect];
-}
-</code></pre><p>111、使用模拟器截图</p>
-<pre><code>快捷键command + s
-或者File-&gt;Save Screen Shot
-</code></pre><p>112、scrollView滚动到最下边</p>
-<pre><code>CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.bounds.size.height);
-[scrollView setContentOffset:bottomOffset animated:YES];
-</code></pre><p>113、UIView背景颜色渐变</p>
-<pre><code>UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-[self.view addSubview:view];
-CAGradientLayer *gradient = [CAGradientLayer layer];
-gradient.frame = view.bounds;
-gradient.colors = [NSArray arrayWithObjects:(id)[[UIColor blackColor] CGColor], (id)[[UIColor whiteColor] CGColor], nil];
-[view.layer insertSublayer:gradient atIndex:0];
-</code></pre><p>114、停止UIView动画</p>
-<pre><code>[yourView.layer removeAllAnimations]
-</code></pre><p>115、为UIView某个角添加圆角</p>
-<pre><code>// 左上角和右下角添加圆角
-UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:(UIRectCornerTopLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(20, 20)];
-    CAShapeLayer *maskLayer = [CAShapeLayer layer];
-    maskLayer.frame = view.bounds;
-    maskLayer.path = maskPath.CGPath;
-    view.layer.mask = maskLayer;
-</code></pre><p>116、删除Xcode Derived data缓存数据</p>
-<p>依次点击Xcode -&gt; Preferences -&gt; location，然后点击 Derived data路径后到小箭头，删除这个文件夹下的数据就可以了，如图</p>
-<p>Xcode Derived data</p>
-<p>117、将一个view放置在其兄弟视图的最上面</p>
-<pre><code>[parentView bringSubviewToFront:yourView]
-</code></pre><p>118、将一个view放置在其兄弟视图的最下面</p>
-<pre><code>[parentView sendSubviewToBack:yourView]
-</code></pre><p>119、让手机震动一下</p>
-<pre><code>倒入框架
-#import &lt;AudioToolbox/AudioToolbox.h&gt;
-AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-或者
-AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-</code></pre><p>120、layoutSubviews方法什么时候调用？</p>
-<p>1、init方法不会调用<br>2、addSubview方法等时候会调用<br>3、bounds改变的时候调用<br>4、scrollView滚动的时候会调用scrollView的layoutSubviews方法(所以不建议在scrollView的layoutSubviews方法中做复杂逻辑)<br>5、旋转设备的时候调用<br>6、子视图被移除的时候调用<br>参考请看：<a href="http://blog.logichigh.com/2011/03/16/when-does-layoutsubviews-get-called/" target="_blank" rel="external">http://blog.logichigh.com/2011/03/16/when-does-layoutsubviews-get-called/</a></p>
-<p>121、让UILabel在指定的地方换行</p>
-<pre><code>// 换行符为\n,在需要换行的地方加上这个符号即可，如 
-label.numberOfLines = 0;
-label.text = @&quot;此处\n换行&quot;;
-</code></pre><p>122、摇一摇功能</p>
-<pre><code>1、打开摇一摇功能
-    [UIApplication sharedApplication].applicationSupportsShakeToEdit = YES;
-2、让需要摇动的控制器成为第一响应者
-[self becomeFirstResponder];
-3、实现以下方法
-
-// 开始摇动
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event
-// 取消摇动
-- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event
-// 摇动结束
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event
-</code></pre><p>123、获取图片大小</p>
-<pre><code>CGFloat imageWidth = image.size.width;
-CGFloat imageHeight = imageWidth * image.scale;
-</code></pre><p>124、获取view的坐标在整个window上的位置</p>
-<pre><code>// v上的(0, 0)点在toView上的位置
-CGPoint point = [v convertPoint:CGPointMake(0, 0) toView:[UIApplication sharedApplication].windows.lastObject];
-或者
-CGPoint point = [v.superview convertPoint:v.frame.origin toView:[UIApplication sharedApplication].windows.lastObject];
-</code></pre><p>125、提交App Store审核程序限制</p>
-<p>您的应用程序的未压缩大小必须小于4GB。每个Mach-O可执行文件（例如app_name.app/app_name）不能超过这些限制：<br>对于MinimumOSVersion小于7.0的应用程序：TEXT二进制文件中所有部分的总数最多为80 MB 。<br>对于MinimumOSVersion7.x到8.x的应用程序：TEXT对于二进制文件中每个体系结构片段的每个片段，最大为60 MB 。<br>对于MinimumOSVersion9.0或更高版本的应用程序：__TEXT二进制文件中所有部分的总数最多为500 MB 。参阅：iTunes Connect开发者指南</p>
-<p>126、修改UISegmentedControl的字体大小</p>
-<pre><code>[segment setTitleTextAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0f]} forState:UIControlStateNormal];
-</code></pre><p>127、在非ViewController的地方弹出UIAlertController对话框</p>
-<pre><code>//  最好抽成一个分类
-UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@&quot;Title&quot; message:@&quot;message&quot; preferredStyle:UIAlertControllerStyleAlert];
-//...
-id rootViewController = [UIApplication sharedApplication].delegate.window.rootViewController;
-if([rootViewController isKindOfClass:[UINavigationController class]])
-{
-    rootViewController = ((UINavigationController *)rootViewController).viewControllers.firstObject;
-}
-if([rootViewController isKindOfClass:[UITabBarController class]])
-{
-    rootViewController = ((UITabBarController *)rootViewController).selectedViewController;
-}
-[rootViewController presentViewController:alertController animated:YES completion:nil];
-</code></pre><p>128、获取一个view所属的控制器</p>
-<pre><code>// view分类方法
-- (UIViewController *)belongViewController {
-    for (UIView *next = [self superview]; next; next = next.superview) {
-        UIResponder* nextResponder = [next nextResponder];
-        if ([nextResponder isKindOfClass:[UIViewController class]]) {
-            return (UIViewController *)nextResponder;
-        }
-    }
-    return nil;
-}
-</code></pre><p>129、UIImage和base64互转</p>
-<pre><code>// view分类方法
-- (NSString *)encodeToBase64String:(UIImage *)image {
- return [UIImagePNGRepresentation(image) base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
-}
-
-- (UIImage *)decodeBase64ToImage:(NSString *)strEncodeData {
-  NSData *data = [[NSData alloc]initWithBase64EncodedString:strEncodeData options:NSDataBase64DecodingIgnoreUnknownCharacters];
-  return [UIImage imageWithData:data];
-}
-</code></pre><p>130、UIWebView设置背景透明</p>
-<pre><code>[webView setBackgroundColor:[UIColor clearColor]];
-[webView setOpaque:NO];
-</code></pre><p>131、判断NSDate是不是今天</p>
-<pre><code>NSDateComponents *otherDay = [[NSCalendar currentCalendar] components:NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:aDate];
-NSDateComponents *today = [[NSCalendar currentCalendar] components:NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay fromDate:[NSDate date]];
-if([today day] == [otherDay day] &amp;&amp;
-   [today month] == [otherDay month] &amp;&amp;
-   [today year] == [otherDay year] &amp;&amp;
-   [today era] == [otherDay era]) {
-    // 是今天
-}
-</code></pre><p>132、设置tableView分割线颜色</p>
-<pre><code>[self.tableView setSeparatorColor:[UIColor myColor]];
-</code></pre><p>133、设置屏幕方向</p>
-<pre><code>[[UIDevice currentDevice] setValue:@(UIInterfaceOrientationLandscapeLeft) forKey:@&quot;orientation&quot;];
-</code></pre><p>134、比较两个颜色是否相等</p>
-<pre><code>- (BOOL)isEqualToColor:(UIColor *)otherColor {
-    CGColorSpaceRef colorSpaceRGB = CGColorSpaceCreateDeviceRGB();
-
-    UIColor *(^convertColorToRGBSpace)(UIColor*) = ^(UIColor *color) {
-        if (CGColorSpaceGetModel(CGColorGetColorSpace(color.CGColor)) == kCGColorSpaceModelMonochrome) {
-            const CGFloat *oldComponents = CGColorGetComponents(color.CGColor);
-            CGFloat components[4] = {oldComponents[0], oldComponents[0], oldComponents[0], oldComponents[1]};
-            CGColorRef colorRef = CGColorCreate( colorSpaceRGB, components );
-
-            UIColor *color = [UIColor colorWithCGColor:colorRef];
-            CGColorRelease(colorRef);
-            return color;            
-        } else
-            return color;
-    };
-
-    UIColor *selfColor = convertColorToRGBSpace(self);
-    otherColor = convertColorToRGBSpace(otherColor);
-    CGColorSpaceRelease(colorSpaceRGB);
-
-    return [selfColor isEqual:otherColor];
-}
-</code></pre><p>135、tableViewCell分割线顶到头</p>
-<pre><code>- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    [cell setSeparatorInset:UIEdgeInsetsZero];
-    [cell setLayoutMargins:UIEdgeInsetsZero];
-    cell.preservesSuperviewLayoutMargins = NO;
-}
-
-- (void)viewDidLayoutSubviews {
-    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
-    [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-}
-</code></pre><p>136、不让控制器的view随着控制器的xib拉伸或压缩</p>
-<pre><code>self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-</code></pre><p>137、cocoaPods报错 : [!] Unable to add a source with url <a href="https://github.com/CocoaPods/Specs.git" target="_blank" rel="external">https://github.com/CocoaPods/Specs.git</a> named master-1.</p>
-<p>You can try adding it manually in ~/.cocoapods/repos or via pod repo add.</p>
-<p>解决方法：这是因为电脑里安装了另外一个Xcode导致cocoapods找不到路径了<br>在终端执行 sudo xcode-select -switch /Applications/Xcode.app 即可</p>
-<p>138、安装cocoapods的时候出现 ERROR: While executing gem … (Errno::EPERM)</p>
-<p>Operation not permitted - /usr/bin/pod<br>解决办法：直接在终端执行 sudo gem install -n /usr/local/bin cocoapods</p>
-<p>139、在状态栏增加网络请求的菊花，类似safari加载网页的时候状态栏菊花</p>
-<pre><code>[UIApplication     sharedApplication].networkActivityIndicatorVisible = YES;
-</code></pre><p>140、检查一个rect是否包含一个point</p>
-<p>// point是否在rect内<br>    BOOL isContains = CGRectContainsPoint(rect, point);</p>
-<p>141、在指定的宽度下，让UILabel自动设置最佳font</p>
-<pre><code>label.adjustsFontSizeToFitWidth = YES;
-</code></pre><p>142、将一个image保存在相册中</p>
-<pre><code>UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil);
-
-或者
-#import &lt;Photos/Photos.h&gt;
-[[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        PHAssetChangeRequest *changeRequest = [PHAssetChangeRequest creationRequestForAssetFromImage:image];
-        changeRequest.creationDate          = [NSDate date];
-    } completionHandler:^(BOOL success, NSError *error) {
-        if (success) {
-            NSLog(@&quot;successfully saved&quot;);
-        }
-        else {
-            NSLog(@&quot;error saving to photos: %@&quot;, error);
-        }
-    }];
-</code></pre><p>143、修改cell.imageView的大小</p>
-<pre><code>UIImage *icon = [UIImage imageNamed:@&quot;&quot;];
-CGSize itemSize = CGSizeMake(30, 30);
-UIGraphicsBeginImageContextWithOptions(itemSize, NO ,0.0);
-CGRect imageRect = CGRectMake(0.0, 0.0, itemSize.width, itemSize.height);
-[icon drawInRect:imageRect];
-cell.imageView.image = UIGraphicsGetImageFromCurrentImageContext();
-UIGraphicsEndImageContext();
-</code></pre><p>144、为一个view添加虚线边框</p>
-<pre><code>CAShapeLayer *border = [CAShapeLayer layer];
-   border.strokeColor = [UIColor colorWithRed:67/255.0f green:37/255.0f blue:83/255.0f alpha:1].CGColor;
-   border.fillColor = nil;
-   border.lineDashPattern = @[@4, @2];
-   border.path = [UIBezierPath bezierPathWithRect:view.bounds].CGPath;
-   border.frame = view.bounds;
-   [view.layer addSublayer:border];
-</code></pre><p>145、UITextView中打开或禁用复制，剪切，选择，全选等功能</p>
-<pre><code>// 继承UITextView重写这个方法
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
-{
-// 返回NO为禁用，YES为开启
-    // 粘贴
-    if (action == @selector(paste:)) return NO;
-    // 剪切
-    if (action == @selector(cut:)) return NO;
-    // 复制
-    if (action == @selector(copy:)) return NO;
-    // 选择
-    if (action == @selector(select:)) return NO;
-    // 选中全部
-    if (action == @selector(selectAll:)) return NO;
-    // 删除
-    if (action == @selector(delete:)) return NO;
-    // 分享
-    if (action == @selector(share)) return NO;
-    return [super canPerformAction:action withSender:sender];
-}
-</code></pre>
-          
+          看到的一篇iOS开发经验总结的文章 做下记录iOS开发经验总结原文章地址 :    http://www.jianshu.com/p/1ff9e44ccc78
+1、禁止手机睡眠
+[UIApplication sharedApplication].idleTimerDisabled = YES;
+2、
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/27/iOS开发经验总结/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1713,49 +470,16 @@ UIGraphicsEndImageContext();
       
         
           
-            <h4 id="Layer的呈现和模型"><a href="#Layer的呈现和模型" class="headerlink" title="Layer的呈现和模型"></a>Layer的呈现和模型</h4><p>CALayer的属性行为其实很不正常，因为改变一个图层的属性并没有立刻生效，而是通过一段时间渐变更新。这是怎么做到的呢？</p>
-<p>当你改变一个图层的属性，属性值的确是立刻更新的（如果你读取它的数据，你会发现它的值在你设置它的那一刻就已经生效了），但是屏幕上并没有马上发生改变。这是因为你设置的属性并没有直接调整图层的外观，相反，他只是定义了图层动画结束之后将要变化的外观。</p>
-<p>当设置CALayer的属性，实际上是在定义当前事务结束之后图层如何显示的模型。Core Animation扮演了一个控制器的角色，并且负责根据图层行为和事务设置去不断更新视图的这些属性在屏幕上的状态。</p>
-<p>我们讨论的就是一个典型的微型MVC模式。CALayer是一个连接用户界面（就是MVC中的view）虚构的类，但是在界面本身这个场景下，CALayer的行为更像是存储了视图如何显示和动画的数据模型。实际上，在苹果自己的文档中，图层树通常都是值的图层树模型。</p>
-<p>在iOS中，屏幕每秒钟重绘60次。如果动画时长比60分之一秒要长，Core Animation就需要在设置一次新值和新值生效之间，对屏幕上的图层进行重新组织。这意味着CALayer除了“真实”值（就是你设置的值）之外，必须要知道当前显示在屏幕上的属性值的记录。</p>
-<p>每个图层属性的显示值都被存储在一个叫做呈现图层的独立图层当中，他可以通过-presentationLayer方法来访问。这个呈现图层实际上是模型图层的复制，但是它的属性值代表了在任何指定时刻当前外观效果。换句话说，你可以通过呈现图层的值来获取当前屏幕上真正显示出来的值。</p>
-<p>除了图层树，另外还有呈现树。呈现树通过图层树中所有图层的呈现图层所形成。注意呈现图层仅仅当图层首次被提交（就是首次第一次在屏幕上显示）的时候创建，所以在那之前调用-presentationLayer将会返回nil。</p>
-<p>你可能注意到有一个叫做–modelLayer的方法。在呈现图层上调用–modelLayer将会返回它正在呈现所依赖的CALayer。通常在一个图层上调用-modelLayer会返回–self（实际上我们已经创建的原始图层就是一种数据模型）。</p>
-<p>大多数情况下，你不需要直接访问呈现图层，你可以通过和模型图层的交互，来让Core Animation更新显示。两种情况下呈现图层会变得很有用，一个是同步动画，一个是处理用户交互。</p>
-<p>如果你在实现一个基于定时器的动画，而不仅仅是基于事务的动画，这个时候准确地知道在某一时刻图层显示在什么位置就会对正确摆放图层很有用了。<br>如果你想让你做动画的图层响应用户输入，你可以使用-hitTest:方法来判断指定图层是否被触摸，这时候对呈现图层而不是模型图层调用</p>
-<p>hitTest:会显得更有意义，因为呈现图层代表了用户当前看到的图层位置，而不是当前动画结束之后的位置。<br>我们可以用一个简单的案例来证明后者。在这个例子中，点击屏幕上的任意位置将会让图层平移到那里。点击图层本身可以随机改变它的颜色。我们通过对呈现图层调用-hitTest:来判断是否被点击。</p>
-<p>如果修改代码让-hitTest:直接作用于colorLayer而不是呈现图层，你会发现当图层移动的时候它并不能正确显示。这时候你就需要点击图层将要移动到的位置而不是图层本身来响应点击（这就是为什么用呈现图层来响应交互的原因）。</p>
-<pre><code>- (void)touch {
-
-    self.blueLayer = [CALayer layer];
-    self.blueLayer.frame = CGRectMake(50.0f, 50.0f, 100.0f, 100.0f);
-    self.blueLayer.backgroundColor = [UIColor blueColor].CGColor;
-
-    [self.view.layer addSublayer:self.blueLayer];
-
-}
-
-- (void)touchesBegan:(NSSet&lt;UITouch *&gt; *)touches withEvent:(UIEvent *)event {
-
-    CGPoint point = [[touches anyObject] locationInView:self.view];
-
-    if([self.blueLayer.presentationLayer hitTest:point]) {
-
-        self.blueLayer.backgroundColor = [UIColor colorWithRed:arc4random()%256/256.0 green:arc4random()%256/256.0 blue:arc4random()%256/256.0 alpha:1].CGColor;
-
-    }else {
-
-        [CATransaction begin];
-
-        [CATransaction setAnimationDuration:2];
-
-        self.blueLayer.position = point;
-
-        [CATransaction commit];
-    }
-}
-</code></pre>
-          
+          Layer的呈现和模型CALayer的属性行为其实很不正常，因为改变一个图层的属性并没有立刻生效，而是通过一段时间渐变更新。这是怎么做到的呢？
+当你改变一个图层的属性，属性值的确是立刻更新的（如果你读取它的数据，你会发现它的值在你设置它的那一刻就已经生效了），但是屏幕上并没有马上发生改变。这是因为你
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/27/Layer的呈现和模型/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -1865,34 +589,18 @@ UIGraphicsEndImageContext();
       
         
           
-            <h6 id="一-栈"><a href="#一-栈" class="headerlink" title="一 栈"></a>一 栈</h6><p> 栈区(stack) 由编译器自动分配并释放，存放函数的参数值，局部变量等。栈是系统数据结构，对应线程/进程是唯一的。</p>
-<p>优点是快速高效，缺点时有限制，数据不灵活。［先进后出］</p>
-<p>栈空间分静态分配 和动态分配两种。</p>
-<h6 id="二-堆"><a href="#二-堆" class="headerlink" title="二 堆"></a>二 堆</h6><p>堆区(heap) 由程序员分配和释放，如果程序员不释放，程序结束时，可能会由操作系统回收 ，比如在ios 中 alloc 都是存放在堆中。</p>
-<p>优点是灵活方便，数据适应面广泛，但是效率有一定降低。［顺序随意］</p>
-<blockquote>
-<p>堆是函数库内部数据结构，不一定唯一。<br> 不同堆分配的内存无法互相操作。<br> 堆空间的分配总是动态的</p>
-</blockquote>
-<h6 id="三-静态"><a href="#三-静态" class="headerlink" title="三 静态"></a>三 静态</h6><p> 全局区(静态区) (static) 全局变量和静态变量的存储是放在一起的，初始化的全局变量和静态变量存放在一块区域，未初始化的全局变量和静态变量在相邻的另一块区域，程序结束后有系统释放。</p>
-<blockquote>
-<p>注意：全局区又可分为未初始化全局区：<br>     .bss段和初始化全局区：data段。<br>     举例：int a;未初始化的。int a = 10;已初始化的<br>     。</p>
-</blockquote>
-<h6 id="四-文字常量区"><a href="#四-文字常量区" class="headerlink" title="四 文字常量区"></a>四 文字常量区</h6><p>文字常量区 存放常量字符串，程序结束后由系统释放</p>
-<h6 id="五-程序代码区"><a href="#五-程序代码区" class="headerlink" title="五 程序代码区"></a>五 程序代码区</h6><p>程序代码区 存放函数的二进制代码</p>
-<h4 id="堆（heap）和栈（stack）区别"><a href="#堆（heap）和栈（stack）区别" class="headerlink" title="堆（heap）和栈（stack）区别"></a>堆（heap）和栈（stack）区别</h4><h5 id="申请方式和回收方式"><a href="#申请方式和回收方式" class="headerlink" title="申请方式和回收方式"></a>申请方式和回收方式</h5><p>栈区（stack） ：由编译器自动分配并释放<br>堆区（heap）：由程序员分配和释放</p>
-<h5 id="申请后的系统响应"><a href="#申请后的系统响应" class="headerlink" title="申请后的系统响应"></a>申请后的系统响应</h5><p>栈：存储每一个函数在执行的时候都会向操作系统索要资源，栈区就是函数运行时的内存，栈区中的变量由编译器负责分配和释放，内存随着函数的运行分配，随着函数的结束而释放，由系统自动完成。</p>
-<p>注意：只要栈的剩余空间大于所申请空间，系统将为程序提供内存，否则将报异常提示栈溢出。</p>
-<p>堆：<br>1.首先应该知道操作系统有一个记录空闲内存地址的链表。<br>2.当系统收到程序的申请时，会遍历该链表，寻找第一个空间大于所申请空间的堆结点，然后将该结点从空闲结点链表中删除，并将该结点的空间分配给程序。<br>3 .由于找到的堆结点的大小不一定正好等于申请的大小，系统会自动的将多余的那部分重新放入空闲链表中</p>
-<h5 id="申请大小的限制"><a href="#申请大小的限制" class="headerlink" title="申请大小的限制"></a>申请大小的限制</h5><p>栈区（stack）：栈是向低地址扩展的数据结构，是一块连续的内存的区域。这句话的意思是栈顶的地址和栈的最大容量是系统预先规定好的，栈的大小是2M（也可能是1M，我看网上说得，我也不清楚），如果申请的空间超过栈的剩余空间时，将提示栈溢出。因此，能从栈获得的空间较小。</p>
-<p>堆区（stack）：堆是向高地址扩展的数据结构，是不连续的内存区域。这是由于系统是用链表来存储的空闲内存地址的，自然是不连续的，而链表的遍历方向是由低地址向高地址。堆的大小受限于计算机系统中有效的虚拟内存。由此可见，堆获得的空间比较灵活，也比较大。</p>
-<h5 id="申请效率的比较"><a href="#申请效率的比较" class="headerlink" title="申请效率的比较"></a>申请效率的比较</h5><p>栈区（stack）：由系统自动分配，速度较快。但程序员是无法控制的。</p>
-<p>堆区（stack）：是由alloc分配的内存，一般速度比较慢，而且容易产生内存碎片,不过用起来最方便.</p>
-<h5 id="分配方式的比较"><a href="#分配方式的比较" class="headerlink" title="分配方式的比较"></a>分配方式的比较</h5><p>栈区（stack）：有2种分配方式：静态分配和动态分配。静态分配是编译器完成的，比如局部变量的分配。动态分配由alloc函数进行分配，但是栈的动态分配和堆是不同的，他的动态分配是由编译器进行释放，无需我们手工实现。</p>
-<p>堆区（stack）：堆都是动态分配的，没有静态分配的堆。</p>
-<h5 id="分配效率的比较"><a href="#分配效率的比较" class="headerlink" title="分配效率的比较"></a>分配效率的比较</h5><p>栈区（stack）：栈是操作系统提供的数据结构，计算机会在底层对栈提供支持：分配专门的寄存器存放栈的地址，压栈出栈都有专门的指令执行，这就决定了栈的效率比较高。</p>
-<p>堆区（stack）：堆则是C/C++函数库提供的，它的机制是很复杂的，例如为了分配一块内存，库函数会按照一定的算法（具体的算法可以参考数据结构/操作系统）在堆内存中搜索可用的足够大小的空间，如果没有足够大小的空间（可能是由于内存碎片太多），就有可能调用系统功能去增加程序数据段的内存空间，这样就有机会分到足够大小的内存，然后进行返回。显然，堆的效率比栈要低得多。</p>
-
-          
+          一 栈 栈区(stack) 由编译器自动分配并释放，存放函数的参数值，局部变量等。栈是系统数据结构，对应线程/进程是唯一的。
+优点是快速高效，缺点时有限制，数据不灵活。［先进后出］
+栈空间分静态分配 和动态分配两种。
+二 堆堆区(heap) 由程序员分配和释放，如果程序员不释放，程序结束时，可能会由
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/24/内存分配-复习/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2002,10 +710,17 @@ UIGraphicsEndImageContext();
       
         
           
-            <h3 id="时间穿透"><a href="#时间穿透" class="headerlink" title="时间穿透"></a>时间穿透</h3><h6 id="需求-A-B-视图同时加在C视图上-A在前-在A的一些手势需要B来触发"><a href="#需求-A-B-视图同时加在C视图上-A在前-在A的一些手势需要B来触发" class="headerlink" title="需求 A B 视图同时加在C视图上 A在前 在A的一些手势需要B来触发"></a>需求 A B 视图同时加在C视图上 A在前 在A的一些手势需要B来触发</h6><p>博客地址 <a href="http://smnh.me/hit-testing-in-ios/" target="_blank" rel="external">http://smnh.me/hit-testing-in-ios/</a></p>
-<p>博主博客: <a href="http://smnh.me/archive/" target="_blank" rel="external">http://smnh.me/archive/</a></p>
+          时间穿透需求 A B 视图同时加在C视图上 A在前 在A的一些手势需要B来触发博客地址 http://smnh.me/hit-testing-in-ios/
+博主博客: http://smnh.me/archive/
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/04/11/事件穿透/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2137,44 +852,20 @@ UIGraphicsEndImageContext();
       
         
           
-            <p>RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合</p>
-<p>先看个简单的列子 KVO 用RAC实现</p>
-<pre><code>{
+          RAC ( ReactiveCocoa ) 我的理解一句话概括就是: 把OC的一些麻烦的实现用 Block块解决 或者说 是通知和block的结合
+先看个简单的列子 KVO 用RAC实现
+{
     NSString *username;
 }
-[RACObserve(self, username) subscribeNext:^(NSString *newName) {
-                                NSLog(@&quot;%@&quot;, newName);
-                            }];
-
-//只要你的username有变化。都可以打印出来
-</code></pre><p>例如下面这个代码块 用到了filter 就是过滤器的意思 指定只有以j开头的username能通过 然后才会打印 否则不打印</p>
-<pre><code>[[RACObserve(self, username)
-  filter:^(NSString *newName) {
-        return [newName hasPrefix:@&quot;j&quot;];
-    }]
- subscribeNext:^(NSString *newName) {
-     NSLog(@&quot;%@&quot;, newName);
- }];
-</code></pre><p>还有个map的代码块 就是映射 对数据进行一些操作 改变值等</p>
-<pre><code>map:^id(id value) {
-
-    return @([value[0] length] &gt; 0 &amp;&amp; [value[1] length] &gt; 5);
-
-}
-</code></pre><p>以最少的代码实现一个时钟应用<br>设置一个间隔为一秒。从现在开始调用的函数。并把当前实际传入。 这个函数返回一个NSString。 然后把这个NSString和界面上的textField绑定在了一起。从而实现时钟程序。表现了流和绑定响应</p>
-<pre><code>RAC(self, timeLabel.text) = [[[RACSignal interval:1 onScheduler:[RACScheduler currentScheduler]] startWith:[NSDate date]] map:^id (NSDate *value) {
-    NSLog(@&quot;value:%@&quot;, value);
-    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSHourCalendarUnit |
-     NSMinuteCalendarUnit | 
-     NSSecondCalendarUnit fromDate:value];
-    return [NSString stringWithFormat:@&quot;%02ld:%02ld:%02ld&quot;, (long)dateComponents.hour, (long)dateComponents.minute, (long)dateComponents.second];
-}];
-</code></pre><p>flattenMap: 先 map 再 flatten</p>
-<p>合并combineLatest      concat      merge  then 都能合并</p>
-<p>详细看下demo吧 看运行结果说话<br><a href="https://github.com/ongfei/RACDemo" target="_blank" rel="external">https://github.com/ongfei/RACDemo</a></p>
-<p>另外附上一个博客 <a href="http://blog.csdn.net/xdrt81y/article/details/30624469" target="_blank" rel="external">http://blog.csdn.net/xdrt81y/article/details/30624469</a></p>
-
-          
+[RACObserve(self, username) 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/16/RAC简单学习/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2306,139 +997,19 @@ UIGraphicsEndImageContext();
       
         
           
-            <p>##collectionView 拖动代理的变化</p>
-<p>#####附上一demo 仿支付宝: <a href="https://github.com/ongfei/SortModule" target="_blank" rel="external">https://github.com/ongfei/SortModule</a></p>
-<p>####iOS9 之后 collectionView 新增拖动代理</p>
-<pre><code>// Support for reordering
-- (BOOL)beginInteractiveMovementForItemAtIndexPath:(NSIndexPath *)indexPath NS_AVAILABLE_IOS(9_0); // returns NO if reordering was prevented from beginning - otherwise YES
-- (void)updateInteractiveMovementTargetPosition:(CGPoint)targetPosition NS_AVAILABLE_IOS(9_0);
-- (void)endInteractiveMovement NS_AVAILABLE_IOS(9_0);
-- (void)cancelInteractiveMovement NS_AVAILABLE_IOS(9_0);
-</code></pre><p>#####9之后的处理</p>
-<pre><code>#pragma mark - iOS9 之后的方法  
-- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath  
-{  
-    // 返回YES允许row移动  
-    return YES;  
-}  
-
-- (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath  
-{  
-    //取出移动row数据  
-    id color = self.dataArr[sourceIndexPath.row];  
-    //从数据源中移除该数据  
-    [self.dataArr removeObject:color];  
-    //将数据插入到数据源中的目标位置  
-    [self.dataArr insertObject:color atIndex:destinationIndexPath.row];  
-}  
-
-- (void)iOS9_Action:(UILongPressGestureRecognizer *)longPress  
-{  
-    switch (longPress.state) {  
-        case UIGestureRecognizerStateBegan:  
-        { //手势开始  
-            //判断手势落点位置是否在row上  
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
-            if (indexPath == nil) {  
-                break;  
-            }  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
-            [self.view bringSubviewToFront:cell];  
-            //iOS9方法 移动cell  
-            [self.collectionView beginInteractiveMovementForItemAtIndexPath:indexPath];  
-        }  
-            break;  
-        case UIGestureRecognizerStateChanged:  
-        { // 手势改变  
-            // iOS9方法 移动过程中随时更新cell位置  
-            [self.collectionView updateInteractiveMovementTargetPosition:[longPress locationInView:self.collectionView]];  
-        }  
-            break;  
-        case UIGestureRecognizerStateEnded:  
-        { // 手势结束  
-            // iOS9方法 移动结束后关闭cell移动  
-            [self.collectionView endInteractiveMovement];  
-        }  
-            break;  
-        default: //手势其他状态  
-            [self.collectionView cancelInteractiveMovement];  
-            break;  
-    }  
-}  
-</code></pre><p>#####9之前的处理</p>
-<pre><code>#pragma mark - iOS9 之前的方法  
-- (void)action:(UILongPressGestureRecognizer *)longPress  
-{  
-    switch (longPress.state) {  
-        case UIGestureRecognizerStateBegan:  
-        { // 手势开始  
-            //判断手势落点位置是否在row上  
-            NSIndexPath *indexPath = [self.collectionView indexPathForItemAtPoint:[longPress locationInView:self.collectionView]];  
-            self.oldIndexPath = indexPath;  
-            if (indexPath == nil) {  
-                break;  
-            }  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];  
-            // 使用系统的截图功能,得到cell的截图视图  
-            UIView *snapshotView = [cell snapshotViewAfterScreenUpdates:NO];  
-            snapshotView.frame = cell.frame;  
-            [self.view addSubview:self.snapshotView = snapshotView];  
-            // 截图后隐藏当前cell  
-            cell.hidden = YES;  
-
-            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
-            [UIView animateWithDuration:0.25 animations:^{  
-                snapshotView.transform = CGAffineTransformMakeScale(1.05, 1.05);  
-                snapshotView.center = currentPoint;  
-            }];  
-        }  
-            break;  
-        case UIGestureRecognizerStateChanged:  
-        { // 手势改变  
-            //当前手指位置 截图视图位置随着手指移动而移动  
-            CGPoint currentPoint = [longPress locationInView:self.collectionView];  
-            self.snapshotView.center = currentPoint;  
-            // 计算截图视图和哪个可见cell相交  
-            for (UICollectionViewCell *cell in self.collectionView.visibleCells) {  
-                // 当前隐藏的cell就不需要交换了,直接continue  
-                if ([self.collectionView indexPathForCell:cell] == self.oldIndexPath) {  
-                    continue;  
-                }  
-                // 计算中心距  
-                CGFloat space = sqrtf(pow(self.snapshotView.center.x - cell.center.x, 2) + powf(self.snapshotView.center.y - cell.center.y, 2));  
-                // 如果相交一半就移动  
-                if (space &lt;= self.snapshotView.bounds.size.width / 2) {  
-                    self.moveIndexPath = [self.collectionView indexPathForCell:cell];  
-                    //移动 会调用willMoveToIndexPath方法更新数据源  
-                    [self.collectionView moveItemAtIndexPath:self.oldIndexPath toIndexPath:self.moveIndexPath];  
-                    //设置移动后的起始indexPath  
-                    self.oldIndexPath = self.moveIndexPath;  
-                    break;  
-                }  
-            }  
-        }  
-            break;  
-        default:  
-        { // 手势结束和其他状态  
-            UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:self.oldIndexPath];  
-            // 结束动画过程中停止交互,防止出问题  
-            self.collectionView.userInteractionEnabled = NO;  
-            // 给截图视图一个动画移动到隐藏cell的新位置  
-            [UIView animateWithDuration:0.25 animations:^{  
-                self.snapshotView.center = cell.center;  
-                self.snapshotView.transform = CGAffineTransformMakeScale(1.0, 1.0);  
-            } completion:^(BOOL finished) {  
-                // 移除截图视图,显示隐藏的cell并开始交互  
-                [self.snapshotView removeFromSuperview];  
-                cell.hidden = NO;  
-                self.collectionView.userInteractionEnabled = YES;  
-            }];  
-        }  
-            break;  
-    }  
-}  
-</code></pre>
-          
+          ##collectionView 拖动代理的变化
+#####附上一demo 仿支付宝: https://github.com/ongfei/SortModule
+####iOS9 之后 collectionView 新增拖动代理
+// Support for reordering
+- (BOOL)b
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/06/collectionView-拖动/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2548,16 +1119,19 @@ UIGraphicsEndImageContext();
       
         
           
-            <h4 id="渐变"><a href="#渐变" class="headerlink" title="渐变"></a>渐变</h4><p>推荐一篇博客 很详细: <a href="http://www.cocoachina.com/ios/20161009/17704.html" target="_blank" rel="external">http://www.cocoachina.com/ios/20161009/17704.html</a></p>
-<ol>
-<li>colors    渐变的颜色</li>
-<li>locations    渐变颜色的分割点</li>
-<li><p>startPoint&amp;endPoint    颜色渐变的方向，范围在(0,0)与(1.0,1.0)之间，如(0,0)(1.0,0)代表水平方向渐变,(0,0)(0,1.0)代表竖直方向渐变</p>
-<p> CAGradientLayer *gradientLayer = [CAGradientLayer layer];<br> gradientLayer.colors = @[(<strong>bridge id)[UIColor redColor].CGColor, (</strong>bridge id)[UIColor yellowColor].CGColor, (__bridge id)[UIColor blueColor].CGColor];<br> gradientLayer.locations = @[@0.3, @0.5, @1.0];<br> gradientLayer.startPoint = CGPointMake(0, 0);<br> gradientLayer.endPoint = CGPointMake(1.0, 0);<br> gradientLayer.frame = CGRectMake(0, 100, 300, 100);<br> [self.view.layer addSublayer:gradientLayer];</p>
-</li>
-</ol>
+          渐变推荐一篇博客 很详细: http://www.cocoachina.com/ios/20161009/17704.html
 
-          
+colors    渐变的颜色
+locations    渐变颜色的分割点
+startPoint&amp;endPoint    颜色渐变的方向，范围在(0,0)与(1.
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/04/渐变/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2667,118 +1241,16 @@ UIGraphicsEndImageContext();
       
         
           
-            <h4 id="CAEmitterLayer粒子动画"><a href="#CAEmitterLayer粒子动画" class="headerlink" title="CAEmitterLayer粒子动画"></a>CAEmitterLayer粒子动画</h4><p>一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。</p>
-<p> 一个或多个CAEmitterLayers，但通常只有一个：这个发射的层主要控制粒子的形状（例如，一个点，矩形或圆形）和发射的位置（例如，在矩形内，或边缘）。这个层具有全局的乘法器，可以施加到系统内的CAEmitterCells。这些给你一个简单的方法覆盖的所有粒子的变化。比如一个人为的例子将改变x雨来模拟风的速度。</p>
-<p>基础是简单的，但这些参数却是相当微妙的。CAEmitterLayer有超过30种不同的参数进行自定义粒子的行为。</p>
-<pre><code>- (void)emitterAnimation {
-
-    CAEmitterLayer *emitter = [CAEmitterLayer layer];
-
-    emitter.frame = self.view.bounds;
-
-    [self.view.layer addSublayer:emitter];
-
-
-    emitter.renderMode = kCAEmitterLayerAdditive;//重叠模式
-    emitter.emitterPosition = CGPointMake(self.view.frame.size.width - 100, self.view.frame.size.height - 20);//发射中心点
-
-
-    CAEmitterCell *cell = [[CAEmitterCell alloc] init];
-
-    cell.contents = (__bridge id)[UIImage imageNamed:@&quot;heart2.png&quot;].CGImage;//设置图片内容
-
-    cell.yAcceleration = -100.f;     // 粒子的初始加速度
-    cell.xAcceleration = 0.f;
-
-    cell.birthRate = 2;//每秒生成的个数
-
-    cell.lifetime = 10.0;//存活时间
-
-    cell.color = [UIColor redColor].CGColor;
-
-    cell.alphaSpeed = -0.4;//消逝速度
-
-    cell.velocity = 50;//粒子运动的速度均值
-
-    cell.velocityRange = 200;//粒子运动的速度扰动范围
-
-    cell.emissionRange = M_PI * 3.0; // 粒子发射角度, 这里是一个扇形.
-
-    // 将粒子组成的数组赋值给CAEmitterLayer的emitterCells属性即可.
-    emitter.emitterCells = @[cell];
-}
-</code></pre><p>effectCell 几个重要属性：</p>
-<p>1）.birthRate 顾名思义没有这个也就没有effectCell，这个必须要设置，具体含义是每秒某个点产生的effectCell数量</p>
-<p>2）.lifetime &amp; lifetimeRange 表示effectCell的生命周期，既在屏幕上的显示时间要多长。</p>
-<p>3）.contents 这个和CALayer一样，只是用来设置图片</p>
-<p>4）.name 这个是当effectCell存在caeEmitter 的emitterCells中用来辨认的。用到setValue forKeyPath比较有用</p>
-<p>5）.velocity &amp; velocityRange &amp; emissionRange 表示cell向屏幕右边飞行的速度 &amp; 在右边什么范围内飞行&amp; ＋－角度扩散</p>
-<p>6）.把cell做成array放进caeEmitter.emitterCells里去。caeEmitter.renderMode有个效果很不错，能变成火的就是kCAEmitterLayerAdditive</p>
-<p>属性：</p>
-<p>alphaRange:  一个粒子的颜色alpha能改变的范围；</p>
-<p>alphaSpeed:粒子透明度在生命周期内的改变速度；</p>
-<p>birthrate：粒子参数的速度乘数因子；</p>
-<p>blueRange：一个粒子的颜色blue 能改变的范围；</p>
-<p>blueSpeed: 粒子blue在生命周期内的改变速度；</p>
-<p>color:粒子的颜色</p>
-<p>contents：是个CGImageRef的对象,既粒子要展现的图片；</p>
-<p>contentsRect：应该画在contents里的子rectangle：</p>
-<p>emissionLatitude：发射的z轴方向的角度</p>
-<p>emissionLongitude:x-y平面的发射方向</p>
-<p>emissionRange；周围发射角度</p>
-<p>emitterCells：粒子发射的粒子</p>
-<p>enabled：粒子是否被渲染</p>
-<p>greenrange: 一个粒子的颜色green 能改变的范围；</p>
-<p>greenSpeed: 粒子green在生命周期内的改变速度；</p>
-<p>lifetime：生命周期</p>
-<p>lifetimeRange：生命周期范围</p>
-<p>magnificationFilter：不是很清楚好像增加自己的大小</p>
-<p>minificatonFilter：减小自己的大小</p>
-<p>minificationFilterBias：减小大小的因子</p>
-<p>name：粒子的名字</p>
-<p>redRange：一个粒子的颜色red 能改变的范围；</p>
-<p>redSpeed; 粒子red在生命周期内的改变速度；</p>
-<p>scale：缩放比例：</p>
-<p>scaleRange：缩放比例范围；</p>
-<p>scaleSpeed：缩放比例速度：</p>
-<p>spin：子旋转角度</p>
-<p>spinrange：子旋转角度范围</p>
-<p>style：不是很清楚：</p>
-<p>velocity：速度</p>
-<p>velocityRange：速度范围</p>
-<p>xAcceleration:粒子x方向的加速度分量</p>
-<p>yAcceleration:粒子y方向的加速度分量</p>
-<p>zAcceleration:粒子z方向的加速度分量</p>
-<p>2、CAEmitterLayer<br>CAEmitterLayer提供了一个基于Core Animation的粒子发射系统，粒子用CAEmitterCell来初始化。粒子画在背景层盒边界上</p>
-<p>属性:   </p>
-<p>birthRate:粒子产生系数，默认1.0；</p>
-<p>emitterCells: 装着CAEmitterCell对象的数组，被用于把粒子投放到layer上；</p>
-<p>emitterDepth:决定粒子形状的深度联系：emittershape</p>
-<p>emitterMode:发射模式</p>
-<p>NSString * const kCAEmitterLayerPoints;</p>
-<p>NSString * const kCAEmitterLayerOutline;</p>
-<p>NSString * const kCAEmitterLayerSurface;</p>
-<p>NSString * const kCAEmitterLayerVolume;</p>
-<p>emitterPosition:发射位置</p>
-<p>emitterShape:发射源的形状：</p>
-<p>NSString * const kCAEmitterLayerPoint;</p>
-<p>NSString * const kCAEmitterLayerLine;</p>
-<p>NSString * const kCAEmitterLayerRectangle;</p>
-<p>NSString * const kCAEmitterLayerCuboid;</p>
-<p>NSString * const kCAEmitterLayerCircle;</p>
-<p>NSString * const kCAEmitterLayerSphere;</p>
-<p>emitterSize:发射源的尺寸大；</p>
-<p>emitterZposition:发射源的z坐标位置；</p>
-<p>lifetime:粒子生命周期</p>
-<p>preservesDepth:不是多很清楚（粒子是平展在层上）</p>
-<p>renderMode:渲染模式：</p>
-<p>NSString * const kCAEmitterLayerUnordered;</p>
-<p>NSString * const kCAEmitterLayerOldestFirst;</p>
-<p>NSString * const kCAEmitterLayerOldestLast;</p>
-<p>NSString * const kCAEmitterLayerBackToFront;</p>
-<p>NSString * const kCAEmitterLayerAdditive;</p>
-
-          
+          CAEmitterLayer粒子动画一个或多个CAEmitterCells：发射器电池可以看作是单个粒子的原型（例如，一个单一的粉扑在一团烟雾）。当散发出一个粒子，UIKit根据这个发射粒子和定义的基础上创建一个随机粒子。此原型包括一些属性来控制粒子的图片，颜色，方向，运动，缩放比例和生命周期。
+ 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/03/01/CAEmitterLayer粒子动画/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2888,9 +1360,16 @@ UIGraphicsEndImageContext();
       
         
           
-            <h4 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h4><p><a href="http://www.bejson.com/knownjson/regexJiaocheng/" target="_blank" rel="external">正则表达式</a></p>
+          正则表达式正则表达式
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/02/10/正则表达式link/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -3000,10 +1479,17 @@ UIGraphicsEndImageContext();
       
         
           
-            <h4 id="记录一个SDK还有一个Open-framework"><a href="#记录一个SDK还有一个Open-framework" class="headerlink" title="记录一个SDK还有一个Open framework"></a>记录一个SDK还有一个Open framework</h4><p><a href="https://tusdk.com/doc" target="_blank" rel="external">涂图SDK</a></p>
-<p><a href="https://github.com/BradLarson/GPUImage" target="_blank" rel="external">GPUImage</a></p>
+          记录一个SDK还有一个Open framework涂图SDK
+GPUImage
 
           
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/02/10/美图SDK-Open-Framework/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -3096,10 +1582,10 @@ UIGraphicsEndImageContext();
             
             
             <div class="site-state-item site-state-categories">
-              
+              <a href="/categories/index.html">
                 <span class="site-state-item-count">1</span>
                 <span class="site-state-item-name">分类</span>
-              
+              </a>
             </div>
           
 
@@ -3107,10 +1593,10 @@ UIGraphicsEndImageContext();
             
             
             <div class="site-state-item site-state-tags">
-              
-                <span class="site-state-item-count">20</span>
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">标签</span>
-              
+              </a>
             </div>
           
 
