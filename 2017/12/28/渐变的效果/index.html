@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="渐变 渐入效果" />
 
 
 
@@ -94,16 +94,25 @@
 
 
 
-<meta name="description" content="低调做事 快乐做人">
-<meta property="og:type" content="website">
-<meta property="og:title" content="分类">
-<meta property="og:url" content="http://yoursite.com/categories/index.html">
+<meta name="description" content="####视图渐变的效果 通过渐变layer（CAGradientLayer）加载到bgview的mask上实现 ，中间视图要作为bgview的子视图 这样子试图才能达到渐变的效果
+- (void)viewDidLoad {  
+    [super viewDidLoad];  
+    // Do any additional setup after loading the view.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="渐变的效果">
+<meta property="og:url" content="http://yoursite.com/2017/12/28/渐变的效果/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="低调做事 快乐做人">
-<meta property="og:updated_time" content="2017-07-27T08:25:53.000Z">
+<meta property="og:description" content="####视图渐变的效果 通过渐变layer（CAGradientLayer）加载到bgview的mask上实现 ，中间视图要作为bgview的子视图 这样子试图才能达到渐变的效果
+- (void)viewDidLoad {  
+    [super viewDidLoad];  
+    // Do any additional setup after loading the view.">
+<meta property="og:updated_time" content="2017-12-28T05:46:54.013Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="分类">
-<meta name="twitter:description" content="低调做事 快乐做人">
+<meta name="twitter:title" content="渐变的效果">
+<meta name="twitter:description" content="####视图渐变的效果 通过渐变layer（CAGradientLayer）加载到bgview的mask上实现 ，中间视图要作为bgview的子视图 这样子试图才能达到渐变的效果
+- (void)viewDidLoad {  
+    [super viewDidLoad];  
+    // Do any additional setup after loading the view.">
 
 
 
@@ -131,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/categories/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/12/28/渐变的效果/"/>
 
 
 
 
 
-  <title>分类 | ongfei | 一步一步往上爬</title>
+  <title>渐变的效果 | ongfei | 一步一步往上爬</title>
   
 
 
@@ -270,25 +279,194 @@
             
 
   <div id="posts" class="posts-expand">
-  <header class="post-header">
+    
 
-	<h1 class="post-title" itemprop="name headline">分类</h1>
+  
 
+  
+  
+  
 
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/28/渐变的效果/">
 
-</header>
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ongfei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ico.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ongfei | 一步一步往上爬">
+    </span>
 
     
-    
-      <div class="category-all-page">
-        <div class="category-all-title">
-            目前共计 1 个分类
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">渐变的效果</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-28T11:27:11+08:00">
+                2017-12-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
         </div>
-        <div class="category-all">
-          <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a><span class="category-list-count">9</span></li></ul>
-        </div>
-      </div>
+      </header>
     
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>####视图渐变的效果 通过渐变layer（CAGradientLayer）加载到bgview的mask上实现 ，中间视图要作为bgview的子视图 这样子试图才能达到渐变的效果</p>
+<pre><code>- (void)viewDidLoad {  
+    [super viewDidLoad];  
+    // Do any additional setup after loading the view.  
+
+    UIView *gradinetView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];  
+    gradinetView.backgroundColor = [UIColor redColor];  
+    [self.view addSubview:gradinetView];  
+
+    CAGradientLayer *gradinetLayer = [CAGradientLayer layer];  
+    NSArray *colors = @[(id)[UIColor colorWithWhite:0 alpha:0].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:0.5].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:1].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:0.5].CGColor,  
+                        (id)[UIColor colorWithWhite:0 alpha:0].CGColor,  
+                        ];  
+    [gradinetLayer setColors:colors];  
+    [gradinetLayer setStartPoint:CGPointMake(0, 0)];  
+    [gradinetLayer setEndPoint:CGPointMake(0, 1)];  
+    [gradinetLayer setFrame:gradinetView.bounds];  
+    [gradinetView.layer setMask:gradinetLayer];  
+
+
+    UIScrollView *sv = [[UIScrollView alloc] initWithFrame:gradinetLayer.bounds];  
+    sv.backgroundColor = [UIColor whiteColor];  
+    [sv setContentInset:UIEdgeInsetsMake(150, 0, 0, 0)];  
+    [gradinetView addSubview:sv];  
+
+    NSString *text = @&quot;新华社北京1月10日电中共中央政治局常务委员会1月10日全天召开会议，听取全国人大常委会、国务院、全国政协、最高人民法院、最高人民检察院党组工作汇报，听取中央书记处工作报告。中共中央总书记习近平主持会议并发表重要讲话。会议强调，办好中国的事情，关键在党。中国特色社会主义最本质的特征是中国共产党领导，中国特色社会主义制度的最大优势是中国共产党领导。坚持党的领导首先是坚持党中央集中统一领导。坚持党中央集中统一领导，是全面从严治党、严肃党内政治生活、加强党内监督的重要目的，也是一条根本的政治规矩。要深入学习贯彻党的十八届六中全会精神，严格执行《关于新形势下党内政治生活的若干准则》、《中国共产党党内监督条例》，牢固树立政治意识、大局意识、核心意识、看齐意识，坚持以党的旗帜为旗帜、以党的方向为方向、以党的意志为意志，切实把党中央重大决策部署落实到各项工作中去。会议认为，过去的一年，全国人大常委会、国务院、全国政协、最高人民法院、最高人民检察院党组坚持党中央集中统一领导，维护党中央权威，落实全面从严治党责任，规范党内政治生活制度，强化政治领导责任，扎实开展“两学一做”学习教育。坚持围绕中心、服务大局，在贯彻落实党中央重大决策部署上凝神聚焦发力，为推进党和国家各项事业发展、实现“十三五”良好开局作出了积极贡献&quot;;  
+    CGRect rect = [text boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 0) options:NSStringDrawingUsesLineFragmentOrigin |NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18]} context:nil];  
+    CGFloat height = rect.size.height;  
+    sv.contentSize = CGSizeMake(0, height);  
+
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, sv.bounds.size.width, height)];  
+    label.textColor = [UIColor darkGrayColor];  
+    label.numberOfLines = 0;  
+    label.textAlignment = NSTextAlignmentLeft;  
+    label.text =text;  
+    label.font = [UIFont systemFontOfSize:18];  
+    [sv addSubview:label];  
+} 
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/渐变/" rel="tag"># 渐变</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/29/X及11更新/" rel="next" title="X及11更新">
+                <i class="fa fa-chevron-left"></i> X及11更新
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -551,10 +729,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
