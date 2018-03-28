@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转场动画 push pop" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于转场动画之Nav转场">
+<meta property="og:url" content="http://yoursite.com/2018/03/28/关于转场动画之Nav转场/index.html">
+<meta property="og:site_name" content="ongfei | 一步一步往上爬">
+<meta property="og:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
+<meta property="og:updated_time" content="2018-03-28T03:39:56.379Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于转场动画之Nav转场">
+<meta name="twitter:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/28/关于转场动画之Nav转场/"/>
+
+
+
+
+
+  <title>关于转场动画之Nav转场 | ongfei | 一步一步往上爬</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ongfei | 一步一步往上爬</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ongfei | 一步一步往上爬</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+
+  <a href="https://github.com/ongfei"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/关于转场动画之Nav转场/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ongfei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ico.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ongfei | 一步一步往上爬">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于转场动画之Nav转场</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T09:22:11+08:00">
+                2018-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="视图控制器转换-View-Controller-Transition-俗称-关于转场动画"><a href="#视图控制器转换-View-Controller-Transition-俗称-关于转场动画" class="headerlink" title="视图控制器转换(View Controller Transition) 俗称 关于转场动画"></a>视图控制器转换(View Controller Transition) 俗称 关于转场动画</h3><h3 id="UINavigationController-的-push-pop-转场动画"><a href="#UINavigationController-的-push-pop-转场动画" class="headerlink" title="UINavigationController 的 push pop 转场动画"></a>UINavigationController 的 push pop 转场动画</h3><h6 id="视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如-UINavigationController，UITabBarController-UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态-Modal-显示。View-Controller-Transition-是什么？在-NavigationController-里-push-或-pop-一个-View-Controller，在-TabBarController-中切换到其他-View-Controller，以-Modal-方式显示另外一个-View-Controller，这些都是-View-Controller-Transition。"><a href="#视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如-UINavigationController，UITabBarController-UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态-Modal-显示。View-Controller-Transition-是什么？在-NavigationController-里-push-或-pop-一个-View-Controller，在-TabBarController-中切换到其他-View-Controller，以-Modal-方式显示另外一个-View-Controller，这些都是-View-Controller-Transition。" class="headerlink" title="视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Transition 是什么？在 NavigationController 里 push 或 pop 一个 View Controller，在 TabBarController 中切换到其他 View Controller，以 Modal 方式显示另外一个 View Controller，这些都是 View Controller Transition。"></a>视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Transition 是什么？在 NavigationController 里 push 或 pop 一个 View Controller，在 TabBarController 中切换到其他 View Controller，以 Modal 方式显示另外一个 View Controller，这些都是 View Controller Transition。</h6><h5 id="首先放个官方链接以示正式"><a href="#首先放个官方链接以示正式" class="headerlink" title="首先放个官方链接以示正式"></a><a href="https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/index.html#//apple_ref/doc/uid/TP40007457-CH2-SW1" target="_blank" rel="external">首先放个官方链接以示正式</a></h5><h5 id="官方支持的可以自定义的转场动画"><a href="#官方支持的可以自定义的转场动画" class="headerlink" title="官方支持的可以自定义的转场动画"></a>官方支持的可以自定义的转场动画</h5><ul>
+<li>UINavigationController 的 push pop 转场动画</li>
+<li>UIViewController 的 present dissmiss 转场动画。仅限于modalPresentationStyle属性为 UIModalPresentationFullScreen 或 UIModalPresentationCustom 这两种模式</li>
+<li>UITabBarController 中切换 Tab 转场动画</li>
+<li>UICollectionViewController 的布局转场 UICollectionViewController 与 UINavigationController 结合的转场方式</li>
+</ul>
+<h4 id="Push-amp-Pop"><a href="#Push-amp-Pop" class="headerlink" title="Push &amp; Pop"></a>Push &amp; Pop</h4><h5 id="首先介绍一下系统方法："><a href="#首先介绍一下系统方法：" class="headerlink" title="首先介绍一下系统方法："></a>首先介绍一下系统方法：</h5><ol>
+<li><p>主要会涉及到两个UINavigationController的代理 </p>
+<pre><code>看返回参数 这是个返回动画的代理
+- (nullable id &lt;UIViewControllerAnimatedTransitioning&gt;)navigationController:(UINavigationController *)navigationController
+                           animationControllerForOperation:(UINavigationControllerOperation)operation
+                                        fromViewController:(UIViewController *)fromVC
+                                          toViewController:(UIViewController *)toVC  NS_AVAILABLE_IOS(7_0);
+</code></pre></li>
+</ol>
+<pre><code>看返回参数 这是个交互代理 就是手势驱动了
+- (nullable id &lt;UIViewControllerInteractiveTransitioning&gt;)navigationController:(UINavigationController *)navigationController
+                  interactionControllerForAnimationController:(id &lt;UIViewControllerAnimatedTransitioning&gt;) animationController NS_AVAILABLE_IOS(7_0);
+</code></pre><ol>
+<li>既然动画是 返回<uiviewcontrolleranimatedtransitioning>的id类型的类 那我们看下 这个代理是什么</uiviewcontrolleranimatedtransitioning></li>
+</ol>
+<pre><code>返回动画执行时间
+- (NSTimeInterval)transitionDuration:(nullable id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;
+关于自定义动画就要在这里操作了
+- (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;
+</code></pre><ol>
+<li><p>再看下交互代理有什么 UIViewControllerInteractiveTransitioning</p>
+<pre><code>系统有这个类是遵循这个交互代理的 我们只要继承这个类就行了
+NS_CLASS_AVAILABLE_IOS(7_0) @interface UIPercentDrivenInteractiveTransition : NSObject &lt;UIViewControllerInteractiveTransitioning&gt;
+
+关于这个类的几个重要的方法
+- (void)pauseInteractiveTransition NS_AVAILABLE_IOS(10_0);
+- (void)updateInteractiveTransition:(CGFloat)percentComplete;
+- (void)cancelInteractiveTransition;
+- (void)finishInteractiveTransition;
+</code></pre></li>
+</ol>
+<h5 id="至此-所有用到的类及方法简单的介绍了-Let’s-do-it"><a href="#至此-所有用到的类及方法简单的介绍了-Let’s-do-it" class="headerlink" title="至此 所有用到的类及方法简单的介绍了 Let’s do it"></a>至此 所有用到的类及方法简单的介绍了 Let’s do it</h5><h4 id="我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。"><a href="#我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。" class="headerlink" title="我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。"></a>我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。</h4><h5 id="关于UINavigationController的处理：可以在自定义的baseNav里做处理-也可以建个UINavigationController的Category"><a href="#关于UINavigationController的处理：可以在自定义的baseNav里做处理-也可以建个UINavigationController的Category" class="headerlink" title="关于UINavigationController的处理：可以在自定义的baseNav里做处理 也可以建个UINavigationController的Category"></a>关于UINavigationController的处理：可以在自定义的baseNav里做处理 也可以建个UINavigationController的Category</h5><pre><code>利用runtime 做个方法替换
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&amp;onceToken, ^{
+        Method sysPush = class_getInstanceMethod(self.class, @selector(pushViewController:animated:));
+        Method dfPush = class_getInstanceMethod(self.class, @selector(df_pushViewController:animated:));
+        method_exchangeImplementations(sysPush, dfPush);
+    });
+}
+
+目的的话当然是设置代理了 要不然 动画怎么走
+- (void)df_pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
+//         为了适用一些情况 考虑之后 这里的判断我去掉了
+//    if ([viewController conformsToProtocol:@protocol(DFTransitionProtocol)]) {
+        self.delegate = (id&lt;UINavigationControllerDelegate&gt;)viewController;
+//    }
+    [self df_pushViewController:viewController animated:animated];
+}
+</code></pre><h5 id="关于UIViewController的处理：可以在自定义的baseVC里做处理-也可以建个UIViewController的Category-（初始想法是把nav的代理指定到自定义的NSObject的，不在UIViewController的Category里面操作的。也不知道为什么就没按意愿走）"><a href="#关于UIViewController的处理：可以在自定义的baseVC里做处理-也可以建个UIViewController的Category-（初始想法是把nav的代理指定到自定义的NSObject的，不在UIViewController的Category里面操作的。也不知道为什么就没按意愿走）" class="headerlink" title="关于UIViewController的处理：可以在自定义的baseVC里做处理 也可以建个UIViewController的Category （初始想法是把nav的代理指定到自定义的NSObject的，不在UIViewController的Category里面操作的。也不知道为什么就没按意愿走）"></a>关于UIViewController的处理：可以在自定义的baseVC里做处理 也可以建个UIViewController的Category （初始想法是把nav的代理指定到自定义的NSObject的，不在UIViewController的Category里面操作的。也不知道为什么就没按意愿走）</h5><pre><code>这里的操作除了实现Nav的两个代理之外还要做些操作 
+nav的push里面虽然指定了代理 但是pop回来的时候代理就丢了 解决方案2选1： 1：替换nav的pop方法重新指定代理 2：替换vc的appear方法重新指定代理
+    + (void)load {
+        static dispatch_once_t onceToken;
+        dispatch_once(&amp;onceToken, ^{
+            Method sysdidDisappear = class_getInstanceMethod(self.class, @selector(viewDidAppear:));
+            Method dfdidDisappear = class_getInstanceMethod(self.class, @selector(df_viewDidAppear:));
+            method_exchangeImplementations(sysdidDisappear, dfdidDisappear);
+        });
+    }
+
+    - (void)df_viewDidAppear:(BOOL)animated {
+        self.navigationController.delegate = self;
+
+        [self df_viewDidAppear:animated];
+    }
+</code></pre><h5 id="关于动画-interface-DFBaseTransitionAnimation-NSObject"><a href="#关于动画-interface-DFBaseTransitionAnimation-NSObject" class="headerlink" title="关于动画 @interface DFBaseTransitionAnimation : NSObject"></a>关于动画 @interface DFBaseTransitionAnimation : NSObject<uiviewcontrolleranimatedtransitioning></uiviewcontrolleranimatedtransitioning></h5><p>只要继承这个类重写动画的两个方法 就可以实现自己的自定义动画了</p>
+<h5 id="关于手势驱动类-interface-DFInteractiveTransition-UIPercentDrivenInteractiveTransition-里面都做了处理了-详细就看工程吧-最后会附上工程demo"><a href="#关于手势驱动类-interface-DFInteractiveTransition-UIPercentDrivenInteractiveTransition-里面都做了处理了-详细就看工程吧-最后会附上工程demo" class="headerlink" title="关于手势驱动类 @interface DFInteractiveTransition : UIPercentDrivenInteractiveTransition 里面都做了处理了 详细就看工程吧 最后会附上工程demo"></a>关于手势驱动类 @interface DFInteractiveTransition : UIPercentDrivenInteractiveTransition 里面都做了处理了 详细就看工程吧 最后会附上工程demo</h5><h4 id="关于使用"><a href="#关于使用" class="headerlink" title="关于使用"></a>关于使用</h4><p>使用很简单 只要vc 遵守<dftransitionprotocol>这个协议 实现方法就行 </dftransitionprotocol></p>
+<p>自定义动画要继承自 DFBaseTransitionAnimation</p>
+<p>如果不实现 那么返回的是DFBaseTransitionAnimation 这个里面的默认动画<br>手势的话也是默认手势 详情看协议</p>
+<pre><code>- (DFBaseTransitionAnimation *)pushTransitionAnimation;
+- (DFBaseTransitionAnimation *)popTransitionAnimation;
+</code></pre><h4 id="最后说下坑"><a href="#最后说下坑" class="headerlink" title="最后说下坑"></a>最后说下坑</h4><p>首先说下vc返回释放不了的问题，起初以为是delegate造成的没释放，后来发现是因为手势里面对VC进行了强持有引起的</p>
+<p>系统nav有个返回的手势 重写代理之后就不能用了 不知道应该是这样的还是我写的有错误的问题</p>
+<p>动画里面 用UIView的动画转场 可以手势百分比 当用CATransition 做layer动画的时候 返回手势就不能百分比</p>
+<h4 id="github-demo"><a href="#github-demo" class="headerlink" title="github-demo"></a><a href="https://github.com/ongfei/DFTransitionAnimation/" target="_blank" rel="external">github-demo</a></h4>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/push-pop/" rel="tag"># push-pop</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/28/渐变的效果/" rel="next" title="渐变的效果">
+                <i class="fa fa-chevron-left"></i> 渐变的效果
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ico.jpg"
+               alt="ongfei" />
+          <p class="site-author-name" itemprop="name">ongfei</p>
+           
+              <p class="site-description motion-element" itemprop="description">低调做事 快乐做人</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ongfei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情连接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devtang.com" title="唐巧的技术博客" target="_blank">唐巧的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com" title="廖雪峰的官方网站" target="_blank">廖雪峰的官方网站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://baixin.io/archive/" title="潘柏信个人站" target="_blank">潘柏信个人站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devzeng.com/#blog" title="曾静的技术博客" target="_blank">曾静的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://limboy.me" title="limboy" target="_blank">limboy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://liuyanwei.jumppo.com" title="liuyanwei" target="_blank">liuyanwei</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://allluckly.cn" title="allluckly" target="_blank">allluckly</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#视图控制器转换-View-Controller-Transition-俗称-关于转场动画"><span class="nav-number">1.</span> <span class="nav-text">视图控制器转换(View Controller Transition) 俗称 关于转场动画</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UINavigationController-的-push-pop-转场动画"><span class="nav-number">2.</span> <span class="nav-text">UINavigationController 的 push pop 转场动画</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如-UINavigationController，UITabBarController-UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态-Modal-显示。View-Controller-Transition-是什么？在-NavigationController-里-push-或-pop-一个-View-Controller，在-TabBarController-中切换到其他-View-Controller，以-Modal-方式显示另外一个-View-Controller，这些都是-View-Controller-Transition。"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Transition 是什么？在 NavigationController 里 push 或 pop 一个 View Controller，在 TabBarController 中切换到其他 View Controller，以 Modal 方式显示另外一个 View Controller，这些都是 View Controller Transition。</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#首先放个官方链接以示正式"><span class="nav-number">2.0.1.</span> <span class="nav-text">首先放个官方链接以示正式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#官方支持的可以自定义的转场动画"><span class="nav-number">2.0.2.</span> <span class="nav-text">官方支持的可以自定义的转场动画</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Push-amp-Pop"><span class="nav-number">2.1.</span> <span class="nav-text">Push & Pop</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#首先介绍一下系统方法："><span class="nav-number">2.1.1.</span> <span class="nav-text">首先介绍一下系统方法：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#至此-所有用到的类及方法简单的介绍了-Let’s-do-it"><span class="nav-number">2.1.2.</span> <span class="nav-text">至此 所有用到的类及方法简单的介绍了 Let’s do it</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。"><span class="nav-number">2.2.</span> <span class="nav-text">我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#关于UINavigationController的处理：可以在自定义的baseNav里做处理-也可以建个UINavigationController的Category"><span class="nav-number">2.2.1.</span> <span class="nav-text">关于UINavigationController的处理：可以在自定义的baseNav里做处理 也可以建个UINavigationController的Category</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#关于UIViewController的处理：可以在自定义的baseVC里做处理-也可以建个UIViewController的Category-（初始想法是把nav的代理指定到自定义的NSObject的，不在UIViewController的Category里面操作的。也不知道为什么就没按意愿走）"><span class="nav-number">2.2.2.</span> <span class="nav-text">关于UIViewController的处理：可以在自定义的baseVC里做处理 也可以建个UIViewController的Category （初始想法是把nav的代理指定到自定义的NSObject的，不在UIViewController的Category里面操作的。也不知道为什么就没按意愿走）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#关于动画-interface-DFBaseTransitionAnimation-NSObject"><span class="nav-number">2.2.3.</span> <span class="nav-text">关于动画 @interface DFBaseTransitionAnimation : NSObject</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#关于手势驱动类-interface-DFInteractiveTransition-UIPercentDrivenInteractiveTransition-里面都做了处理了-详细就看工程吧-最后会附上工程demo"><span class="nav-number">2.2.4.</span> <span class="nav-text">关于手势驱动类 @interface DFInteractiveTransition : UIPercentDrivenInteractiveTransition 里面都做了处理了 详细就看工程吧 最后会附上工程demo</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关于使用"><span class="nav-number">2.3.</span> <span class="nav-text">关于使用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最后说下坑"><span class="nav-number">2.4.</span> <span class="nav-text">最后说下坑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#github-demo"><span class="nav-number">2.5.</span> <span class="nav-text">github-demo</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ongfei</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>
