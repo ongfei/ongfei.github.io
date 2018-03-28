@@ -100,7 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/28/关于转场动画之Nav转场/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
 <meta property="og:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
-<meta property="og:updated_time" content="2018-03-28T03:45:51.250Z">
+<meta property="og:updated_time" content="2018-03-28T03:47:45.849Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于转场动画之Nav转场">
 <meta name="twitter:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
@@ -378,19 +378,17 @@
                                    animationControllerForOperation:(UINavigationControllerOperation)operation
                                                 fromViewController:(UIViewController *)fromVC
                                                   toViewController:(UIViewController *)toVC  NS_AVAILABLE_IOS(7_0);
-</code></pre></li>
-</ol>
-<pre><code>看返回参数 这是个交互代理 就是手势驱动了
+
+看返回参数 这是个交互代理 就是手势驱动了
 - (nullable id &lt;UIViewControllerInteractiveTransitioning&gt;)navigationController:(UINavigationController *)navigationController
                           interactionControllerForAnimationController:(id &lt;UIViewControllerAnimatedTransitioning&gt;) animationController NS_AVAILABLE_IOS(7_0);
-</code></pre><ol>
-<li>既然动画是 返回<uiviewcontrolleranimatedtransitioning>的id类型的类 那我们看下 这个代理是什么</uiviewcontrolleranimatedtransitioning></li>
-</ol>
+</code></pre></li>
+<li><p>既然动画是 返回<uiviewcontrolleranimatedtransitioning>的id类型的类 那我们看下 这个代理是什么</uiviewcontrolleranimatedtransitioning></p>
 <pre><code>返回动画执行时间
 - (NSTimeInterval)transitionDuration:(nullable id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;
 关于自定义动画就要在这里操作了
 - (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;
-</code></pre><ol>
+</code></pre></li>
 <li><p>再看下交互代理有什么 UIViewControllerInteractiveTransitioning</p>
 <pre><code>系统有这个类是遵循这个交互代理的 我们只要继承这个类就行了
 NS_CLASS_AVAILABLE_IOS(7_0) @interface UIPercentDrivenInteractiveTransition : NSObject &lt;UIViewControllerInteractiveTransitioning&gt;
