@@ -100,7 +100,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/03/28/关于转场动画之Nav转场/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
 <meta property="og:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
-<meta property="og:updated_time" content="2018-03-28T03:39:56.379Z">
+<meta property="og:updated_time" content="2018-03-28T03:43:37.799Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="关于转场动画之Nav转场">
 <meta name="twitter:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画UINavigationController 的 push pop 转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这">
@@ -375,14 +375,14 @@
 <li><p>主要会涉及到两个UINavigationController的代理 </p>
 <pre><code>看返回参数 这是个返回动画的代理
 - (nullable id &lt;UIViewControllerAnimatedTransitioning&gt;)navigationController:(UINavigationController *)navigationController
-                           animationControllerForOperation:(UINavigationControllerOperation)operation
-                                        fromViewController:(UIViewController *)fromVC
-                                          toViewController:(UIViewController *)toVC  NS_AVAILABLE_IOS(7_0);
+                                   animationControllerForOperation:(UINavigationControllerOperation)operation
+                                                fromViewController:(UIViewController *)fromVC
+                                                  toViewController:(UIViewController *)toVC  NS_AVAILABLE_IOS(7_0);
 </code></pre></li>
 </ol>
 <pre><code>看返回参数 这是个交互代理 就是手势驱动了
 - (nullable id &lt;UIViewControllerInteractiveTransitioning&gt;)navigationController:(UINavigationController *)navigationController
-                  interactionControllerForAnimationController:(id &lt;UIViewControllerAnimatedTransitioning&gt;) animationController NS_AVAILABLE_IOS(7_0);
+                          interactionControllerForAnimationController:(id &lt;UIViewControllerAnimatedTransitioning&gt;) animationController NS_AVAILABLE_IOS(7_0);
 </code></pre><ol>
 <li>既然动画是 返回<uiviewcontrolleranimatedtransitioning>的id类型的类 那我们看下 这个代理是什么</uiviewcontrolleranimatedtransitioning></li>
 </ol>
@@ -392,15 +392,15 @@
 - (void)animateTransition:(id &lt;UIViewControllerContextTransitioning&gt;)transitionContext;
 </code></pre><ol>
 <li><p>再看下交互代理有什么 UIViewControllerInteractiveTransitioning</p>
-<pre><code>系统有这个类是遵循这个交互代理的 我们只要继承这个类就行了
-NS_CLASS_AVAILABLE_IOS(7_0) @interface UIPercentDrivenInteractiveTransition : NSObject &lt;UIViewControllerInteractiveTransitioning&gt;
-
-关于这个类的几个重要的方法
-- (void)pauseInteractiveTransition NS_AVAILABLE_IOS(10_0);
-- (void)updateInteractiveTransition:(CGFloat)percentComplete;
-- (void)cancelInteractiveTransition;
-- (void)finishInteractiveTransition;
-</code></pre></li>
+<p> 系统有这个类是遵循这个交互代理的 我们只要继承这个类就行了<br> NS_CLASS_AVAILABLE_IOS(7_0) @interface UIPercentDrivenInteractiveTransition : NSObject <uiviewcontrollerinteractivetransitioning></uiviewcontrollerinteractivetransitioning></p>
+<p> 关于这个类的几个重要的方法</p>
+<ul>
+<li>(void)pauseInteractiveTransition NS_AVAILABLE_IOS(10_0);</li>
+<li>(void)updateInteractiveTransition:(CGFloat)percentComplete;</li>
+<li>(void)cancelInteractiveTransition;</li>
+<li>(void)finishInteractiveTransition;</li>
+</ul>
+</li>
 </ol>
 <h5 id="至此-所有用到的类及方法简单的介绍了-Let’s-do-it"><a href="#至此-所有用到的类及方法简单的介绍了-Let’s-do-it" class="headerlink" title="至此 所有用到的类及方法简单的介绍了 Let’s do it"></a>至此 所有用到的类及方法简单的介绍了 Let’s do it</h5><h4 id="我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。"><a href="#我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。" class="headerlink" title="我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。"></a>我的实现目的是为了省化系统的一堆代理，就算你不知道有哪些代理一样能自定义转场动画。</h4><h5 id="关于UINavigationController的处理：可以在自定义的baseNav里做处理-也可以建个UINavigationController的Category"><a href="#关于UINavigationController的处理：可以在自定义的baseNav里做处理-也可以建个UINavigationController的Category" class="headerlink" title="关于UINavigationController的处理：可以在自定义的baseNav里做处理 也可以建个UINavigationController的Category"></a>关于UINavigationController的处理：可以在自定义的baseNav里做处理 也可以建个UINavigationController的Category</h5><pre><code>利用runtime 做个方法替换
 + (void)load {
