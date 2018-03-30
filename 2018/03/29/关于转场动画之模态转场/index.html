@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="转场动画 present dismiss" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Tr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于转场动画之模态转场">
+<meta property="og:url" content="http://yoursite.com/2018/03/29/关于转场动画之模态转场/index.html">
+<meta property="og:site_name" content="ongfei | 一步一步往上爬">
+<meta property="og:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Tr">
+<meta property="og:updated_time" content="2018-03-30T03:01:25.450Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于转场动画之模态转场">
+<meta name="twitter:description" content="视图控制器转换(View Controller Transition) 俗称 关于转场动画视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Tr">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/29/关于转场动画之模态转场/"/>
+
+
+
+
+
+  <title>关于转场动画之模态转场 | ongfei | 一步一步往上爬</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ongfei | 一步一步往上爬</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ongfei | 一步一步往上爬</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+
+  <a href="https://github.com/ongfei"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/关于转场动画之模态转场/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ongfei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ico.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ongfei | 一步一步往上爬">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于转场动画之模态转场</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-29T17:17:32+08:00">
+                2018-03-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="视图控制器转换-View-Controller-Transition-俗称-关于转场动画"><a href="#视图控制器转换-View-Controller-Transition-俗称-关于转场动画" class="headerlink" title="视图控制器转换(View Controller Transition) 俗称 关于转场动画"></a>视图控制器转换(View Controller Transition) 俗称 关于转场动画</h3><h6 id="视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如-UINavigationController，UITabBarController-UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态-Modal-显示。View-Controller-Transition-是什么？在-NavigationController-里-push-或-pop-一个-View-Controller，在-TabBarController-中切换到其他-View-Controller，以-Modal-方式显示另外一个-View-Controller，这些都是-View-Controller-Transition。"><a href="#视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如-UINavigationController，UITabBarController-UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态-Modal-显示。View-Controller-Transition-是什么？在-NavigationController-里-push-或-pop-一个-View-Controller，在-TabBarController-中切换到其他-View-Controller，以-Modal-方式显示另外一个-View-Controller，这些都是-View-Controller-Transition。" class="headerlink" title="视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Transition 是什么？在 NavigationController 里 push 或 pop 一个 View Controller，在 TabBarController 中切换到其他 View Controller，以 Modal 方式显示另外一个 View Controller，这些都是 View Controller Transition。"></a>视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Transition 是什么？在 NavigationController 里 push 或 pop 一个 View Controller，在 TabBarController 中切换到其他 View Controller，以 Modal 方式显示另外一个 View Controller，这些都是 View Controller Transition。</h6><h5 id="UINavigationController-和-UITabBarController-这两个容器-VC-的根视图在屏幕上是不可见的-或者说是透明的-，可见的只是内嵌在这两者中的子-VC-中的视图，转场是从子-VC-的视图转换到另外一个子-VC-的视图，其根视图并未参与转场；而-Modal-转场，以-presentation-为例，是从-presentingView-转换到-presentedView，根视图-presentingView-也就是-fromView-参与了转场。而且-NavigationController-和-TabBarController-转场中的-containerView-也并非这两者的根视图。"><a href="#UINavigationController-和-UITabBarController-这两个容器-VC-的根视图在屏幕上是不可见的-或者说是透明的-，可见的只是内嵌在这两者中的子-VC-中的视图，转场是从子-VC-的视图转换到另外一个子-VC-的视图，其根视图并未参与转场；而-Modal-转场，以-presentation-为例，是从-presentingView-转换到-presentedView，根视图-presentingView-也就是-fromView-参与了转场。而且-NavigationController-和-TabBarController-转场中的-containerView-也并非这两者的根视图。" class="headerlink" title="UINavigationController 和 UITabBarController 这两个容器 VC 的根视图在屏幕上是不可见的(或者说是透明的)，可见的只是内嵌在这两者中的子 VC 中的视图，转场是从子 VC 的视图转换到另外一个子 VC 的视图，其根视图并未参与转场；而 Modal 转场，以 presentation 为例，是从 presentingView 转换到 presentedView，根视图 presentingView 也就是 fromView 参与了转场。而且 NavigationController 和 TabBarController 转场中的 containerView 也并非这两者的根视图。"></a>UINavigationController 和 UITabBarController 这两个容器 VC 的根视图在屏幕上是不可见的(或者说是透明的)，可见的只是内嵌在这两者中的子 VC 中的视图，转场是从子 VC 的视图转换到另外一个子 VC 的视图，其根视图并未参与转场；而 Modal 转场，以 presentation 为例，是从 presentingView 转换到 presentedView，根视图 presentingView 也就是 fromView 参与了转场。而且 NavigationController 和 TabBarController 转场中的 containerView 也并非这两者的根视图。</h5><h5 id="Modal-转场与两种容器-VC-的转场的另外一个不同是：Modal-转场结束后-presentingView-可能依然可见，UIModalPresentationPageSheet-模式就是这样。这种不同导致了-Modal-转场和容器-VC-的转场对-fromView-的处理差异：容器-VC-的转场结束后-fromView-会被主动移出视图结构，这是可预见的结果，我们也可以在转场结束前手动移除；而-Modal-转场中，presentation-结束后-presentingView-fromView-并未主动被从视图结构中移除。准确来说，是-UIModalPresentationCustom-这种模式下的-Modal-转场结束时-fromView-并未从视图结构中移除；UIModalPresentationFullScreen-模式的-Modal-转场结束后-fromView-依然主动被从视图结构中移除了。这种差异导致在处理-dismissal-转场的时候很容易出现问题，没有意识到这个不同点的话出错时就会毫无头绪。下面来看看-dismissal-转场时的场景。"><a href="#Modal-转场与两种容器-VC-的转场的另外一个不同是：Modal-转场结束后-presentingView-可能依然可见，UIModalPresentationPageSheet-模式就是这样。这种不同导致了-Modal-转场和容器-VC-的转场对-fromView-的处理差异：容器-VC-的转场结束后-fromView-会被主动移出视图结构，这是可预见的结果，我们也可以在转场结束前手动移除；而-Modal-转场中，presentation-结束后-presentingView-fromView-并未主动被从视图结构中移除。准确来说，是-UIModalPresentationCustom-这种模式下的-Modal-转场结束时-fromView-并未从视图结构中移除；UIModalPresentationFullScreen-模式的-Modal-转场结束后-fromView-依然主动被从视图结构中移除了。这种差异导致在处理-dismissal-转场的时候很容易出现问题，没有意识到这个不同点的话出错时就会毫无头绪。下面来看看-dismissal-转场时的场景。" class="headerlink" title="Modal 转场与两种容器 VC 的转场的另外一个不同是：Modal 转场结束后 presentingView 可能依然可见，UIModalPresentationPageSheet 模式就是这样。这种不同导致了 Modal 转场和容器 VC 的转场对 fromView 的处理差异：容器 VC 的转场结束后 fromView 会被主动移出视图结构，这是可预见的结果，我们也可以在转场结束前手动移除；而 Modal 转场中，presentation 结束后 presentingView(fromView) 并未主动被从视图结构中移除。准确来说，是 UIModalPresentationCustom 这种模式下的 Modal 转场结束时 fromView 并未从视图结构中移除；UIModalPresentationFullScreen 模式的 Modal 转场结束后 fromView 依然主动被从视图结构中移除了。这种差异导致在处理 dismissal 转场的时候很容易出现问题，没有意识到这个不同点的话出错时就会毫无头绪。下面来看看 dismissal 转场时的场景。"></a>Modal 转场与两种容器 VC 的转场的另外一个不同是：Modal 转场结束后 presentingView 可能依然可见，UIModalPresentationPageSheet 模式就是这样。这种不同导致了 Modal 转场和容器 VC 的转场对 fromView 的处理差异：容器 VC 的转场结束后 fromView 会被主动移出视图结构，这是可预见的结果，我们也可以在转场结束前手动移除；而 Modal 转场中，presentation 结束后 presentingView(fromView) 并未主动被从视图结构中移除。准确来说，是 UIModalPresentationCustom 这种模式下的 Modal 转场结束时 fromView 并未从视图结构中移除；UIModalPresentationFullScreen 模式的 Modal 转场结束后 fromView 依然主动被从视图结构中移除了。这种差异导致在处理 dismissal 转场的时候很容易出现问题，没有意识到这个不同点的话出错时就会毫无头绪。下面来看看 dismissal 转场时的场景。</h5><h3 id="划重点"><a href="#划重点" class="headerlink" title="划重点"></a>划重点</h3><ol>
+<li>UIModalPresentationFullScreen 模式：presentation 后，presentingView 被主动移出视图结构，在 dismissal 中 presentingView 是 toView 的角色，其将会重新加入 containerView 中，实际上，我们不主动将其加入，UIKit 也会这么做，前面的两种容器控制器的转场里不是这样处理的，不过这个差异基本没什么影响。</li>
+<li>UIModalPresentationCustom 模式：转场时 containerView 并不担任 presentingView 的父视图，后者由 UIKit 另行管理。在 presentation 后，fromView(presentingView) 未被移出视图结构，在 dismissal 中，注意不要像其他转场中那样将 toView(presentingView) 加入 containerView 中，否则本来可见的 presentingView 将会被移除出自身所处的视图结构消失不见。如果你在使用 Custom 模式时没有注意到这点，就很容易掉进这个陷阱而很难察觉问题所在。</li>
+</ol>
+<h4 id="小结：经过上面的尝试，建议是，不要干涉官方对-Modal-转场的处理，我们去适应它。在-Custom-模式下，由于-presentingView-不受-containerView-管理，在-dismissal-转场中不要像其他的转场那样将-toView-presentingView-加入-containerView，否则-presentingView-将消失不见，而应用则也很可能假死；而在-presentation-转场中，切记不要手动将-fromView-presentingView-移出其父视图。"><a href="#小结：经过上面的尝试，建议是，不要干涉官方对-Modal-转场的处理，我们去适应它。在-Custom-模式下，由于-presentingView-不受-containerView-管理，在-dismissal-转场中不要像其他的转场那样将-toView-presentingView-加入-containerView，否则-presentingView-将消失不见，而应用则也很可能假死；而在-presentation-转场中，切记不要手动将-fromView-presentingView-移出其父视图。" class="headerlink" title="小结：经过上面的尝试，建议是，不要干涉官方对 Modal 转场的处理，我们去适应它。在 Custom 模式下，由于 presentingView 不受 containerView 管理，在 dismissal 转场中不要像其他的转场那样将 toView(presentingView) 加入 containerView，否则 presentingView 将消失不见，而应用则也很可能假死；而在 presentation 转场中，切记不要手动将 fromView(presentingView) 移出其父视图。"></a>小结：经过上面的尝试，建议是，不要干涉官方对 Modal 转场的处理，我们去适应它。在 Custom 模式下，由于 presentingView 不受 containerView 管理，在 dismissal 转场中不要像其他的转场那样将 toView(presentingView) 加入 containerView，否则 presentingView 将消失不见，而应用则也很可能假死；而在 presentation 转场中，切记不要手动将 fromView(presentingView) 移出其父视图。</h4><hr>
+<h4 id="模态的转场代理"><a href="#模态的转场代理" class="headerlink" title="模态的转场代理"></a>模态的转场代理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">@property (nullable, nonatomic, weak) id &lt;UIViewControllerTransitioningDelegate&gt; transitioningDelegate NS_AVAILABLE_IOS(7_0);</div></pre></td></tr></table></figure>
+<hr>
+<h4 id="模态转场动画及手势代理"><a href="#模态转场动画及手势代理" class="headerlink" title="模态转场动画及手势代理"></a>模态转场动画及手势代理</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">和Nav的不同 模态的present和dismiss是分开的</div><div class="line">presented 要跳转的vc</div><div class="line">presenting 当前的 如果当前的是放在Nav上的vc 那么这个就是Nav</div><div class="line">source 当前的vc</div><div class="line"></div><div class="line">- (nullable id &lt;UIViewControllerAnimatedTransitioning&gt;)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source;</div><div class="line"></div><div class="line">- (nullable id &lt;UIViewControllerAnimatedTransitioning&gt;)animationControllerForDismissedController:(UIViewController *)dismissed;</div><div class="line"></div><div class="line">模态的手势present和dismiss也是分开的</div><div class="line">不需要的返回nil</div><div class="line"></div><div class="line">- (nullable id &lt;UIViewControllerInteractiveTransitioning&gt;)interactionControllerForPresentation:(id &lt;UIViewControllerAnimatedTransitioning&gt;)animator;</div><div class="line"></div><div class="line">- (nullable id &lt;UIViewControllerInteractiveTransitioning&gt;)interactionControllerForDismissal:(id &lt;UIViewControllerAnimatedTransitioning&gt;)animator;</div><div class="line"></div><div class="line">8.0以后的api</div><div class="line"></div><div class="line">- (nullable UIPresentationController *)presentationControllerForPresentedViewController:(UIViewController *)presented presentingViewController:(nullable UIViewController *)presenting sourceViewController:(UIViewController *)source NS_AVAILABLE_IOS(8_0);</div></pre></td></tr></table></figure>
+<hr>
+<h5 id="手势处理是和Nav的处理是一样的"><a href="#手势处理是和Nav的处理是一样的" class="headerlink" title="手势处理是和Nav的处理是一样的"></a>手势处理是和Nav的处理是一样的</h5><hr>
+<h4 id="iOS-8-api：UIPresentationController"><a href="#iOS-8-api：UIPresentationController" class="headerlink" title="iOS 8 api：UIPresentationController"></a>iOS 8 api：UIPresentationController</h4><h5 id="iOS-8-针对分辨率日益分裂的-iOS-设备带来了新的适应性布局方案，以往有些专为在-iPad-上设计的控制器也能在-iPhone-上使用了，一个大变化是在视图控制器的-模态-显示过程，包括转场过程，引入了UIPresentationController类，该类接管了-UIViewController-的显示过程，为其提供转场和视图管理支持。当-UIViewController-的modalPresentationStyle属性为-Custom时-不支持-FullScreen-，我们有机会通过控制器的转场代理提供UIPresentationController的子类对-Modal-转场进行进一步的定制。官方对该类参与转场的流程和使用方法有非常详细的说明：Creating-Custom-Presentations。"><a href="#iOS-8-针对分辨率日益分裂的-iOS-设备带来了新的适应性布局方案，以往有些专为在-iPad-上设计的控制器也能在-iPhone-上使用了，一个大变化是在视图控制器的-模态-显示过程，包括转场过程，引入了UIPresentationController类，该类接管了-UIViewController-的显示过程，为其提供转场和视图管理支持。当-UIViewController-的modalPresentationStyle属性为-Custom时-不支持-FullScreen-，我们有机会通过控制器的转场代理提供UIPresentationController的子类对-Modal-转场进行进一步的定制。官方对该类参与转场的流程和使用方法有非常详细的说明：Creating-Custom-Presentations。" class="headerlink" title="iOS 8 针对分辨率日益分裂的 iOS 设备带来了新的适应性布局方案，以往有些专为在 iPad 上设计的控制器也能在 iPhone 上使用了，一个大变化是在视图控制器的(模态)显示过程，包括转场过程，引入了UIPresentationController类，该类接管了 UIViewController 的显示过程，为其提供转场和视图管理支持。当 UIViewController 的modalPresentationStyle属性为.Custom时(不支持.FullScreen)，我们有机会通过控制器的转场代理提供UIPresentationController的子类对 Modal 转场进行进一步的定制。官方对该类参与转场的流程和使用方法有非常详细的说明：Creating Custom Presentations。"></a>iOS 8 针对分辨率日益分裂的 iOS 设备带来了新的适应性布局方案，以往有些专为在 iPad 上设计的控制器也能在 iPhone 上使用了，一个大变化是在视图控制器的(模态)显示过程，包括转场过程，引入了UIPresentationController类，该类接管了 UIViewController 的显示过程，为其提供转场和视图管理支持。当 UIViewController 的modalPresentationStyle属性为.Custom时(不支持.FullScreen)，我们有机会通过控制器的转场代理提供UIPresentationController的子类对 Modal 转场进行进一步的定制。官方对该类参与转场的流程和使用方法有非常详细的说明：<a href="https://developer.apple.com/library/content/featuredarticles/ViewControllerPGforiPhoneOS/DefiningCustomPresentations.html#//apple_ref/doc/uid/TP40007457-CH25-SW1" target="_blank" rel="external">Creating Custom Presentations</a>。</h5><h4 id="UIPresentationController类主要给-Modal-转场带来了以下几点变化："><a href="#UIPresentationController类主要给-Modal-转场带来了以下几点变化：" class="headerlink" title="UIPresentationController类主要给 Modal 转场带来了以下几点变化："></a><a href="https://developer.apple.com/documentation/uikit/uipresentationcontroller" target="_blank" rel="external">UIPresentationController</a>类主要给 Modal 转场带来了以下几点变化：</h4><ol>
+<li>定制 presentedView 的外观：设定 presentedView 的尺寸以及在 containerView 中添加自定义视图并为这些视图添加动画；</li>
+<li>可以选择是否移除 presentingView；</li>
+<li>可以在不需要动画控制器的情况下单独工作；</li>
+<li>iOS 8 中的适应性布局。</li>
+</ol>
+<p>以上变化中第1点 iOS 7 中也能做到，3和4是 iOS 8 带来的新特性，只有第2点才真正解决了 iOS 7 中的痛点。在 iOS 7 中定制外观时，动画控制器需要负责管理额外添加的的视图，UIPresentationController类将该功能剥离了出来独立负责，其提供了如下的方法参与转场，对转场过程实现了更加细致的控制，从命名便可以看出与动画控制器里的animateTransition:的关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">//presentationTransitionWillBegin 是在呈现过渡即将开始的时候被调用的。</div><div class="line">- (void)presentationTransitionWillBegin;</div><div class="line"></div><div class="line">//presentationTransitionDidEnd: 是在呈现过渡结束时被调用的，并且该方法提供一个布尔变量来判断过渡效果是否完成。</div><div class="line">- (void)presentationTransitionDidEnd:(BOOL)completed;</div><div class="line"></div><div class="line">- (void)dismissalTransitionWillBegin;</div><div class="line"></div><div class="line">- (void)dismissalTransitionDidEnd:(BOOL)completed;</div><div class="line"></div><div class="line">//处理被呈现的 view 并没有完全填充整个屏幕，而是很小的一个矩形。</div><div class="line">- (CGRect)frameOfPresentedViewInContainerView&#123;</div><div class="line">    </div><div class="line">    CGFloat windowH = [UIScreen mainScreen].bounds.size.height;</div><div class="line">    CGFloat windowW = [UIScreen mainScreen].bounds.size.width;</div><div class="line">    </div><div class="line">    self.presentedView.frame = CGRectMake(0, windowH - 300, windowW, 300);</div><div class="line">    </div><div class="line">    return self.presentedView.frame;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="没有-presentingView-是因为-Custom-模式下-presentingView-不受-containerView-管理，UIPresentationController类并没有改变这一点。iOS-8-扩充了转场环境协议，可以通过viewForKey-方便获取转场的视图，而该方法在-Modal-转场中获取的是presentedView-返回的视图。因此我们可以在子类中将-presentedView-包装在其他视图后重写该方法返回包装后的视图当做-presentedView-在动画控制器中使用。"><a href="#没有-presentingView-是因为-Custom-模式下-presentingView-不受-containerView-管理，UIPresentationController类并没有改变这一点。iOS-8-扩充了转场环境协议，可以通过viewForKey-方便获取转场的视图，而该方法在-Modal-转场中获取的是presentedView-返回的视图。因此我们可以在子类中将-presentedView-包装在其他视图后重写该方法返回包装后的视图当做-presentedView-在动画控制器中使用。" class="headerlink" title="没有 presentingView 是因为 Custom 模式下 presentingView 不受 containerView 管理，UIPresentationController类并没有改变这一点。iOS 8 扩充了转场环境协议，可以通过viewForKey:方便获取转场的视图，而该方法在 Modal 转场中获取的是presentedView()返回的视图。因此我们可以在子类中将 presentedView 包装在其他视图后重写该方法返回包装后的视图当做 presentedView 在动画控制器中使用。"></a>没有 presentingView 是因为 Custom 模式下 presentingView 不受 containerView 管理，UIPresentationController类并没有改变这一点。iOS 8 扩充了转场环境协议，可以通过viewForKey:方便获取转场的视图，而该方法在 Modal 转场中获取的是presentedView()返回的视图。因此我们可以在子类中将 presentedView 包装在其他视图后重写该方法返回包装后的视图当做 presentedView 在动画控制器中使用。</h5><h5 id="参与角色都准备好了，但有个问题，无法直接访问动画控制器，不知道转场的持续时间，怎么与转场过程同步？这时候前面提到的用处甚少的转场协调器-Transition-Coordinator-将在这里派上用场。该对象可通过-UIViewController-的transitionCoordinator-方法获取，这是-iOS-7-为自定义转场新增的-API，该方法只在控制器处于转场过程中才返回一个与当前转场有关的有效对象，其他时候返回-nil。"><a href="#参与角色都准备好了，但有个问题，无法直接访问动画控制器，不知道转场的持续时间，怎么与转场过程同步？这时候前面提到的用处甚少的转场协调器-Transition-Coordinator-将在这里派上用场。该对象可通过-UIViewController-的transitionCoordinator-方法获取，这是-iOS-7-为自定义转场新增的-API，该方法只在控制器处于转场过程中才返回一个与当前转场有关的有效对象，其他时候返回-nil。" class="headerlink" title="参与角色都准备好了，但有个问题，无法直接访问动画控制器，不知道转场的持续时间，怎么与转场过程同步？这时候前面提到的用处甚少的转场协调器(Transition Coordinator)将在这里派上用场。该对象可通过 UIViewController 的transitionCoordinator()方法获取，这是 iOS 7 为自定义转场新增的 API，该方法只在控制器处于转场过程中才返回一个与当前转场有关的有效对象，其他时候返回 nil。"></a>参与角色都准备好了，但有个问题，无法直接访问动画控制器，不知道转场的持续时间，怎么与转场过程同步？这时候前面提到的用处甚少的转场协调器(Transition Coordinator)将在这里派上用场。该对象可通过 UIViewController 的transitionCoordinator()方法获取，这是 iOS 7 为自定义转场新增的 API，该方法只在控制器处于转场过程中才返回一个与当前转场有关的有效对象，其他时候返回 nil。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//与动画控制器中的转场动画同步，执行其他动画</div><div class="line">animateAlongsideTransition:completion:</div><div class="line">//与动画控制器中的转场动画同步，在指定的视图内执行动画</div><div class="line">animateAlongsideTransitionInView:animation:completion:</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">   /**</div><div class="line">     *  使用Coordinator可以在整个viewcontroller转场动画中增加一些你自己的额外的视图元素的动画</div><div class="line">     */</div><div class="line">    [self.transitionCoordinator animateAlongsideTransition:^(id&lt;UIViewControllerTransitionCoordinatorContext&gt;  _Nonnull context) &#123;</div><div class="line">        UIView *containerView = [context containerView];</div><div class="line">        UIView *fromeView = [context viewForKey:UITransitionContextFromViewKey];</div><div class="line">        UIView *toView = [context viewForKey:UITransitionContextToViewKey];</div><div class="line">        UIViewController *fromeVC = [context viewControllerForKey: UITransitionContextFromViewControllerKey];</div><div class="line">        UIViewController *toVC = [context viewControllerForKey: UITransitionContextToViewControllerKey];</div><div class="line">		</div><div class="line">		NSLog(@&quot;%@-%@-%@-%@-%@&quot;,containerView,fromeView,toView,fromeVC,toVC);</div><div class="line"></div><div class="line">/*</div><div class="line">&lt;UITransitionView: 0x7f97c5b009e0; frame = (0 0; 414 736); autoresize = W+H; layer = &lt;CALayer: 0x604000226360&gt;&gt;-(null)-&lt;UIView: 0x7f97c5901140; frame = (0 436; 414 300); autoresize = W+H; gestureRecognizers = &lt;NSArray: 0x608000257ee0&gt;; layer = &lt;CALayer: 0x6080002281e0&gt;&gt;-&lt;UITabBarController: 0x7f97c501ec00&gt;-&lt;FViewController: 0x7f97c2e0fdd0&gt;</div><div class="line"></div><div class="line">*/</div><div class="line"></div><div class="line">    &#125; completion:^(id&lt;UIViewControllerTransitionCoordinatorContext&gt;  _Nonnull context) &#123;</div><div class="line">        NSLog(@&quot;completion&quot;);</div><div class="line">    &#125;];</div><div class="line">    </div><div class="line">    //当手势动结束后会回调该接口</div><div class="line">//    [self.transitionCoordinator notifyWhenInteractionEndsUsingBlock:^(id&lt;UIViewControllerTransitionCoordinatorContext&gt;  _Nonnull context) &#123;</div><div class="line">//        NSLog(@&quot;notifyWhenInteractionEndsUsingBlock&quot;);</div><div class="line">//    &#125;];</div></pre></td></tr></table></figure>
+<h5 id="OverlayPresentationController类接手了-dimmingView-的工作后，需要回到上一节OverlayAnimationController里把涉及-dimmingView-的部分删除，然后在-presentedVC-的转场代理属性transitioningDelegate中提供该类实例就可以实现和上一节同样的效果。"><a href="#OverlayPresentationController类接手了-dimmingView-的工作后，需要回到上一节OverlayAnimationController里把涉及-dimmingView-的部分删除，然后在-presentedVC-的转场代理属性transitioningDelegate中提供该类实例就可以实现和上一节同样的效果。" class="headerlink" title="OverlayPresentationController类接手了 dimmingView 的工作后，需要回到上一节OverlayAnimationController里把涉及 dimmingView 的部分删除，然后在 presentedVC 的转场代理属性transitioningDelegate中提供该类实例就可以实现和上一节同样的效果。"></a>OverlayPresentationController类接手了 dimmingView 的工作后，需要回到上一节OverlayAnimationController里把涉及 dimmingView 的部分删除，然后在 presentedVC 的转场代理属性transitioningDelegate中提供该类实例就可以实现和上一节同样的效果。</h5><h5 id="UIViewControllerTransitionCoordinator这个协议没太深入了解，引用别人的解释如下："><a href="#UIViewControllerTransitionCoordinator这个协议没太深入了解，引用别人的解释如下：" class="headerlink" title="UIViewControllerTransitionCoordinator这个协议没太深入了解，引用别人的解释如下："></a>UIViewControllerTransitionCoordinator这个协议没太深入了解，引用别人的解释如下：</h5><blockquote>
+<p>transitioning 和 coordinator 都是用于自定义动画，但是二者定义的维度不一样，A主要用于完全自定义系统的viewController动画显示，例如present,push等等了，当然你说是不是用了transitioning就不能用coordingator呢，当然也不是，coordinator本质的系统设计想法是在大的viewcontroller转场动画后，用于viewController内部小的UI元素做动画，这些个小的UI元素的动画和大的转场动画在同一个动画上下文中，这样是不是就可以让我们的动画变得很丰富呢？我不说你也知道，��（装波逼 ~~）<br>全动画逻辑在苹果哪里的说法叫 non interaction animation；大家肯定直接可以想到non interaction animation反面就是 interaction animation，我这里把这个翻译成交互式动画，一个典型的例子就是我们导航控件手势向右滑动退出了，实现这个交互式动画需要配合系统提供的UIPercentDrivenInteractiveTransition，手势外加UIPercentDrivenInteractiveTransition就可以实现你意向不到的交互式动画了</p>
+<p>系统的导航控件 navigationcontroller也提供了自定义的delegate ，本质和viewcontroller一样</p>
+<p>站在更高的层面思考，这个自定义动画的逻辑就是系统将相关动画的控制参数通过delegate全部交给你来做，我们自己做一个应该也是 so easy 的</p>
+</blockquote>
+<hr>
+<h4 id="最后说下坑"><a href="#最后说下坑" class="headerlink" title="最后说下坑"></a>最后说下坑</h4><h5 id="写动画的时候要注意style是FullSceen还是Custom，差别见上面划的重点"><a href="#写动画的时候要注意style是FullSceen还是Custom，差别见上面划的重点" class="headerlink" title="写动画的时候要注意style是FullSceen还是Custom，差别见上面划的重点"></a>写动画的时候要注意style是FullSceen还是Custom，差别见上面划的重点</h5><h5 id="iOS-8-为-lt-UIViewControllerContextTransitioning-gt-协议添加了viewForKey-方法以方便获取-fromView-和-toView，但是在-Modal-转场里要注意，从上面可以知道，Custom-模式下，presentingView-并不受-containerView-管理，这时通过viewForKey-方法来获取-presentingView-得到的是-nil，必须通过viewControllerForKey-得到-presentingVC-后来获取。因此在-Modal-转场中，较稳妥的方法是从-fromVC-和-toVC-中获取-fromView-和-toView。"><a href="#iOS-8-为-lt-UIViewControllerContextTransitioning-gt-协议添加了viewForKey-方法以方便获取-fromView-和-toView，但是在-Modal-转场里要注意，从上面可以知道，Custom-模式下，presentingView-并不受-containerView-管理，这时通过viewForKey-方法来获取-presentingView-得到的是-nil，必须通过viewControllerForKey-得到-presentingVC-后来获取。因此在-Modal-转场中，较稳妥的方法是从-fromVC-和-toVC-中获取-fromView-和-toView。" class="headerlink" title="iOS 8 为&lt; UIViewControllerContextTransitioning &gt;协议添加了viewForKey:方法以方便获取 fromView 和 toView，但是在 Modal 转场里要注意，从上面可以知道，Custom 模式下，presentingView 并不受 containerView 管理，这时通过viewForKey:方法来获取 presentingView 得到的是 nil，必须通过viewControllerForKey:得到 presentingVC 后来获取。因此在 Modal 转场中，较稳妥的方法是从 fromVC 和 toVC 中获取 fromView 和 toView。"></a>iOS 8 为&lt; UIViewControllerContextTransitioning &gt;协议添加了viewForKey:方法以方便获取 fromView 和 toView，但是在 Modal 转场里要注意，从上面可以知道，Custom 模式下，presentingView 并不受 containerView 管理，这时通过viewForKey:方法来获取 presentingView 得到的是 nil，必须通过viewControllerForKey:得到 presentingVC 后来获取。因此在 Modal 转场中，较稳妥的方法是从 fromVC 和 toVC 中获取 fromView 和 toView。</h5>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/present-dismiss/" rel="tag"># present-dismiss</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/28/关于转场动画之Nav转场/" rel="next" title="关于转场动画之Nav转场">
+                <i class="fa fa-chevron-left"></i> 关于转场动画之Nav转场
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ico.jpg"
+               alt="ongfei" />
+          <p class="site-author-name" itemprop="name">ongfei</p>
+           
+              <p class="site-description motion-element" itemprop="description">低调做事 快乐做人</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ongfei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情连接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devtang.com" title="唐巧的技术博客" target="_blank">唐巧的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com" title="廖雪峰的官方网站" target="_blank">廖雪峰的官方网站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://baixin.io/archive/" title="潘柏信个人站" target="_blank">潘柏信个人站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devzeng.com/#blog" title="曾静的技术博客" target="_blank">曾静的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://limboy.me" title="limboy" target="_blank">limboy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://liuyanwei.jumppo.com" title="liuyanwei" target="_blank">liuyanwei</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://allluckly.cn" title="allluckly" target="_blank">allluckly</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#视图控制器转换-View-Controller-Transition-俗称-关于转场动画"><span class="nav-number">1.</span> <span class="nav-text">视图控制器转换(View Controller Transition) 俗称 关于转场动画</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如-UINavigationController，UITabBarController-UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态-Modal-显示。View-Controller-Transition-是什么？在-NavigationController-里-push-或-pop-一个-View-Controller，在-TabBarController-中切换到其他-View-Controller，以-Modal-方式显示另外一个-View-Controller，这些都是-View-Controller-Transition。"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">视图控制器中的视图显示在屏幕上有两种方式：最主要的方式是内嵌在容器控制器中，比如 UINavigationController，UITabBarController, UISplitController；由另外一个视图控制器显示它，这种方式通常被称为模态(Modal)显示。View Controller Transition 是什么？在 NavigationController 里 push 或 pop 一个 View Controller，在 TabBarController 中切换到其他 View Controller，以 Modal 方式显示另外一个 View Controller，这些都是 View Controller Transition。</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UINavigationController-和-UITabBarController-这两个容器-VC-的根视图在屏幕上是不可见的-或者说是透明的-，可见的只是内嵌在这两者中的子-VC-中的视图，转场是从子-VC-的视图转换到另外一个子-VC-的视图，其根视图并未参与转场；而-Modal-转场，以-presentation-为例，是从-presentingView-转换到-presentedView，根视图-presentingView-也就是-fromView-参与了转场。而且-NavigationController-和-TabBarController-转场中的-containerView-也并非这两者的根视图。"><span class="nav-number">1.0.1.</span> <span class="nav-text">UINavigationController 和 UITabBarController 这两个容器 VC 的根视图在屏幕上是不可见的(或者说是透明的)，可见的只是内嵌在这两者中的子 VC 中的视图，转场是从子 VC 的视图转换到另外一个子 VC 的视图，其根视图并未参与转场；而 Modal 转场，以 presentation 为例，是从 presentingView 转换到 presentedView，根视图 presentingView 也就是 fromView 参与了转场。而且 NavigationController 和 TabBarController 转场中的 containerView 也并非这两者的根视图。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modal-转场与两种容器-VC-的转场的另外一个不同是：Modal-转场结束后-presentingView-可能依然可见，UIModalPresentationPageSheet-模式就是这样。这种不同导致了-Modal-转场和容器-VC-的转场对-fromView-的处理差异：容器-VC-的转场结束后-fromView-会被主动移出视图结构，这是可预见的结果，我们也可以在转场结束前手动移除；而-Modal-转场中，presentation-结束后-presentingView-fromView-并未主动被从视图结构中移除。准确来说，是-UIModalPresentationCustom-这种模式下的-Modal-转场结束时-fromView-并未从视图结构中移除；UIModalPresentationFullScreen-模式的-Modal-转场结束后-fromView-依然主动被从视图结构中移除了。这种差异导致在处理-dismissal-转场的时候很容易出现问题，没有意识到这个不同点的话出错时就会毫无头绪。下面来看看-dismissal-转场时的场景。"><span class="nav-number">1.0.2.</span> <span class="nav-text">Modal 转场与两种容器 VC 的转场的另外一个不同是：Modal 转场结束后 presentingView 可能依然可见，UIModalPresentationPageSheet 模式就是这样。这种不同导致了 Modal 转场和容器 VC 的转场对 fromView 的处理差异：容器 VC 的转场结束后 fromView 会被主动移出视图结构，这是可预见的结果，我们也可以在转场结束前手动移除；而 Modal 转场中，presentation 结束后 presentingView(fromView) 并未主动被从视图结构中移除。准确来说，是 UIModalPresentationCustom 这种模式下的 Modal 转场结束时 fromView 并未从视图结构中移除；UIModalPresentationFullScreen 模式的 Modal 转场结束后 fromView 依然主动被从视图结构中移除了。这种差异导致在处理 dismissal 转场的时候很容易出现问题，没有意识到这个不同点的话出错时就会毫无头绪。下面来看看 dismissal 转场时的场景。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#划重点"><span class="nav-number">2.</span> <span class="nav-text">划重点</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#小结：经过上面的尝试，建议是，不要干涉官方对-Modal-转场的处理，我们去适应它。在-Custom-模式下，由于-presentingView-不受-containerView-管理，在-dismissal-转场中不要像其他的转场那样将-toView-presentingView-加入-containerView，否则-presentingView-将消失不见，而应用则也很可能假死；而在-presentation-转场中，切记不要手动将-fromView-presentingView-移出其父视图。"><span class="nav-number">2.1.</span> <span class="nav-text">小结：经过上面的尝试，建议是，不要干涉官方对 Modal 转场的处理，我们去适应它。在 Custom 模式下，由于 presentingView 不受 containerView 管理，在 dismissal 转场中不要像其他的转场那样将 toView(presentingView) 加入 containerView，否则 presentingView 将消失不见，而应用则也很可能假死；而在 presentation 转场中，切记不要手动将 fromView(presentingView) 移出其父视图。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模态的转场代理"><span class="nav-number">2.2.</span> <span class="nav-text">模态的转场代理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#模态转场动画及手势代理"><span class="nav-number">2.3.</span> <span class="nav-text">模态转场动画及手势代理</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#手势处理是和Nav的处理是一样的"><span class="nav-number">2.3.1.</span> <span class="nav-text">手势处理是和Nav的处理是一样的</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#iOS-8-api：UIPresentationController"><span class="nav-number">2.4.</span> <span class="nav-text">iOS 8 api：UIPresentationController</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#iOS-8-针对分辨率日益分裂的-iOS-设备带来了新的适应性布局方案，以往有些专为在-iPad-上设计的控制器也能在-iPhone-上使用了，一个大变化是在视图控制器的-模态-显示过程，包括转场过程，引入了UIPresentationController类，该类接管了-UIViewController-的显示过程，为其提供转场和视图管理支持。当-UIViewController-的modalPresentationStyle属性为-Custom时-不支持-FullScreen-，我们有机会通过控制器的转场代理提供UIPresentationController的子类对-Modal-转场进行进一步的定制。官方对该类参与转场的流程和使用方法有非常详细的说明：Creating-Custom-Presentations。"><span class="nav-number">2.4.1.</span> <span class="nav-text">iOS 8 针对分辨率日益分裂的 iOS 设备带来了新的适应性布局方案，以往有些专为在 iPad 上设计的控制器也能在 iPhone 上使用了，一个大变化是在视图控制器的(模态)显示过程，包括转场过程，引入了UIPresentationController类，该类接管了 UIViewController 的显示过程，为其提供转场和视图管理支持。当 UIViewController 的modalPresentationStyle属性为.Custom时(不支持.FullScreen)，我们有机会通过控制器的转场代理提供UIPresentationController的子类对 Modal 转场进行进一步的定制。官方对该类参与转场的流程和使用方法有非常详细的说明：Creating Custom Presentations。</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UIPresentationController类主要给-Modal-转场带来了以下几点变化："><span class="nav-number">2.5.</span> <span class="nav-text">UIPresentationController类主要给 Modal 转场带来了以下几点变化：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#没有-presentingView-是因为-Custom-模式下-presentingView-不受-containerView-管理，UIPresentationController类并没有改变这一点。iOS-8-扩充了转场环境协议，可以通过viewForKey-方便获取转场的视图，而该方法在-Modal-转场中获取的是presentedView-返回的视图。因此我们可以在子类中将-presentedView-包装在其他视图后重写该方法返回包装后的视图当做-presentedView-在动画控制器中使用。"><span class="nav-number">2.5.1.</span> <span class="nav-text">没有 presentingView 是因为 Custom 模式下 presentingView 不受 containerView 管理，UIPresentationController类并没有改变这一点。iOS 8 扩充了转场环境协议，可以通过viewForKey:方便获取转场的视图，而该方法在 Modal 转场中获取的是presentedView()返回的视图。因此我们可以在子类中将 presentedView 包装在其他视图后重写该方法返回包装后的视图当做 presentedView 在动画控制器中使用。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#参与角色都准备好了，但有个问题，无法直接访问动画控制器，不知道转场的持续时间，怎么与转场过程同步？这时候前面提到的用处甚少的转场协调器-Transition-Coordinator-将在这里派上用场。该对象可通过-UIViewController-的transitionCoordinator-方法获取，这是-iOS-7-为自定义转场新增的-API，该方法只在控制器处于转场过程中才返回一个与当前转场有关的有效对象，其他时候返回-nil。"><span class="nav-number">2.5.2.</span> <span class="nav-text">参与角色都准备好了，但有个问题，无法直接访问动画控制器，不知道转场的持续时间，怎么与转场过程同步？这时候前面提到的用处甚少的转场协调器(Transition Coordinator)将在这里派上用场。该对象可通过 UIViewController 的transitionCoordinator()方法获取，这是 iOS 7 为自定义转场新增的 API，该方法只在控制器处于转场过程中才返回一个与当前转场有关的有效对象，其他时候返回 nil。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#OverlayPresentationController类接手了-dimmingView-的工作后，需要回到上一节OverlayAnimationController里把涉及-dimmingView-的部分删除，然后在-presentedVC-的转场代理属性transitioningDelegate中提供该类实例就可以实现和上一节同样的效果。"><span class="nav-number">2.5.3.</span> <span class="nav-text">OverlayPresentationController类接手了 dimmingView 的工作后，需要回到上一节OverlayAnimationController里把涉及 dimmingView 的部分删除，然后在 presentedVC 的转场代理属性transitioningDelegate中提供该类实例就可以实现和上一节同样的效果。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#UIViewControllerTransitionCoordinator这个协议没太深入了解，引用别人的解释如下："><span class="nav-number">2.5.4.</span> <span class="nav-text">UIViewControllerTransitionCoordinator这个协议没太深入了解，引用别人的解释如下：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最后说下坑"><span class="nav-number">2.6.</span> <span class="nav-text">最后说下坑</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#写动画的时候要注意style是FullSceen还是Custom，差别见上面划的重点"><span class="nav-number">2.6.1.</span> <span class="nav-text">写动画的时候要注意style是FullSceen还是Custom，差别见上面划的重点</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#iOS-8-为-lt-UIViewControllerContextTransitioning-gt-协议添加了viewForKey-方法以方便获取-fromView-和-toView，但是在-Modal-转场里要注意，从上面可以知道，Custom-模式下，presentingView-并不受-containerView-管理，这时通过viewForKey-方法来获取-presentingView-得到的是-nil，必须通过viewControllerForKey-得到-presentingVC-后来获取。因此在-Modal-转场中，较稳妥的方法是从-fromVC-和-toVC-中获取-fromView-和-toView。"><span class="nav-number">2.6.2.</span> <span class="nav-text">iOS 8 为< UIViewControllerContextTransitioning >协议添加了viewForKey:方法以方便获取 fromView 和 toView，但是在 Modal 转场里要注意，从上面可以知道，Custom 模式下，presentingView 并不受 containerView 管理，这时通过viewForKey:方法来获取 presentingView 得到的是 nil，必须通过viewControllerForKey:得到 presentingVC 后来获取。因此在 Modal 转场中，较稳妥的方法是从 fromVC 和 toVC 中获取 fromView 和 toView。</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ongfei</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>
