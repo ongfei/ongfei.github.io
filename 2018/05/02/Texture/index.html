@@ -126,7 +126,7 @@ ASMapNode
 ASControlNode
 ASScrollNode
 ASE">
-<meta property="og:updated_time" content="2018-08-24T09:12:56.427Z">
+<meta property="og:updated_time" content="2018-09-17T02:12:15.346Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Texture">
 <meta name="twitter:description" content="Texture介绍、优点、缺点等等就不说了， 百度 、 google 随便找
@@ -427,6 +427,7 @@ ASE">
 <p>如果直接init 就是默认的view</p>
 <h6 id="ASControlNode"><a href="#ASControlNode" class="headerlink" title="ASControlNode"></a>ASControlNode</h6><p>很多node都是继承这个。继承这个的node，直接可以加target-action。但是有个前提就是：不是自定义的view! 也就是初始化不是用的initWith..Block。否则 target-action不会执行，哪怕自定义view加手势也不会执行。</p>
 <p>如果需要自定义了view，又需要交互怎么办？ 用继承自NSObject的ASDisplayNode，可以给view加手势处理。</p>
+<h6 id="踩坑"><a href="#踩坑" class="headerlink" title="踩坑"></a>踩坑</h6><p>textView&amp;textField 有两个属性 inputView与inputAccessoryView用来处理键盘呼出和响应者的关系<br>如果同时设置view是inputview 又加载到别的视图上 就会崩溃父类错误<br>menuController显示的时候必须设置firstResponder<br>如果不小心在vc里面定义了属性inputView，menu就会崩溃下一级响应被重写</p>
 
       
     </div>
@@ -656,7 +657,7 @@ ASE">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Texture"><span class="nav-number">1.</span> <span class="nav-text">Texture</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nodes"><span class="nav-number">2.</span> <span class="nav-text">Nodes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#布局方式-：ASLayoutSpec"><span class="nav-number">3.</span> <span class="nav-text">布局方式 ：ASLayoutSpec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解"><span class="nav-number">4.</span> <span class="nav-text">理解</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">4.0.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#每个node都持有一个view"><span class="nav-number">4.0.2.</span> <span class="nav-text">每个node都持有一个view</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#ASControlNode"><span class="nav-number">4.0.3.</span> <span class="nav-text">ASControlNode</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Texture"><span class="nav-number">1.</span> <span class="nav-text">Texture</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nodes"><span class="nav-number">2.</span> <span class="nav-text">Nodes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#布局方式-：ASLayoutSpec"><span class="nav-number">3.</span> <span class="nav-text">布局方式 ：ASLayoutSpec</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#理解"><span class="nav-number">4.</span> <span class="nav-text">理解</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#初始化"><span class="nav-number">4.0.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#每个node都持有一个view"><span class="nav-number">4.0.2.</span> <span class="nav-text">每个node都持有一个view</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#ASControlNode"><span class="nav-number">4.0.3.</span> <span class="nav-text">ASControlNode</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#踩坑"><span class="nav-number">4.0.4.</span> <span class="nav-text">踩坑</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
