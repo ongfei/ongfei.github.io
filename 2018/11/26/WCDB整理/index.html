@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Xcode" />
 
 
 
@@ -94,40 +94,22 @@
 
 
 
-<meta name="description" content="-–
-title: WCDB整理
-date: 2018-11-26 10:20:54
-tags: db
-categories: iOS
-keywords: Xcode
--–
-WCDB整理[TOC]
-WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将">
+<meta name="description" content="WCDB整理[TOC]
+WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将其隔离，达到只在model层使用Objective-C++编译，而不影响controller和view。 
+易用WCDB通过WINQ和ORM，使得从拼接SQL、获取数据、拼装">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ongfei | 一步一步往上爬">
-<meta property="og:url" content="http://yoursite.com/2019/04/22/WCDB整理/index.html">
+<meta property="og:title" content="WCDB整理">
+<meta property="og:url" content="http://yoursite.com/2018/11/26/WCDB整理/index.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="-–
-title: WCDB整理
-date: 2018-11-26 10:20:54
-tags: db
-categories: iOS
-keywords: Xcode
--–
-WCDB整理[TOC]
-WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将">
-<meta property="og:updated_time" content="2019-04-24T06:12:15.957Z">
+<meta property="og:description" content="WCDB整理[TOC]
+WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将其隔离，达到只在model层使用Objective-C++编译，而不影响controller和view。 
+易用WCDB通过WINQ和ORM，使得从拼接SQL、获取数据、拼装">
+<meta property="og:updated_time" content="2019-04-24T06:15:39.777Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ongfei | 一步一步往上爬">
-<meta name="twitter:description" content="-–
-title: WCDB整理
-date: 2018-11-26 10:20:54
-tags: db
-categories: iOS
-keywords: Xcode
--–
-WCDB整理[TOC]
-WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将">
+<meta name="twitter:title" content="WCDB整理">
+<meta name="twitter:description" content="WCDB整理[TOC]
+WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将其隔离，达到只在model层使用Objective-C++编译，而不影响controller和view。 
+易用WCDB通过WINQ和ORM，使得从拼接SQL、获取数据、拼装">
 
 
 
@@ -155,13 +137,13 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/22/WCDB整理/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/11/26/WCDB整理/"/>
 
 
 
 
 
-  <title> | ongfei | 一步一步往上爬</title>
+  <title>WCDB整理 | ongfei | 一步一步往上爬</title>
   
 
 
@@ -303,7 +285,7 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/WCDB整理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/26/WCDB整理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="ongfei">
@@ -320,7 +302,7 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
 
         
         
-          <h1 class="post-title" itemprop="name headline"></h1>
+          <h1 class="post-title" itemprop="name headline">WCDB整理</h1>
         
 
         <div class="post-meta">
@@ -332,8 +314,8 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-22T18:13:06+08:00">
-                2019-04-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-26T10:20:54+08:00">
+                2018-11-26
               </time>
             
 
@@ -342,6 +324,28 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/iOS/" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -367,14 +371,7 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
       
 
       
-        <p>-–</p>
-<p>title: WCDB整理</p>
-<p>date: 2018-11-26 10:20:54</p>
-<p>tags: db</p>
-<p>categories: iOS</p>
-<p>keywords: Xcode</p>
-<p>-–</p>
-<h2 id="WCDB整理"><a href="#WCDB整理" class="headerlink" title="WCDB整理"></a>WCDB整理</h2><p>[TOC]</p>
+        <h2 id="WCDB整理"><a href="#WCDB整理" class="headerlink" title="WCDB整理"></a>WCDB整理</h2><p>[TOC]</p>
 <h3 id="WCDB"><a href="#WCDB" class="headerlink" title="WCDB"></a>WCDB</h3><p>WCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀<code>.m</code>改为<code>.mm</code>。为减少影响范围，可以通过Objective-C的category特性将其隔离，达到<strong>只在model层使用Objective-C++编译，而不影响controller和view</strong>。 </p>
 <h3 id="易用"><a href="#易用" class="headerlink" title="易用"></a>易用</h3><p>WCDB通过WINQ和ORM，使得从拼接SQL、获取数据、拼装Object的整个过程，<strong>只需要一行代码即可完成</strong>。</p>
 <p><code>NSArray&lt;Message *&gt; *messages = [wcdb getAllObjectsOfClass:Message.class fromTable:@&quot;message&quot;];</code></p>
@@ -757,6 +754,7 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
 </ul>
 <h5 id="SQL执行监控"><a href="#SQL执行监控" class="headerlink" title="SQL执行监控"></a>SQL执行监控</h5><p>WCDB可以监控所有SQL的执行，以确定代码符合预期</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//SQL Execution Monitor</div><div class="line">[WCTStatistics SetGlobalSQLTrace:^(NSString *sql) &#123;</div><div class="line">	NSLog(@&quot;SQL: %@&quot;, sql);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+
       
     </div>
 
@@ -782,6 +780,12 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/db/" rel="tag"># db</a>
+          
+        </div>
       
 
       
@@ -895,7 +899,7 @@ WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-count">28</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
