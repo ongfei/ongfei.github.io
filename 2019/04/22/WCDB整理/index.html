@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="-–
+title: WCDB整理
+date: 2018-11-26 10:20:54
+tags: db
+categories: iOS
+keywords: Xcode
+-–
+WCDB整理[TOC]
+WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ongfei | 一步一步往上爬">
+<meta property="og:url" content="http://yoursite.com/2019/04/22/WCDB整理/index.html">
+<meta property="og:site_name" content="ongfei | 一步一步往上爬">
+<meta property="og:description" content="-–
+title: WCDB整理
+date: 2018-11-26 10:20:54
+tags: db
+categories: iOS
+keywords: Xcode
+-–
+WCDB整理[TOC]
+WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将">
+<meta property="og:updated_time" content="2019-04-24T06:12:15.957Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ongfei | 一步一步往上爬">
+<meta name="twitter:description" content="-–
+title: WCDB整理
+date: 2018-11-26 10:20:54
+tags: db
+categories: iOS
+keywords: Xcode
+-–
+WCDB整理[TOC]
+WCDBWCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀.m改为.mm。为减少影响范围，可以通过Objective-C的category特性将">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/22/WCDB整理/"/>
+
+
+
+
+
+  <title> | ongfei | 一步一步往上爬</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ongfei | 一步一步往上爬</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ongfei | 一步一步往上爬</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+
+  <a href="https://github.com/ongfei"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/22/WCDB整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ongfei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ico.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ongfei | 一步一步往上爬">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-22T18:13:06+08:00">
+                2019-04-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>-–</p>
+<p>title: WCDB整理</p>
+<p>date: 2018-11-26 10:20:54</p>
+<p>tags: db</p>
+<p>categories: iOS</p>
+<p>keywords: Xcode</p>
+<p>-–</p>
+<h2 id="WCDB整理"><a href="#WCDB整理" class="headerlink" title="WCDB整理"></a>WCDB整理</h2><p>[TOC]</p>
+<h3 id="WCDB"><a href="#WCDB" class="headerlink" title="WCDB"></a>WCDB</h3><p>WCDB基于WINQ，引入了Objective-C++代码，因此对于所有引入WCDB的源文件，都需要将其后缀<code>.m</code>改为<code>.mm</code>。为减少影响范围，可以通过Objective-C的category特性将其隔离，达到<strong>只在model层使用Objective-C++编译，而不影响controller和view</strong>。 </p>
+<h3 id="易用"><a href="#易用" class="headerlink" title="易用"></a>易用</h3><p>WCDB通过WINQ和ORM，使得从拼接SQL、获取数据、拼装Object的整个过程，<strong>只需要一行代码即可完成</strong>。</p>
+<p><code>NSArray&lt;Message *&gt; *messages = [wcdb getAllObjectsOfClass:Message.class fromTable:@&quot;message&quot;];</code></p>
+<h3 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h3><p><code>WCTDatabase</code>通过指定路径进行创建。同时，该接口会自动创建路径中未创建的目录。</p>
+<p><code>WCTDatabase* wcdb = [[WCTDatabase alloc] initWithPath:path];</code></p>
+<h3 id="打开数据库"><a href="#打开数据库" class="headerlink" title="打开数据库"></a>打开数据库</h3><p>WCDB会在第一次访问数据库时，自动打开数据库，不需要开发者主动操作。</p>
+<p><code>canOpen</code>接口可用于测试数据库能否正常打开，<code>isOpened</code>接口可用于测试数据库是否已打开。</p>
+<h3 id="建表与ORM"><a href="#建表与ORM" class="headerlink" title="建表与ORM"></a>建表与ORM</h3><ul>
+<li><code>WCDB_IMPLEMENTATION(className)</code>用于定义进行绑定的类</li>
+<li><code>WCDB_PROPERTY(propertyName)</code>和<code>WCDB_SYNTHESIZE(className, propertyName)</code>用于声明和定义字段。</li>
+<li><code>WCDB_SYNTHESIZE(className, propertyName)</code>默认使用属性名作为数据库表的字段名。对于属性名与字段名不同的情况，可以使用<code>WCDB_SYNTHESIZE_COLUMN(className, propertyName, columnName)</code>进行映射。</li>
+<li><code>WCDB_PRIMARY_AUTO_INCREMENT(className, propertyName)</code>用于定义主键且自增。</li>
+<li><code>WCDB_INDEX(className, indexNameSubfix, propertyName)</code>用于定义索引。</li>
+</ul>
+<p><code>createTableAndIndexesOfName:withClass:</code>该接口使用的是IF NOT EXISTS的SQL，因此可以用重复调用。不需要在每次调用前判断表或索引是否已经存在。</p>
+<p>当定义发生变化时，该接口也会对应的增加字段或索引。因此，该接口可用于数据库表的升级</p>
+<h3 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h3><p><code>NSArray&lt;Message *&gt; *messages = [wcdb getAllObjectsOfClass:Message.class fromTable:@&quot;message&quot;];</code></p>
+<h3 id="插入"><a href="#插入" class="headerlink" title="插入"></a>插入</h3><p><code>[wcdb insertObject:message into:@&quot;message&quot;];</code></p>
+<h3 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h3><p><code>[wcdb updateAllRowsInTable:@&quot;message&quot; onProperties:Message.modifiedTime withObject:message];</code></p>
+<h3 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h3><p><code>[wcdb deleteAllObjects];</code></p>
+<h3 id="条件语句"><a href="#条件语句" class="headerlink" title="条件语句"></a>条件语句</h3><p>WCDB通过WINQ完成条件语句</p>
+<h4 id="查询示例"><a href="#查询示例" class="headerlink" title="查询示例"></a>查询示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NSArray *messages = [wcdb getObjectsOnResults:&#123;Message.localID, Message.createTime&#125; </div><div class="line">                                    fromTable:@&quot;message&quot;</div><div class="line">                                        where:Message.localID&gt;1||Message.modifiedTime!=Message.createTime];</div></pre></td></tr></table></figure>
+<h4 id="自增插入示例"><a href="#自增插入示例" class="headerlink" title="自增插入示例"></a>自增插入示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">message.isAutoIncrement = YES;</div><div class="line">[wcdb insertObject:message </div><div class="line">          onProperties:&#123;Message.localID, Message.content&#125; </div><div class="line">                  into:@&quot;message&quot;];</div></pre></td></tr></table></figure>
+<h4 id="数值更新示例"><a href="#数值更新示例" class="headerlink" title="数值更新示例"></a>数值更新示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[wcdb updateRowsInTable:@&quot;message&quot; </div><div class="line">             onProperty:Message.modifiedTime </div><div class="line">              withValue:[NSDate date]</div><div class="line">                  where:Message.localID==1];</div></pre></td></tr></table></figure>
+<h4 id="部分删除示例"><a href="#部分删除示例" class="headerlink" title="部分删除示例"></a>部分删除示例</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[wcdb deleteObjectsFromTable:@&quot;messsage&quot; </div><div class="line">                           where:Message.localID&gt;0&amp;&amp;Message.content!=nil</div><div class="line">                           limit:1];</div></pre></td></tr></table></figure>
+<p>更多关于增删查改接口的用法，可参考：<a href="https://github.com/Tencent/wcdb/wiki/%e5%9f%ba%e7%a1%80%e7%b1%bb%e3%80%81CRUD%e4%b8%8eTransaction#CRUD" target="_blank" rel="external">CRUD教程</a></p>
+<h3 id="特殊语句和核心层接口"><a href="#特殊语句和核心层接口" class="headerlink" title="特殊语句和核心层接口"></a>特殊语句和核心层接口</h3><p>WCDB的ObjC层接口封装了绝大部分场景下适用的增删查改语句。但SQL千变万化，接口层不可能覆盖全部场景。对于这种情况，可以通过WINQ的核心层接口进行调用。</p>
+<p>对于SQL：<code>EXPLAIN QUERY PLAN CREATE TABLE message(localID INTEGER)</code>。</p>
+<ol>
+<li><p>找到其对应的<a href="http://www.sqlite.org/syntax/sql-stmt.html" target="_blank" rel="external">sql-stmt</a>，然后通过以<code>WCDB::Statement</code>开头的类进行调用。如例子中，其对应的sql-stmt为<code>WCDB::StatementExplain</code>和<code>WCDB::StatementCreateTable</code>。</p>
+</li>
+<li><p>获取字段映射。对于已经定义ORM的字段，可以通过<code>className.propertyName</code>获取，如：<code>Message.localID</code>。对于未定义ORM的字段，可以通过<code>WCDB::Column columnName(&quot;columnName&quot;)</code>创建，如 <code>WCDB::Column localID(&quot;localID&quot;)</code>。</p>
+</li>
+<li><p>根据<code>Statement</code>内的定义，按照<strong>与SQL同名的函数</strong>调用获得完整的WINQ语句。如例子中，其对应的WINQ语句为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">WCDB::ColumnDefList columnDefList = &#123;WCTSampleORM.identifier.def(WCTColumnTypeInteger32, true)&#125;;</div><div class="line">WCDB::StatementExplain statementExplain = WCDB::StatementExplain().explainQueryPlan(WCDB::StatementCreateTable().create(&quot;message&quot;, columnDefList));</div></pre></td></tr></table></figure>
+</li>
+<li><p>通过<code>getDescription()</code>打印log，调试确保SQL正确</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">NSLog(@&quot;SQL: %s&quot;, statementExplain.getDescription().c_str());</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="执行WINQ"><a href="#执行WINQ" class="headerlink" title="执行WINQ"></a>执行WINQ</h4><p>通过<code>exec:</code>执行WINQ statement。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[wcdb exec:statement];</div></pre></td></tr></table></figure>
+<h4 id="获取WINQ运行结果"><a href="#获取WINQ运行结果" class="headerlink" title="获取WINQ运行结果"></a>获取WINQ运行结果</h4><p>通过<code>prepare:</code>运行WINQ statement，获得<code>WCTStatement</code>，并以此获取返回值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">WCTStatement *statement = [wcdb prepare:statementExplain];</div><div class="line">if (statement &amp;&amp; [statement step]) &#123;</div><div class="line">    for (int i = 0; i &lt; [statement getCount]; ++i) &#123;</div><div class="line">        NSString *columnName = [statement getNameAtIndex:i];</div><div class="line">        WCTValue *value = [statement getValueAtIndex:i];</div><div class="line">        NSLog(@&quot;%@:%@&quot;, columnName, value);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>该接口风格与FMDB类似。</p>
+<p>更多关于示例代码，可以参考<a href="https://github.com/Tencent/wcdb/wiki/%e5%9f%ba%e7%a1%80%e7%b1%bb%e3%80%81CRUD%e4%b8%8eTransaction#%e6%a0%b8%e5%bf%83%e5%b1%82%e6%8e%a5%e5%8f%a3" target="_blank" rel="external">核心层接口</a></p>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">BOOL result = [wcdb beginTransaction];</div><div class="line">if (!result) &#123;</div><div class="line">    //failed</div><div class="line">&#125;</div><div class="line">//do sth...</div><div class="line">if (![wcdb commitTransaction]) &#123;</div><div class="line">    [wcdb rollbackTransaction];</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="便捷事务接口"><a href="#便捷事务接口" class="headerlink" title="便捷事务接口"></a>便捷事务接口</h4><p><code>runTransaction:</code>接口会在commit失败时自动rollback事务。开发者也可以在<code>BLOCK</code>结束时返回<code>YES</code>或<code>NO</code>来决定commit或rollback事务，以此减少代码量。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[wcdb runTransaction:^BOOL&#123;</div><div class="line">    //do sth...</div><div class="line">    return result;//YES to commit transaction and NO to rollback transaction</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h4 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[wcdb setConfig:^BOOL(std::shared_ptr&lt;WCDB::Handle&gt; handle, WCDB::Error &amp;error) &#123;</div><div class="line">    return handle-&gt;exec(WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize, -2000));</div><div class="line">&#125; forName:@&quot;CacheSizeConfig&quot;]&apos;</div></pre></td></tr></table></figure>
+<h4 id="关闭数据库"><a href="#关闭数据库" class="headerlink" title="关闭数据库"></a>关闭数据库</h4><p>WCDB会自动管理这个过程。对于某一路径的数据库，WCDB会在所有对其的引用释放时，自动关闭数据库，并回收资源。</p>
+<p>WCDB提供了<code>close:</code>接口确保完全关闭数据库，并阻塞其他线程的访问。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">[wcdb close:^()&#123;</div><div class="line">   //do something on this closed database</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h4 id="将一个已有的ObjC类进行ORM绑定的过程如下："><a href="#将一个已有的ObjC类进行ORM绑定的过程如下：" class="headerlink" title="将一个已有的ObjC类进行ORM绑定的过程如下："></a>将一个已有的ObjC类进行ORM绑定的过程如下：</h4><ul>
+<li>定义该类遵循<code>WCTTableCoding</code>协议。可以在类声明上定义，也可以通过<a href="https://github.com/Tencent/wcdb/wiki/ORM%e4%bd%bf%e7%94%a8%e6%95%99%e7%a8%8b#WCTTableCoding%e6%96%87%e4%bb%b6%e6%a8%a1%e7%89%88" target="_blank" rel="external">文件模版</a>在category内定义。</li>
+<li>使用<code>WCDB_PROPERTY</code>宏在头文件声明需要绑定到数据库表的字段。</li>
+<li>使用<code>WCDB_IMPLEMENTATIO</code>宏在类文件定义绑定到数据库表的类。</li>
+<li>使用<code>WCDB_SYNTHESIZE</code>宏在类文件定义需要绑定到数据库表的字段。</li>
+</ul>
+<p>除此之外，WCDB还提供了许多可选的宏，用于定义数据库索引、约束等，如：</p>
+<ul>
+<li><code>WCDB_PRIMARY</code>用于定义主键</li>
+<li><code>WCDB_INDEX</code>用于定义索引</li>
+<li><code>WCDB_UNIQUE</code>用于定义唯一约束</li>
+<li><code>WCDB_NOT_NULL</code>用于定义非空约束</li>
+<li>…</li>
+</ul>
+<h3 id="基础类"><a href="#基础类" class="headerlink" title="基础类"></a>基础类</h3><p>WCDB提供了三个基础类进行数据库操作：<code>WCTDatabase</code>、<code>WCTTable</code>、<code>WCTTransaction</code>。它们的接口都是线程安全的。</p>
+<h4 id="WCTDatabase"><a href="#WCTDatabase" class="headerlink" title="WCTDatabase"></a>WCTDatabase</h4><p><code>WCTDatabase</code>表示一个数据库，可以进行所有数据库操作，包括增删查改、表操作、事务、文件操作、损坏修复等。</p>
+<p>WCDB提供了删除数据库、移动数据库、获取数据库占用空间和使用路径的文件操作接口。 </p>
+<p>文件操作的最佳实践是确保数据库已关闭。</p>
+<p>可加密</p>
+<p><code>WCTDatabase</code>不支持跨线程事务。事务内的操作必须在同一个线程运行完。跨线程事务可以参考<a href="https://github.com/Tencent/wcdb/wiki/%e5%9f%ba%e7%a1%80%e7%b1%bb%e3%80%81CRUD%e4%b8%8eTransaction#WCTTransaction" target="_blank" rel="external">WCTTransaction</a>。关于事务的例子，可以参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/transaction/sample_transaction_main.mm" target="_blank" rel="external">Sample-transaction</a>。</p>
+<h4 id="WCTTable"><a href="#WCTTable" class="headerlink" title="WCTTable"></a>WCTTable</h4><p><code>WCTTable</code>表示一个表。它等价于预设了<code>class</code>和<code>tableName</code>的<code>WCTDatabase</code>，仅可以进行数据的增删查改等。</p>
+<h4 id="WCTTransaction"><a href="#WCTTransaction" class="headerlink" title="WCTTransaction"></a>WCTTransaction</h4><p><code>WCTTransaction</code>表示一个事务。</p>
+<p> 与<code>WCTDatabase</code>的事务不同，<code>WCTTransaction</code>可以在函数和对象之间传递，实现跨线程的事务。 </p>
+<p>关于事务的例子，可以参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/transaction/sample_transaction_main.mm" target="_blank" rel="external">Sample-transaction</a>。</p>
+<h4 id="基础类共享"><a href="#基础类共享" class="headerlink" title="基础类共享"></a>基础类共享</h4><p>对于同一个路径的数据库，不同的<code>WCTDatabase</code>、<code>WCTTable</code>、<code>WCTTransaction</code>对象共享同一个WCDB核心。因此，你可以在代码的不同位置、不同线程任意创建不同的基础类对象，WCDB会自动管理它们的共享数据和线程并发。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">WCTDatabase* database1 = [[WCTDatabase alloc] initWithPath:path];</div><div class="line">WCTDatabase* database2 = [[WCTDatabase alloc] initWithPath:path];</div><div class="line">database1.tag = 1;</div><div class="line">NSLog(@&quot;%d&quot;, database2.tag);//print 1</div></pre></td></tr></table></figure>
+<h4 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h4><p>WCDB的增删改查分为表操作和数据操作两种。</p>
+<h5 id="表操作"><a href="#表操作" class="headerlink" title="表操作"></a>表操作</h5><p>表操作包括创建/删除 表/索引、判断表、索引是否存在等。<code>WCTDatabase</code>和<code>WCTransaction</code>都支持表操作的接口。</p>
+<p>开发者可以根据ORM的定义创建表或索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">BOOL ret = [database createTableAndIndexesOfName:tableName</div><div class="line">                                       withClass:WCTSampleTable.class];</div></pre></td></tr></table></figure>
+<p>也可以通过WINQ自定义表或索引：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">BOOL ret = [database createTableOfName:tableName</div><div class="line">                     withColumnDefList:&#123;</div><div class="line">                     WCTSampleTable.intValue.def(WCTColumnTypeInteger32),</div><div class="line">                     WCTSampleTable.stringValue.def(WCTColumnTypeString)</div><div class="line">           &#125;];</div></pre></td></tr></table></figure>
+<p>关于表操作的例子，可以参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/table/sample_table_main.mm" target="_blank" rel="external">Sample-table</a></p>
+<h5 id="数据操作"><a href="#数据操作" class="headerlink" title="数据操作"></a>数据操作</h5><p>数据操作分为便捷接口和链式接口两种。<code>WCTDatabase</code>、<code>WCTTable</code>、<code>WCTTransaction</code>均支持数据操作接口。</p>
+<h5 id="便捷接口"><a href="#便捷接口" class="headerlink" title="便捷接口"></a>便捷接口</h5><p>便捷接口的设计原则为，通过一行代码即可完成数据的操作。</p>
+<h6 id="插入-1"><a href="#插入-1" class="headerlink" title="插入"></a>插入</h6><ul>
+<li><code>insertObject:into:</code>和<code>insertObjects:into:</code>，插入单个或多个对象</li>
+<li><code>insertOrReplaceObject:into</code>和<code>insertOrReplaceObjects:into</code>，插入单个或多个对象。当对象的主键在数据库内已经存在时，更新数据；否则插入对象。</li>
+<li><code>insertObject:onProperties:into:</code>和<code>insertObjects:onProperties:into:</code>，插入单个或多个对象的部分属性</li>
+<li><code>insertOrReplaceObject:onProperties:into</code>和<code>insertOrReplaceObjects:onProperties:into</code>，插入单个或多个对象的部分属性。当对象的主键在数据库内已经存在时，更新数据；否则插入对象。</li>
+</ul>
+<h6 id="删除-1"><a href="#删除-1" class="headerlink" title="删除"></a>删除</h6><ul>
+<li><code>deleteAllObjectsFromTable:</code>删除表内的所有数据</li>
+<li><code>deleteObjectsFromTable:</code>后可组合接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以删除部分数据</li>
+</ul>
+<h6 id="更新"><a href="#更新" class="headerlink" title="更新"></a>更新</h6><ul>
+<li><code>updateAllRowsInTable:onProperties:withObject:</code>，通过object更新数据库中所有指定列的数据</li>
+<li><code>updateRowsInTable:onProperties:withObject:</code>后可组合接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以通过object更新指定列的部分数据</li>
+<li><code>updateAllRowsInTable:onProperty:withObject:</code>，通过object更新数据库某一列的数据</li>
+<li><code>updateRowsInTable:onProperty:withObject:</code>后可组合接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以通过object更新某一列的部分数据</li>
+<li><code>updateAllRowsInTable:onProperties:withRow:</code>，通过数组更新数据库中的所有指定列的数据</li>
+<li><code>updateRowsInTable:onProperties:withRow:</code>后可组合接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以通过数组更新指定列的部分数据</li>
+<li><code>updateAllRowsInTable:onProperty:withRow:</code>，通过数组更新数据库某一列的数据</li>
+<li><code>updateRowsInTable:onProperty:withRow:</code>后可组合接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以通过数组更新某一列的部分数</li>
+</ul>
+<h6 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h6><ul>
+<li><code>getOneObjectOfClass:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一行数据并组合成object</li>
+<li><code>getOneObjectOnResults:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一行数据的部分列并组合成object</li>
+<li><code>getOneRowOnResults:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一行数据的部分列并组合成数组</li>
+<li><code>getOneColumnOnResult:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一列数据并组合成数组</li>
+<li><code>getOneDistinctColumnOnResult:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一列数据，并取distinct后组合成数组。</li>
+<li><code>getOneValueOnResult:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一行数据的某一列</li>
+<li><code>getAllObjectsOfClass:fromTable:</code>，取出所有数据，并组合成object</li>
+<li><code>getObjectsOfClass:fromTable:</code>后可接 <code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一部分数据，并组合成object</li>
+<li><code>getAllObjectsOnResults:fromTable:</code>，取出所有数据的指定列，并组合成object</li>
+<li><code>getObjectsOnResults:fromTable:</code>后可接<code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一部分数据的指定列，并组合成object</li>
+<li><code>getAllRowsOnResults:fromTable:</code>，取出所有数据的指定列，并组合成数组</li>
+<li><code>getRowsOnResults:fromTable:</code>后可接<code>where</code>、<code>orderBy</code>、<code>limit</code>、<code>offset</code>以从数据库中取出一部分数据的指定列，并组合成数组</li>
+</ul>
+<p>具体例子可直接参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/convenient/sample_convenient_main.mm" target="_blank" rel="external">Sample-convenience</a></p>
+<h5 id="链式接口"><a href="#链式接口" class="headerlink" title="链式接口"></a>链式接口</h5><p>链式调用是指对象的接口返回一个对象，从而允许在单个语句中将调用链接在一起，而不需要变量来存储中间结果。</p>
+<p>WCDB对于增删改查操作，都提供了对应的类以实现链式调用</p>
+<ul>
+<li><code>WCTInsert</code></li>
+<li><code>WCTDelete</code></li>
+<li><code>WCTUpdate</code></li>
+<li><code>WCTSelect</code></li>
+<li><code>WCTRowSelect</code></li>
+<li><code>WCTMultiSelect</code></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">WCTSelect *select = [database prepareSelectObjectsOnResults:Message.localID.max()</div><div class="line">                                                  fromTable:@&quot;message&quot;];</div><div class="line">NSArray&lt;Message *&gt; *objects = [[[[select where:Message.localID &gt; 0] </div><div class="line">                               			groupBy:&#123;Message.content&#125;]</div><div class="line">                                	    orderBy:Message.createTime.order()] </div><div class="line">                               		      limit:10].allObjects;</div></pre></td></tr></table></figure>
+<p><code>where</code>、<code>orderBy</code>、<code>limit</code>等接口的返回值均为<code>self</code>，因此可以通过链式调用，更自然更灵活的写出对应的查询。</p>
+<p>开发者可以通过链式接口获取数据库操作的耗时、错误信息；也可以通过遍历逐个生成object。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//Error message</div><div class="line">WCTError *error = select.error;</div><div class="line">//Performance</div><div class="line">int cost = select.cost;</div><div class="line">//Iteration</div><div class="line">Message *message;</div><div class="line">while ((message = [select nextObject])) &#123;</div><div class="line">    //...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>关于链式接口的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/chaincall/sample_chaincall_main.mm" target="_blank" rel="external">Sample-chaincall</a>。</p>
+<h4 id="封装SQL"><a href="#封装SQL" class="headerlink" title="封装SQL"></a>封装SQL</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">- (BOOL)exec:(const WCDB::Statement &amp;)statement;</div><div class="line">- (WCTStatement *)prepare:(const WCDB::Statement &amp;)statement;</div></pre></td></tr></table></figure>
+<p>结合WINQ，开发者可以用核心层接口执行其他未封装的复杂SQL。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">//run unwrapped SQL</div><div class="line">//PRAGMA case_sensitive_like=1</div><div class="line">[database exec:WCDB::StatementPragma().pragma(WCDB::Pragma::CaseSensitiveLike, true)];</div><div class="line"></div><div class="line">//get value from unwrapped SQL</div><div class="line">//PRAGMA case_sensitive</div><div class="line">WCTStatement *statement = [database prepare:WCDB::StatementPragma().pragma(WCDB::Pragma::CacheSize)];</div><div class="line">if (statement &amp;&amp; statement.step) &#123;</div><div class="line">    NSLog(@&quot;Cache size %@&quot;, [statement getValueAtIndex:0]);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//complex statement</div><div class="line">//EXPLAIN CREATE TABLE message(localID INTEGER PRIMARY KEY ASC, content TEXT);</div><div class="line">NSLog(@&quot;Explain:&quot;);</div><div class="line">WCDB::ColumnDef localIDColumnDef(WCDB::Column(&quot;localID&quot;), WCDB::ColumnType::Integer32);</div><div class="line">localIDColumnDef.makePrimary(WCDB::OrderTerm::ASC);</div><div class="line">WCDB::ColumnDef contentColumnDef(WCDB::Column(&quot;content&quot;), WCDB::ColumnType::Text);</div><div class="line">WCDB::ColumnDefList columnDefList = &#123;localIDColumnDef, contentColumnDef&#125;;</div><div class="line">WCDB::StatementCreateTable statementCreate = WCDB::StatementCreateTable().create(&quot;message&quot;, columnDefList);</div><div class="line">WCTStatement *statementExplain = [database prepare:WCDB::StatementExplain().explain(statementCreate)];</div><div class="line">if (statementExplain &amp;&amp; [statementExplain step]) &#123;</div><div class="line">    for (int i = 0; i &lt; [statementExplain getCount]; ++i) &#123;</div><div class="line">        NSString *columnName = [statementExplain getNameAtIndex:i];</div><div class="line">        WCTValue *value = [statementExplain getValueAtIndex:i];</div><div class="line">        NSLog(@&quot;%@:%@&quot;, columnName, value);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="调试SQL"><a href="#调试SQL" class="headerlink" title="调试SQL"></a>调试SQL</h4><p><code>[WCTStatistics SetGlobalSQLTrace:]</code>会监控所有执行的SQL，该接口可用于调试，确定SQL是否执行正确。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//SQL Execution Monitor</div><div class="line">[WCTStatistics SetGlobalSQLTrace:^(NSString *sql) &#123;</div><div class="line">	NSLog(@&quot;SQL: %@&quot;, sql);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<p>关于核心层接口的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/core/sample_core_main.mm" target="_blank" rel="external">Sample-core</a>。</p>
+<h4 id="主键自增-Auto-Increment"><a href="#主键自增-Auto-Increment" class="headerlink" title="主键自增(Auto Increment)"></a>主键自增(Auto Increment)</h4><p>对于主键自增的类，需要在ORM定义<code>WCDB_PRIMARY_AUTO_INCREMENT(className, propertyName)</code>，然后通过<code>isAutoIncrement</code>接口设置自增属性，并通过<code>lastInsertedRowID</code>接口获取插入的<code>RowID</code>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">WCTSampleConvenient *object = [[WCTSampleConvenient alloc] init];</div><div class="line">object.isAutoIncrement = YES;</div><div class="line">object.stringValue = @&quot;Insert auto increment&quot;;</div><div class="line">[database insertObject:object</div><div class="line">                  into:tableName];</div><div class="line">long long lastInsertedRowID = object.lastInsertedRowID;</div></pre></td></tr></table></figure>
+<h4 id="as重定向"><a href="#as重定向" class="headerlink" title="as重定向"></a>as重定向</h4><p>基于ORM的支持，我们可以从数据库直接取出一个Object。然而，有时候需要取出并非是某个字段，而是有一些组合。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSNumber *maxModifiedTime = [database getOneValueOnResult:Message.modifiedTime.max()</div><div class="line">                                                fromTable:@&quot;message&quot;];</div><div class="line">Message *message = [[Message alloc] init];</div><div class="line">message.createTime = [NSDate dateWithTimeIntervalSince1970:maxModifiedTime.doubleValue];</div></pre></td></tr></table></figure>
+<p>这段代码从数据库中取出了消息的最新的修改时间，并以此将此时间作为消息的创建时间，新建了一个message。这种情况下，就可以使用as重定向。</p>
+<p>as重定向，它可以将一个查询结果重定向到某一个字段，如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Message *message = [database getOneObjectOnResults:Message.modifiedTime.max().as(Message.createTime)</div><div class="line">                                         fromTable:@&quot;message&quot;];</div></pre></td></tr></table></figure>
+<p>通过<code>as(Message.createTime)</code>的语法，将查询结果重新指向了createTime。因此只需一行代码便可完成原来的任务。</p>
+<h4 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h4><p>SQLite支持联表查询，在某些特定的场景下，可以起到优化性能、简化表结构的作用。</p>
+<p>WCDB同样提供了对应的接口，并在ORM的支持下，通过WCTMultiSelect的链式接口，可以同时从表中取出多个类的对象。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">/*</div><div class="line"> SELECT contact.nickname, contact_ext.headImg</div><div class="line"> FROM contact, contact_ext</div><div class="line"> WHERE contact.name==contact_ext.name</div><div class="line"> */</div><div class="line">WCTMultiSelect *multiSelect = [[database prepareSelectMultiObjectsOnResults:&#123;</div><div class="line">    Contact.nickname.inTable(@&quot;contact&quot;),</div><div class="line">	ContactExt.nickname.inTable(@&quot;contact_ext&quot;)</div><div class="line">&#125; fromTables:@[ @&quot;contact&quot;, @&quot;contact_ext&quot; ]] where:Contact.name.inTable(@&quot;contact&quot;) == ContactExt.name.inTable(@&quot;contact_ext&quot;)];</div><div class="line"></div><div class="line">while ((multiObject = [multiSelect nextMultiObject])) &#123;</div><div class="line">    Contact *contact = (Contact *) [multiObject objectForKey:@&quot;contact&quot;];</div><div class="line">    ContactExt *contact = (ContactExt *) [multiObject objectForKey:@&quot;contact_ext&quot;];</div><div class="line">    //...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h3><h4 id="ORM宏"><a href="#ORM宏" class="headerlink" title="ORM宏"></a>ORM宏</h4><p>WCDB使用内置的宏来连接类、属性与表、字段。共有三类宏，分别对应数据库的字段、索引和约束。所有宏都定义在<a href="https://github.com/Tencent/wcdb/blob/master/objc/WCDB/interface/orm/macro/WCTCodingMacro.h" target="_blank" rel="external">WCTCodingMacro.h</a>中。</p>
+<p>关于字段、索引、约束的具体描述及用法，请参考SQLite的相关文档：<a href="http://www.sqlite.org/lang_createtable.html" target="_blank" rel="external">Create Table</a>和<a href="http://www.sqlite.org/lang_createindex.html" target="_blank" rel="external">Create Index</a>。</p>
+<h4 id="字段宏"><a href="#字段宏" class="headerlink" title="字段宏"></a>字段宏</h4><p>字段宏以<code>WCDB_SYNTHESIZE</code>开头，定义了类属性与字段之间的联系。支持自定义字段名和默认值。</p>
+<ul>
+<li><code>WCDB_SYNTHESIZE(className, propertyName)</code>是最简单的用法，它直接使用<code>propertyName</code>作为数据库字段名。</li>
+<li><code>WCDB_SYNTHESIZE_COLUMN(className, propertyName, columnName)</code>支持自定义字段名。</li>
+<li><code>WCDB_SYNTHESIZE_DEFAULT(className, propertyName, defaultValue)</code>支持自定义字段的默认值。默认值可以是任意的C类型或<code>NSString</code>、<code>NSData</code>、<code>NSNumber</code>、<code>NSNull</code>。</li>
+<li><code>WCDB_SYNTHESIZE_COLUMN_DEFAULT(className, propertyName, columnName, defaultValue)</code>为以上两者的组合。</li>
+</ul>
+<p>关于字段宏的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORM.mm" target="_blank" rel="external">WCTSampleORM</a>。</p>
+<h4 id="索引宏"><a href="#索引宏" class="headerlink" title="索引宏"></a>索引宏</h4><p>索引宏以<code>WCDB_INDEX</code>开头，定义了数据库的索引属性。支持定义索引的排序方式。</p>
+<ul>
+<li><code>WCDB_INDEX(className, indexSubfixName, propertyName)</code>是最简单的用法，它直接定义某个字段为索引。同时，WCDB会将<code>tableName</code>+<code>indexSubfixName</code>作为该索引的名称。</li>
+<li><code>WCDB_INDEX_ASC(className, indexSubfixName, propertyName)</code>定义索引为升序。</li>
+<li><code>WCDB_INDEX_DESC(className, indexSubfixName, propertyName)</code>定义索引为降序。</li>
+<li><code>WCDB_UNIQUE_INDEX(className, indexSubfixName, propertyName)</code>定义唯一索引。</li>
+<li><code>WCDB_UNIQUE_INDEX_ASC(className, indexSubfixName, propertyName)</code>定义唯一索引为升序。</li>
+<li><code>WCDB_UNIQUE_INDEX_DESC(className, indexSubfixName, propertyName)</code>定义唯一索引为降序。</li>
+</ul>
+<h4 id="多字段索引"><a href="#多字段索引" class="headerlink" title="多字段索引"></a>多字段索引</h4><p>WCDB通过<code>indexSubfixName</code>匹配多索引。相同的<code>indexSubfixName</code>会被组合为多字段索引。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">WCDB_INDEX(WCTSampleORMIndex, &quot;_multiIndexSubfix&quot;, multiIndexPart1)</div><div class="line">WCDB_INDEX(WCTSampleORMIndex, &quot;_multiIndexSubfix&quot;, multiIndexPart2)</div></pre></td></tr></table></figure>
+<p>关于索引宏的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORMIndex.mm" target="_blank" rel="external">WCTSampleORMIndex</a>。</p>
+<h4 id="约束宏"><a href="#约束宏" class="headerlink" title="约束宏"></a>约束宏</h4><p>约束宏包括字段约束和表约束</p>
+<h4 id="字段约束"><a href="#字段约束" class="headerlink" title="字段约束"></a>字段约束</h4><ul>
+<li><p>主键约束以<code>WCDB_PRIMARY</code>开头，定义了数据库的主键，支持自定义主键的排序方式、是否自增。</p>
+<ul>
+<li><code>WCDB_PRIMARY(className, propertyName)</code>是最基本的用法，它直接使用<code>propertyName</code>作为数据库主键。</li>
+<li><code>WCDB_PRIMARY_ASC(className, propertyName)</code>定义主键升序。</li>
+<li><code>WCDB_PRIMARY_DESC(className, propertyName)</code>定义主键降序。</li>
+<li><code>WCDB_PRIMARY_AUTO_INCREMENT(className, propertyName)</code>定义主键自增。</li>
+<li><code>WCDB_PRIMARY_ASC_AUTO_INCREMENT(className, propertyName)</code>是主键自增和升序的组合。</li>
+<li><code>WCDB_PRIMARY_DESC_AUTO_INCREMENT(className, propertyName)</code>是主键自增和降序的组合。</li>
+</ul>
+</li>
+<li><p>非空约束为<code>WCDB_NOT_NULL(className, propertyName)</code>，当该字段插入数据为空时，数据库会返回错误。</p>
+</li>
+<li>唯一约束为<code>WCDB_UNIQUE(className, propertyName)</code>，当该字段插入数据与其他列冲突时，数据库会返回错误。</li>
+</ul>
+<p>关于字段约束的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORMColumnConstraint.mm" target="_blank" rel="external">WCTSampleORMColumnConstraint</a> </p>
+<h4 id="表约束"><a href="#表约束" class="headerlink" title="表约束"></a>表约束</h4><ul>
+<li>多主键约束以<code>WCDB_MULTI_PRIMARY</code>开头，定义了数据库的多主键，支持自定义每个主键的排序方式。<ul>
+<li><code>WCDB_MULTI_PRIMARY(className, constraintName, propertyName)</code>是最基本的用法，与索引类似，多个主键通过<code>constraintName</code>匹配。</li>
+<li><code>WCDB_MULTI_PRIMARY_ASC(className, constraintName, propertyName)</code>定义了多主键<code>propertyName</code>对应的主键升序。</li>
+<li><code>WCDB_MULTI_PRIMARY_DESC(className, constraintName, propertyName)</code>定义了多主键中<code>propertyName</code>对应的主键降序。</li>
+</ul>
+</li>
+<li>多字段唯一约束以<code>WCDB_MULTI_UNIQUE</code>开头，定义了数据库的多字段组合唯一，支持自定义每个字段的排序方式。<ul>
+<li><code>WCDB_MULTI_UNIQUE(className, constraintName, propertyName)</code>是最基本的用法，与索引类似，多个字段通过<code>constraintName</code>匹配。</li>
+<li><code>WCDB_MULTI_UNIQUE_ASC(className, constraintName, propertyName)</code>定义了多字段中<code>propertyName</code>对应的字段升序。</li>
+<li><code>WCDB_MULTI_UNIQUE_DESC(className, constraintName, propertyName)</code>定义了多字段中<code>propertyName</code>对应的字段降序。</li>
+</ul>
+</li>
+</ul>
+<p>关于表约束的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/orm/WCTSampleORMTableConstraint.mm" target="_blank" rel="external">WCTSampleORMTableConstraint</a></p>
+<h4 id="类与数据库对应类型"><a href="#类与数据库对应类型" class="headerlink" title="类与数据库对应类型"></a>类与数据库对应类型</h4><p>SQLite数据库的字段有整型、浮点数、字符串、二进制数据等五种类型。WCDB的ORM会自动识别property的类型，并映射到适合的数据库类型。其对应关系为：</p>
+<table>
+<thead>
+<tr>
+<th>C类型</th>
+<th>数据库类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>整型（包括但不限于<code>int</code>、<code>unsigned</code>、<code>long</code>、<code>unsigned long</code>、<code>long long</code>、<code>unsigned long long</code>等所有基于整型的C基本类型）</td>
+<td>整型（INTEGER）</td>
+</tr>
+<tr>
+<td>枚举型（<code>enum</code>及所有基于枚举型的C基本类型）</td>
+<td>整型（INTEGER）</td>
+</tr>
+<tr>
+<td>浮点数（包括但不限于<code>float</code>、<code>double</code>、<code>long double</code>等所有基于浮点型的C基本类型）</td>
+<td>浮点型（ REAL）</td>
+</tr>
+<tr>
+<td>字符串（<code>const char *</code>的C字符串类型）</td>
+<td>字符串（ TEXT）</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Objective-C类型</th>
+<th>数据库类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Objective-C类型</th>
+<th>数据库类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NSDate</code></td>
+<td>整型（INTEGER）</td>
+</tr>
+<tr>
+<td><code>NSNumber</code></td>
+<td>浮点型（ REAL）</td>
+</tr>
+<tr>
+<td><code>NSString</code>、<code>NSMutableString</code></td>
+<td>字符串（ TEXT）</td>
+</tr>
+<tr>
+<td>其他所有符合<code>NSCoding</code>协议的<code>NSObject</code>子类</td>
+<td>二进制（BLOB）</td>
+</tr>
+</tbody>
+</table>
+<h4 id="自定义类-数据库类型映射"><a href="#自定义类-数据库类型映射" class="headerlink" title="自定义类-数据库类型映射"></a>自定义类-数据库类型映射</h4><p>WCDB支持开发者自定义绑定类型。</p>
+<p>类只需实现<code>WCTColumnCoding</code>协议，即可支持绑定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@protocol WCTColumnCoding</div><div class="line">@required</div><div class="line">+ (instancetype)unarchiveWithWCTValue:(WCTValue *)value; //value could be nil</div><div class="line">- (id /* WCTValue* */)archivedWCTValue;                  //value could be nil</div><div class="line">+ (WCTColumnType)columnTypeForWCDB;</div><div class="line">@end</div></pre></td></tr></table></figure>
+<ul>
+<li><code>columnTypeForWCDB</code>接口定义类对应数据库中的类型。</li>
+<li><code>unarchiveWithWCTValue:</code>接口定义从数据库类型反序列化到类的转换方式。</li>
+<li><code>archivedWCTValue</code>接口定义从类序列化到数据库类型的转换方式。</li>
+</ul>
+<p>为了简化定义，WCDB提供了Xcode文件模版来创建类字段绑定。</p>
+<h4 id="取消内置类型"><a href="#取消内置类型" class="headerlink" title="取消内置类型"></a>取消内置类型</h4><p>上面提到WCDB内置对<code>NSData</code>、<code>NSArray</code>等等常用的Objective-C类型的支持，并且基于<code>NSCoding</code>协议进行序列化和反序列化。这些内置绑定的实现都在 <a href="https://github.com/Tencent/wcdb/tree/master/objc/WCDB/interface/builtin" target="_blank" rel="external">builtin</a> 目录下，这些实现也可以作为例子参考。</p>
+<p>若开发者希望自定义基本类型的绑定，可以将内置的绑定关闭。关闭方法为：删除工程文件的<code>Build Settings</code>-&gt;<code>Preprocessor Macros</code>下各个scheme的<code>WCDB_BUILTIN_COLUMN_CODING</code>宏。</p>
+<p>关于自定义类型的例子，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/sample/advance/sample_advance_main.mm" target="_blank" rel="external">sample_advance</a>。</p>
+<h4 id="修改字段"><a href="#修改字段" class="headerlink" title="修改字段"></a>修改字段</h4><h5 id="增"><a href="#增" class="headerlink" title="增"></a>增</h5><p>对于需要增加的字段，只需在定义处添加，并再次执行<code>createTableAndIndexesOfName:withClass:</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">WCDB_IMPLEMENTATION(WCTSampleAddColumn)</div><div class="line">WCDB_SYNTHESIZE(WCTSampleAddColumn, identifier)</div><div class="line">WCDB_SYNTHESIZE(WCTSampleAddColumn, newColumn)// Add a new column</div></pre></td></tr></table></figure>
+<h5 id="删"><a href="#删" class="headerlink" title="删"></a>删</h5><p>对于需要删除字段，只需将其定义删除即可。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">WCDB_IMPLEMENTATION(WCTSampleAddColumn)</div><div class="line">WCDB_SYNTHESIZE(WCTSampleAddColumn, identifier)</div><div class="line">//WCDB_SYNTHESIZE(WCTSampleAddColumn, deletedColumn)// delete a column</div></pre></td></tr></table></figure>
+<p>由于SQLite不支持删除字段，因此，删除定义后，WCDB只是将该字段忽略，其旧数据依然存在在数据库内，但新增加的数据基本不会因为该字段产生额外的性能和空间损耗。</p>
+<h5 id="改"><a href="#改" class="headerlink" title="改"></a>改</h5><p>由于SQLite不支持修改字段名称，因此WCDB使用<code>WCDB_SYNTHESIZE_COLUMN(className, propertyName, columnName)</code>重新映射宏。</p>
+<p>对于已经定义的字段<code>WCDB_SYNTHESIZE(MyClass, myValue)</code>可以修改为<code>WCDB_SYNTHESIZE_COLUMN(MyClass, newMyValue, &quot;myValue&quot;)</code>。</p>
+<p>对于已经定义的字段类型，可以任意修改为其他类型。但旧数据会使用新类型的解析方式进行反序列化，因此需要确保其兼容性。</p>
+<h4 id="更多扩展性"><a href="#更多扩展性" class="headerlink" title="更多扩展性"></a>更多扩展性</h4><p>由于ORM不可能覆盖所有用法，因此WCDB提供了 core 接口，开发者可以根据自己的需求执行SQL。请参考 <a href="https://github.com/Tencent/wcdb/wiki/%e5%9f%ba%e7%a1%80%e7%b1%bb%e3%80%81CRUD%e4%b8%8eTransaction#%e6%a0%b8%e5%bf%83%e5%b1%82%e6%8e%a5%e5%8f%a3" target="_blank" rel="external">核心层接口</a></p>
+<p>如果这些接口仍不满足你的需求，欢迎给我们<a href="https://github.com/Tencent/wcdb/issues" target="_blank" rel="external">提 Issue </a>。</p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ol>
+<li>由于<code>WCDB_SYNTHESIZE(className, propertyName)</code>宏默认使用<code>propertyName</code>作为字段名，因此在修改<code>propertyName</code>后，会导致错误，需用<code>WCDB_SYNTHESIZE_COLUMN(className, newPropertyName, &quot;oldPropertyName&quot;)</code>重新映射。</li>
+<li><strong>每个进行ORM的property，都必须实现getter/setter</strong>。因为ORM会在初始化时通过objc-runtime获取property的getter/setter的<code>IMP</code> ，以此实现通过object存取数据库的特性。getter/setter不必须是公开的，也可以是私有接口。</li>
+</ol>
+<h3 id="全局监控与错误处理"><a href="#全局监控与错误处理" class="headerlink" title="全局监控与错误处理"></a>全局监控与错误处理</h3><h4 id="错误处理WCTError"><a href="#错误处理WCTError" class="headerlink" title="错误处理WCTError"></a>错误处理WCTError</h4><p><code>WCTError</code>继承自<code>NSError</code>，包含了WCDB错误的所有信息，以供调试或发现问题。</p>
+<p><code>type</code>表示错误的类型，不同类型的错误其错误码和拥有的信息不同。其对应关系如下</p>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SQLite</strong>，表示该错误来自SQLite接口</td>
+<td>请参考<a href="http://www.sqlite.org/rescode.html" target="_blank" rel="external">rescode</a></td>
+</tr>
+<tr>
+<td><strong>SystemCall</strong>，表示该错误来自系统调用</td>
+<td>请参考<a href="http://man7.org/linux/man-pages/man3/errno.3.html" target="_blank" rel="external">errno</a></td>
+</tr>
+<tr>
+<td><strong>Core</strong>，表示该错误来自WCDB Core层</td>
+<td>请参考源码的<a href="https://github.com/Tencent/wcdb/blob/master/objc/WCDB/util/error.hpp" target="_blank" rel="external">error.hpp</a></td>
+</tr>
+<tr>
+<td><strong>Interface</strong>，表示该错误来自WCDB Interface层</td>
+<td>请参考源码的<a href="https://github.com/Tencent/wcdb/blob/master/objc/WCDB/util/error.hpp" target="_blank" rel="external">error.hpp</a></td>
+</tr>
+<tr>
+<td><strong>Abort</strong>，表示中断，该错误一般是开发错误，应该在发布前修复</td>
+<td>/</td>
+</tr>
+<tr>
+<td><strong>Warning</strong>，表示警告，建议修复</td>
+<td>/</td>
+</tr>
+<tr>
+<td><strong>SQLiteGlobal</strong>，表示该信息来自SQLite的log接口，一般只作为debug log</td>
+<td>请参考<a href="http://www.sqlite.org/rescode.html" target="_blank" rel="external">rescode</a></td>
+</tr>
+</tbody>
+</table>
+<p>其他错误信息通过<code>infoForKey</code>接口获得，包括：</p>
+<ol>
+<li><strong>Tag</strong>，正在操作的数据库的tag</li>
+<li><strong>Operation</strong>，正在进行的操作，请参考<a href="https://github.com/Tencent/wcdb/blob/master/objc/WCDB/util/error.hpp" target="_blank" rel="external">error.hpp</a></li>
+<li><strong>Extended Code</strong>，SQLite的扩展码，请参考<a href="http://www.sqlite.org/rescode.html" target="_blank" rel="external">rescode</a></li>
+<li><strong>Message</strong>，错误信息</li>
+<li><strong>SQL</strong>，发生错误时正在执行的SQL</li>
+<li><strong>Path</strong>，发生错误时正在操作的文件的路径。</li>
+</ol>
+<h5 id="获取错误"><a href="#获取错误" class="headerlink" title="获取错误"></a>获取错误</h5><p>由于便捷接口的设计原则是易用，因此不提供获取错误的方式。错误处理需使用链式接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">WCTSelect *select = [database prepareSelectObjectsOfClass:Message.class</div><div class="line">                                                fromTable:@&quot;message&quot;];</div><div class="line">NSArray&lt;Message *&gt; *objects = [[[select where:Message.localID &gt; 0] </div><div class="line">                                	  orderBy:Message.createTime.order()] </div><div class="line">                               			limit:10].allObjects;</div><div class="line">WCTError *error = select.error;</div></pre></td></tr></table></figure>
+<p>开发者也可以注册全局的错误接口，以调试、上报、打log</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//Error Monitor</div><div class="line">[WCTStatistics SetGlobalErrorReport:^(WCTError *error) &#123;</div><div class="line">	NSLog(@&quot;[WCDB]%@&quot;, error);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h4 id="性能监控"><a href="#性能监控" class="headerlink" title="性能监控"></a>性能监控</h4><p>WCDB支持获取单次操作的耗时，也支持对单个DB或全局注册统一接口监控性能。</p>
+<p><strong>所有性能监控都会有少量的性能损坏，请根据需求开启。</strong></p>
+<h5 id="操作耗时"><a href="#操作耗时" class="headerlink" title="操作耗时"></a>操作耗时</h5><p>由于便捷接口的设计原则是易用，因此不提供获取错误的方式。操作耗时需使用链式接口。</p>
+<p>首先安通过<code>setStatisticsEnabled:</code>打开耗时监控</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">WCTSelect *select = [database prepareSelectObjectsOfClass:Message.class</div><div class="line">                                                fromTable:@&quot;message&quot;];</div><div class="line">[select setStatisticsEnabled:YES];//You should call this before all other operations.</div></pre></td></tr></table></figure>
+<p>在操作执行完成后，通过<code>cost</code>接口获取耗时</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NSArray&lt;Message *&gt; *objects = [[[select where:Message.localID &gt; 0] </div><div class="line">                                	  orderBy:Message.createTime.order()] </div><div class="line">                               			limit:10].allObjects;</div><div class="line">NSLog(@&quot;%f&quot;, select.cost);//You should call this after all other operations.</div></pre></td></tr></table></figure>
+<h5 id="监控耗时"><a href="#监控耗时" class="headerlink" title="监控耗时"></a>监控耗时</h5><p>WCDB支持对所有SQL操作进行全局监控，也支持监控单个特定的数据库。</p>
+<p>所有监控的返回数据都相同，包括三个数据：</p>
+<ul>
+<li><strong>Tag</strong>，执行操作的数据库的tag</li>
+<li><strong>sqls</strong>，执行的SQL和对应的次数<ul>
+<li>对于非事务操作，则为单条SQL</li>
+<li>对于事务操作，则为该次事务所执行的所有SQL和每个sql执行的次数</li>
+</ul>
+</li>
+<li><strong>cost</strong>，耗时</li>
+</ul>
+<h5 id="全局监控"><a href="#全局监控" class="headerlink" title="全局监控"></a>全局监控</h5><p>监控所有db的数据库操作耗时，该接口需要在所有db打开、操作之前调用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[WCTStatistics SetGlobalTrace:^(WCTTag tag, NSDictionary&lt;NSString *, NSNumber *&gt; *sqls, NSInteger cost) &#123;</div><div class="line">    NSLog(@&quot;Tag: %d&quot;, tag);</div><div class="line">    [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) &#123;</div><div class="line">      NSLog(@&quot;SQL: %@ Count: %d&quot;, sql, count.intValue);</div><div class="line">    &#125;];</div><div class="line">    NSLog(@&quot;Total cost %ld nanoseconds&quot;, (long) cost);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h5 id="特定数据库监控"><a href="#特定数据库监控" class="headerlink" title="特定数据库监控"></a>特定数据库监控</h5><p>对于特定的数据库，该接口会覆盖全局监控的注册。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">[db setTrace:^(WCTTag tag, NSDictionary&lt;NSString *, NSNumber *&gt; *sqls, NSInteger cost) &#123;</div><div class="line">    NSLog(@&quot;Tag: %d&quot;, tag);</div><div class="line">    [sqls enumerateKeysAndObjectsUsingBlock:^(NSString *sql, NSNumber *count, BOOL *) &#123;</div><div class="line">      NSLog(@&quot;SQL: %@ Count: %d&quot;, sql, count.intValue);</div><div class="line">    &#125;];</div><div class="line">    NSLog(@&quot;Total cost %ld nanoseconds&quot;, (long) cost);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+<h5 id="操作耗时与监控耗时的不同"><a href="#操作耗时与监控耗时的不同" class="headerlink" title="操作耗时与监控耗时的不同"></a>操作耗时与监控耗时的不同</h5><ul>
+<li>操作耗时的<code>cost</code>返回的耗时为浮点数的秒，监控耗时的<code>cost</code>返回的耗时为整型的纳秒。</li>
+<li>监控耗时仅包括SQL在SQLite层面的耗时，包括SQL的编译、I/O等。而操作耗时除以上之外，还包括了WCDB层面对类封装等产生的耗时</li>
+</ul>
+<h5 id="SQL执行监控"><a href="#SQL执行监控" class="headerlink" title="SQL执行监控"></a>SQL执行监控</h5><p>WCDB可以监控所有SQL的执行，以确定代码符合预期</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//SQL Execution Monitor</div><div class="line">[WCTStatistics SetGlobalSQLTrace:^(NSString *sql) &#123;</div><div class="line">	NSLog(@&quot;SQL: %@&quot;, sql);</div><div class="line">&#125;];</div></pre></td></tr></table></figure>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/11/自定义键盘/" rel="next" title="自定义键盘">
+                <i class="fa fa-chevron-left"></i> 自定义键盘
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ico.jpg"
+               alt="ongfei" />
+          <p class="site-author-name" itemprop="name">ongfei</p>
+           
+              <p class="site-description motion-element" itemprop="description">低调做事 快乐做人</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">27</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ongfei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情连接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devtang.com" title="唐巧的技术博客" target="_blank">唐巧的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com" title="廖雪峰的官方网站" target="_blank">廖雪峰的官方网站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://baixin.io/archive/" title="潘柏信个人站" target="_blank">潘柏信个人站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devzeng.com/#blog" title="曾静的技术博客" target="_blank">曾静的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://limboy.me" title="limboy" target="_blank">limboy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://liuyanwei.jumppo.com" title="liuyanwei" target="_blank">liuyanwei</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://allluckly.cn" title="allluckly" target="_blank">allluckly</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://zhongwuzw.github.io" title="钟武的技术博客" target="_blank">钟武的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.harrisonxi.com" title="HarrisonXi" target="_blank">HarrisonXi</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.jianshu.com/u/af829e5100e6" title="dpsoxeon" target="_blank">dpsoxeon</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://pingguohe.net" title="苹果核" target="_blank">苹果核</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://opensource.alibaba.com/projects/" title="opensource.alibaba" target="_blank">opensource.alibaba</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wereadteam.github.io" title="wereadteam" target="_blank">wereadteam</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.kittenyang.com/author/kittenyang/" title="kittenyang" target="_blank">kittenyang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://ming1016.github.io" title="戴铭" target="_blank">戴铭</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://casatwy.com/" title="casatwy" target="_blank">casatwy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.danthought.com/" title="但江" target="_blank">但江</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WCDB整理"><span class="nav-number">1.</span> <span class="nav-text">WCDB整理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WCDB"><span class="nav-number">1.1.</span> <span class="nav-text">WCDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#易用"><span class="nav-number">1.2.</span> <span class="nav-text">易用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建数据库"><span class="nav-number">1.3.</span> <span class="nav-text">创建数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#打开数据库"><span class="nav-number">1.4.</span> <span class="nav-text">打开数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#建表与ORM"><span class="nav-number">1.5.</span> <span class="nav-text">建表与ORM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询"><span class="nav-number">1.6.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#插入"><span class="nav-number">1.7.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#修改"><span class="nav-number">1.8.</span> <span class="nav-text">修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除"><span class="nav-number">1.9.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#条件语句"><span class="nav-number">1.10.</span> <span class="nav-text">条件语句</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询示例"><span class="nav-number">1.10.1.</span> <span class="nav-text">查询示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自增插入示例"><span class="nav-number">1.10.2.</span> <span class="nav-text">自增插入示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数值更新示例"><span class="nav-number">1.10.3.</span> <span class="nav-text">数值更新示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#部分删除示例"><span class="nav-number">1.10.4.</span> <span class="nav-text">部分删除示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊语句和核心层接口"><span class="nav-number">1.11.</span> <span class="nav-text">特殊语句和核心层接口</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行WINQ"><span class="nav-number">1.11.1.</span> <span class="nav-text">执行WINQ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取WINQ运行结果"><span class="nav-number">1.11.2.</span> <span class="nav-text">获取WINQ运行结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务"><span class="nav-number">1.11.3.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#便捷事务接口"><span class="nav-number">1.11.4.</span> <span class="nav-text">便捷事务接口</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置"><span class="nav-number">1.11.5.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#关闭数据库"><span class="nav-number">1.11.6.</span> <span class="nav-text">关闭数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#将一个已有的ObjC类进行ORM绑定的过程如下："><span class="nav-number">1.11.7.</span> <span class="nav-text">将一个已有的ObjC类进行ORM绑定的过程如下：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基础类"><span class="nav-number">1.12.</span> <span class="nav-text">基础类</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WCTDatabase"><span class="nav-number">1.12.1.</span> <span class="nav-text">WCTDatabase</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WCTTable"><span class="nav-number">1.12.2.</span> <span class="nav-text">WCTTable</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#WCTTransaction"><span class="nav-number">1.12.3.</span> <span class="nav-text">WCTTransaction</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基础类共享"><span class="nav-number">1.12.4.</span> <span class="nav-text">基础类共享</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CRUD"><span class="nav-number">1.12.5.</span> <span class="nav-text">CRUD</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#表操作"><span class="nav-number">1.12.5.1.</span> <span class="nav-text">表操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据操作"><span class="nav-number">1.12.5.2.</span> <span class="nav-text">数据操作</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#便捷接口"><span class="nav-number">1.12.5.3.</span> <span class="nav-text">便捷接口</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#插入-1"><span class="nav-number">1.12.5.3.1.</span> <span class="nav-text">插入</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#删除-1"><span class="nav-number">1.12.5.3.2.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#更新"><span class="nav-number">1.12.5.3.3.</span> <span class="nav-text">更新</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#查找"><span class="nav-number">1.12.5.3.4.</span> <span class="nav-text">查找</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#链式接口"><span class="nav-number">1.12.5.4.</span> <span class="nav-text">链式接口</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#封装SQL"><span class="nav-number">1.12.6.</span> <span class="nav-text">封装SQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#调试SQL"><span class="nav-number">1.12.7.</span> <span class="nav-text">调试SQL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主键自增-Auto-Increment"><span class="nav-number">1.12.8.</span> <span class="nav-text">主键自增(Auto Increment)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#as重定向"><span class="nav-number">1.12.9.</span> <span class="nav-text">as重定向</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多表查询"><span class="nav-number">1.12.10.</span> <span class="nav-text">多表查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ORM"><span class="nav-number">1.13.</span> <span class="nav-text">ORM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ORM宏"><span class="nav-number">1.13.1.</span> <span class="nav-text">ORM宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字段宏"><span class="nav-number">1.13.2.</span> <span class="nav-text">字段宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#索引宏"><span class="nav-number">1.13.3.</span> <span class="nav-text">索引宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多字段索引"><span class="nav-number">1.13.4.</span> <span class="nav-text">多字段索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#约束宏"><span class="nav-number">1.13.5.</span> <span class="nav-text">约束宏</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字段约束"><span class="nav-number">1.13.6.</span> <span class="nav-text">字段约束</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#表约束"><span class="nav-number">1.13.7.</span> <span class="nav-text">表约束</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#类与数据库对应类型"><span class="nav-number">1.13.8.</span> <span class="nav-text">类与数据库对应类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义类-数据库类型映射"><span class="nav-number">1.13.9.</span> <span class="nav-text">自定义类-数据库类型映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#取消内置类型"><span class="nav-number">1.13.10.</span> <span class="nav-text">取消内置类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改字段"><span class="nav-number">1.13.11.</span> <span class="nav-text">修改字段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#增"><span class="nav-number">1.13.11.1.</span> <span class="nav-text">增</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删"><span class="nav-number">1.13.11.2.</span> <span class="nav-text">删</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#改"><span class="nav-number">1.13.11.3.</span> <span class="nav-text">改</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#更多扩展性"><span class="nav-number">1.13.12.</span> <span class="nav-text">更多扩展性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注意事项"><span class="nav-number">1.13.13.</span> <span class="nav-text">注意事项</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#全局监控与错误处理"><span class="nav-number">1.14.</span> <span class="nav-text">全局监控与错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#错误处理WCTError"><span class="nav-number">1.14.1.</span> <span class="nav-text">错误处理WCTError</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#获取错误"><span class="nav-number">1.14.1.1.</span> <span class="nav-text">获取错误</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#性能监控"><span class="nav-number">1.14.2.</span> <span class="nav-text">性能监控</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#操作耗时"><span class="nav-number">1.14.2.1.</span> <span class="nav-text">操作耗时</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#监控耗时"><span class="nav-number">1.14.2.2.</span> <span class="nav-text">监控耗时</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#全局监控"><span class="nav-number">1.14.2.3.</span> <span class="nav-text">全局监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#特定数据库监控"><span class="nav-number">1.14.2.4.</span> <span class="nav-text">特定数据库监控</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#操作耗时与监控耗时的不同"><span class="nav-number">1.14.2.5.</span> <span class="nav-text">操作耗时与监控耗时的不同</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#SQL执行监控"><span class="nav-number">1.14.2.6.</span> <span class="nav-text">SQL执行监控</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ongfei</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>
