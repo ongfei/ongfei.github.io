@@ -97,7 +97,7 @@
 <meta name="description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
 如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
 如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
-####第一步">
+第一步 注册t">
 <meta property="og:type" content="article">
 <meta property="og:title" content="发布自己的代码到CocoaPods">
 <meta property="og:url" content="http://yoursite.com/2016/12/07/发布自己的代码到CocoaPods/index.html">
@@ -105,14 +105,14 @@
 <meta property="og:description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
 如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
 如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
-####第一步">
-<meta property="og:updated_time" content="2017-02-07T07:37:17.000Z">
+第一步 注册t">
+<meta property="og:updated_time" content="2019-05-22T09:54:30.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="发布自己的代码到CocoaPods">
 <meta name="twitter:description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
 如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
 如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
-####第一步">
+第一步 注册t">
 
 
 
@@ -355,8 +355,7 @@
         <p>##如何发布自己的开源代码到CocoaPods<br>在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。</p>
 <p>如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？</p>
 <p>如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：<a href="http://blog.devtang.com/2014/05/25/use-cocoapod-to-manage-ios-lib-dependency/" target="_blank" rel="external">用CocoaPods做iOS程序的依赖管理</a></p>
-<p>####第一步 注册trunk</p>
-<p>在注册trunk之前，我们需要确认当前的CocoaPods版本是否足够新。trunk需要pod在0.33及以上版本，如果你不满足要求，打开Terminal使用ruby的gem命令更新pod:</p>
+<h4 id="第一步-注册trunk"><a href="#第一步-注册trunk" class="headerlink" title="第一步 注册trunk"></a>第一步 注册trunk</h4><p>在注册trunk之前，我们需要确认当前的CocoaPods版本是否足够新。trunk需要pod在0.33及以上版本，如果你不满足要求，打开Terminal使用ruby的gem命令更新pod:</p>
 <pre><code>sudo gem install cocoapods
 </code></pre><p>注册trunk：</p>
 <pre><code>pod trunk register 邮箱地址@ &quot;用户名&quot;
@@ -366,8 +365,7 @@
 </code></pre><p>可以查询到你的个人信息:邮箱,姓名,注册时间,开源库,session</p>
 <p>添加其他维护者（如果你的pod是由多人维护的，你也可以添加其他维护者）</p>
 <pre><code>pod trunk add-owner 名字 邮件@
-</code></pre><p>####第二步 建立PodSpec文件并通过trunk推送给CocoaPods服务器</p>
-<p>通过下面命令可以创建一个PodSpec文件</p>
+</code></pre><h4 id="第二步-建立PodSpec文件并通过trunk推送给CocoaPods服务器"><a href="#第二步-建立PodSpec文件并通过trunk推送给CocoaPods服务器" class="headerlink" title="第二步 建立PodSpec文件并通过trunk推送给CocoaPods服务器"></a>第二步 建立PodSpec文件并通过trunk推送给CocoaPods服务器</h4><p>通过下面命令可以创建一个PodSpec文件</p>
 <pre><code>pod spec create 文件名
 </code></pre><p>执行完该命令之后会在工程目录生成XPRACSignal.podspec文件，然后编辑这个文件！里面注释很多</p>
 <pre><code>Pod::Spec.new do |s|
@@ -397,22 +395,26 @@
   s.frameworks = &apos;UIKit&apos;                  #所需的framework，多个用逗号隔开
   s.dependency &apos;FMDB&apos;, &apos;~&gt; 2.5&apos;   #依赖关系，该项目所依赖的其他库，如果有多个需要填写多个s.dependency
 end
-</code></pre><p>编辑完podspec文件后，需要验证一下这个文件是否可用，验证需要执行一下命令</p>
+</code></pre><p>​<br>编辑完podspec文件后，需要验证一下这个文件是否可用，验证需要执行一下命令</p>
 <pre><code>pod lib lint
 </code></pre><p>当出现     PodTestLibrary passed validation 的时候 说明 podspec可用 </p>
 <p>如果出现了错误可以看下这篇文章<a href="http://blog.csdn.net/blog_jihq/article/details/52614156" target="_blank" rel="external">pod创建问题</a></p>
-<p>####提交code到git仓库中，并打上tag版本号</p>
-<pre><code>git add -A
+<h4 id="提交code到git仓库中，并打上tag版本号"><a href="#提交code到git仓库中，并打上tag版本号" class="headerlink" title="提交code到git仓库中，并打上tag版本号"></a>提交code到git仓库中，并打上tag版本号</h4><pre><code>git add -A
 git commit -m &quot;first commit&quot;
 git push origin master
 git tag &apos;1.0.0&apos; 
 git push --tags 
-</code></pre><p>####提交到CocoaPods trunk</p>
-<pre><code>pod trunk push podspec文件名
+</code></pre><h4 id="公开提交到CocoaPods-trunk"><a href="#公开提交到CocoaPods-trunk" class="headerlink" title="公开提交到CocoaPods trunk"></a>公开提交到CocoaPods trunk</h4><pre><code>pod trunk push podspec文件名
 </code></pre><p>如果没有错误 就会提示 successfully published<br>说明cocoapod库已接收</p>
 <p>这个时候要更新一下本地的依赖库</p>
 <pre><code>pod setup
 </code></pre><p>然后用pod search 查询一下吧</p>
+<h4 id="提交到私有库"><a href="#提交到私有库" class="headerlink" title="提交到私有库"></a>提交到私有库</h4><p>首先创建项目存放私有Repo源</p>
+<p>本地添加私有源 pod repo add 私有源 私有源地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod repo push 私有源 podspec文件名</div></pre></td></tr></table></figure>
+<p>常见错误 ：  Xcode编译没有问题，但是pod repo push时总是提示”cocoapods specification does not validate”这个问题，是由于执行”pod spec lint”有warning的项目，cocoapods不通过lint，这个时候可以通过在pod repo push命令添加”–allow-warnings”标识，这样对于有warning的项目同样可以通过pod的lint</p>
+<p>使用需要指定源地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source &apos;私有源地址.git&apos;</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -515,8 +517,17 @@ git push --tags
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/ico.jpg"
@@ -667,6 +678,22 @@ git push --tags
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#第一步-注册trunk"><span class="nav-number">1.</span> <span class="nav-text">第一步 注册trunk</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#第二步-建立PodSpec文件并通过trunk推送给CocoaPods服务器"><span class="nav-number">2.</span> <span class="nav-text">第二步 建立PodSpec文件并通过trunk推送给CocoaPods服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提交code到git仓库中，并打上tag版本号"><span class="nav-number">3.</span> <span class="nav-text">提交code到git仓库中，并打上tag版本号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#公开提交到CocoaPods-trunk"><span class="nav-number">4.</span> <span class="nav-text">公开提交到CocoaPods trunk</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#提交到私有库"><span class="nav-number">5.</span> <span class="nav-text">提交到私有库</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
