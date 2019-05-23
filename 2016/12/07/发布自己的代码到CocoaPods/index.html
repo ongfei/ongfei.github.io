@@ -106,7 +106,7 @@
 如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
 如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
 第一步 注册t">
-<meta property="og:updated_time" content="2019-05-23T06:09:14.914Z">
+<meta property="og:updated_time" content="2019-05-23T08:59:21.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="发布自己的代码到CocoaPods">
 <meta name="twitter:description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
@@ -416,6 +416,8 @@ git push --tags
 <p><a href="https://blog.csdn.net/weixin_33744141/article/details/87206553" target="_blank" rel="external">更多错误记录</a></p>
 <p>使用需要指定源地址</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source &apos;私有源地址.git&apos;</div></pre></td></tr></table></figure>
+<p>关于tag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git tag -a &apos;0.0.1&apos;  -m &apos;描述&apos;//添加tag</div><div class="line">git tag //查看tag</div><div class="line">git tag -d &apos;0.0.1&apos;//删除tag</div><div class="line">git push --tags//将本地创建的tag推到远程库</div><div class="line">git push origin :0.0.1//删除tag</div></pre></td></tr></table></figure>
 
       
     </div>
