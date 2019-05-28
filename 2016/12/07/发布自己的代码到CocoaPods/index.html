@@ -106,7 +106,7 @@
 如果我们也想将自己写的组件或库开源出去，让别人也可以通过pod install命令安装自己的框架该怎么做呢？
 如果你现在对CocoaPods还不太了解，推荐你看一看这篇文章：用CocoaPods做iOS程序的依赖管理
 第一步 注册t">
-<meta property="og:updated_time" content="2019-05-23T08:59:21.055Z">
+<meta property="og:updated_time" content="2019-05-28T01:46:13.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="发布自己的代码到CocoaPods">
 <meta name="twitter:description" content="##如何发布自己的开源代码到CocoaPods在开发过程中，经常会使用到第三框架，我们通过一个pod install命令，很方便的就将第三方框架加到我们自己的项目中。
@@ -412,7 +412,16 @@ git push --tags
 <h4 id="提交到私有库"><a href="#提交到私有库" class="headerlink" title="提交到私有库"></a>提交到私有库</h4><p>首先创建项目存放私有Repo源</p>
 <p>本地添加私有源 pod repo add 私有源 私有源地址</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"> pod repo push 私有源 podspec文件名 --verbose --use-libraries --allow-warnings</div><div class="line"> </div><div class="line">--verbose：有些非语法错误是不会给出错误原因的，这个时候可以使用--verbose来查看详细的验证过程来帮助定位错误。</div><div class="line">--use-libraries：表示使用静态库或者是framework，这里主要是解决当我们依赖一些framework库后校验提示找不到库的时候用到。</div><div class="line">--allow-warnings：表示允许警告。</div></pre></td></tr></table></figure>
-<p>常见错误 ：  Xcode编译没有问题，但是pod repo push时总是提示”cocoapods specification does not validate”这个问题，是由于执行”pod spec lint”有warning的项目，cocoapods不通过lint，这个时候可以通过在pod repo push命令添加”–allow-warnings”标识，这样对于有warning的项目同样可以通过pod的lint </p>
+<p>常见错误 ：  </p>
+<ol>
+<li><p>Xcode编译没有问题，但是pod repo push时总是提示”cocoapods specification does not validate”这个问题，是由于执行”pod spec lint”有warning的项目，cocoapods不通过lint，这个时候可以通过在pod repo push命令添加”–allow-warnings”标识，这样对于有warning的项目同样可以通过pod的lint </p>
+</li>
+<li><p>Encountered an unknown error (Unable to find a specification for <code>xxxx</code> depended upon by <code>xxxx</code> </p>
+<p>我们的 <code>podspec</code> 文件在写依赖的时候也无法在对应的库后面添加源地址。但是我们可以在验证和提交的时候多写一个参数。</p>
+<p>那就是<code>--sources</code> 参数，需要注意的是给<code>--sources</code> 赋值的时候，一定也要带上官方的源。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint --no-clean --verbose --allow-warnings --use-libraries --sources=https://xxx,https://github.com/CocoaPods/Specs</div></pre></td></tr></table></figure>
+</li>
+</ol>
 <p><a href="https://blog.csdn.net/weixin_33744141/article/details/87206553" target="_blank" rel="external">更多错误记录</a></p>
 <p>使用需要指定源地址</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">source &apos;私有源地址.git&apos;</div></pre></td></tr></table></figure>
