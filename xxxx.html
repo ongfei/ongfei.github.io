@@ -78,7 +78,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="xxxx" />
 
 
 
@@ -94,15 +94,25 @@
 
 
 
-<meta name="description" content="低调做事 快乐做人">
+<meta name="description" content="tableview嵌套tableview 滑动方向如果不冲突是不用额外处理滑动冲突的
+如果滑动方向一致，这时候可能需要滑动的和实际滑动的会有差别，需要手动调整需要谁滑动谁不滑动。
+可以根据当前两个的位置，对scrollenable做处理，让能滑动的可以滑动不能滑动的不滑动。预期：切换的时候会有卡顿手势断掉的可能。
+滑动就会触发contentOffset 所以可以通过监听两个tableview的co">
 <meta property="og:type" content="website">
-<meta property="og:title" content="ongfei | 一步一步往上爬">
-<meta property="og:url" content="http://yoursite.com/page/4/index.html">
+<meta property="og:title" content="xxxx">
+<meta property="og:url" content="http://yoursite.com/xxxx.html">
 <meta property="og:site_name" content="ongfei | 一步一步往上爬">
-<meta property="og:description" content="低调做事 快乐做人">
+<meta property="og:description" content="tableview嵌套tableview 滑动方向如果不冲突是不用额外处理滑动冲突的
+如果滑动方向一致，这时候可能需要滑动的和实际滑动的会有差别，需要手动调整需要谁滑动谁不滑动。
+可以根据当前两个的位置，对scrollenable做处理，让能滑动的可以滑动不能滑动的不滑动。预期：切换的时候会有卡顿手势断掉的可能。
+滑动就会触发contentOffset 所以可以通过监听两个tableview的co">
+<meta property="og:updated_time" content="2019-06-19T07:26:28.214Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ongfei | 一步一步往上爬">
-<meta name="twitter:description" content="低调做事 快乐做人">
+<meta name="twitter:title" content="xxxx">
+<meta name="twitter:description" content="tableview嵌套tableview 滑动方向如果不冲突是不用额外处理滑动冲突的
+如果滑动方向一致，这时候可能需要滑动的和实际滑动的会有差别，需要手动调整需要谁滑动谁不滑动。
+可以根据当前两个的位置，对scrollenable做处理，让能滑动的可以滑动不能滑动的不滑动。预期：切换的时候会有卡顿手势断掉的可能。
+滑动就会触发contentOffset 所以可以通过监听两个tableview的co">
 
 
 
@@ -130,13 +140,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/page/4/"/>
+  <link rel="canonical" href="http://yoursite.com/xxxx.html"/>
 
 
 
 
 
-  <title>ongfei | 一步一步往上爬</title>
+  <title>xxxx | ongfei | 一步一步往上爬</title>
   
 
 
@@ -161,9 +171,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-   page-home 
- ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -269,135 +277,27 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
-    
-      
 
-  
+  <div id="posts" class="posts-expand">
+  <header class="post-header">
 
-  
-  
-  
+	<h1 class="post-title" itemprop="name headline">xxxx</h1>
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/10/09/Hexo-搭建自己的博客/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="ongfei">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/ico.jpg">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ongfei | 一步一步往上爬">
-    </span>
+</header>
 
     
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/10/09/Hexo-搭建自己的博客/" itemprop="url">Hexo 搭建自己的博客</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-10-09T12:17:30+08:00">
-                2015-10-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
     
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          
-什么是HexoHexo 是一个简单地、轻量地、基于Node的一个静态博客框架，可以方便的生成静态网页托管在github和Heroku上
-GitHub Pages是什么？GitHub Pages 可以被认为是用户编写的、托管在github上的静态网页。由于它的空间免费稳定， 可以用于介绍托管在git
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2015/10/09/Hexo-搭建自己的博客/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
+      <p>tableview嵌套tableview 滑动方向如果不冲突是不用额外处理滑动冲突的</p>
+<p>如果滑动方向一致，这时候可能需要滑动的和实际滑动的会有差别，需要手动调整需要谁滑动谁不滑动。</p>
+<p>可以根据当前两个的位置，对scrollenable做处理，让能滑动的可以滑动不能滑动的不滑动。预期：切换的时候会有卡顿手势断掉的可能。</p>
+<p>滑动就会触发contentOffset 所以可以通过监听两个tableview的contentoffset做处理，下面提供一个简单的思路，具体还要根据需求来做。</p>
+<p>伪代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">- (void)小的tableview的contentoffset发生了变化:(scrollview:)scroll offset:(float)offset &#123;</div><div class="line">// 比方说都是上下滑动 冲突的范围就是headview的高</div><div class="line">    if (大tableview.contentOffset.y+offset &lt; 大tableview.tableHeaderView.height) &#123;</div><div class="line">// 只让大tableview会滚动而小tableview不会滚动 每次都初始状态也就相当于不滚动了</div><div class="line">// 由于每次都会把小tableview的偏移量置为0所以此处的offset就是增量</div><div class="line">        大tableview.contentOffset = CGPointMake(大tableview.contentOffset.x, 大tableview.contentOffset.y+offset);</div><div class="line">        scroll.contentOffset = CGPointMake(0, 0);</div><div class="line">    &#125;</div><div class="line">// 这里由于不是由自身引起的偏移不会会弹回去，需要调用方法使其弹回去</div><div class="line">    if (大tableview.contentOffset.y &lt; 0) &#123;</div><div class="line">        [self.tableV setContentOffset:CGPointMake(0, 0) animated:YES];</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 
     
-  </section>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
-  </nav>
-
+  </div>
 
 
           </div>
@@ -405,6 +305,10 @@ GitHub Pages是什么？GitHub Pages 可以被认为是用户编写的、托管�
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -441,7 +345,7 @@ GitHub Pages是什么？GitHub Pages 可以被认为是用户编写的、托管�
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
