@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="-–
+title: 线程相关
+date: 2017-11-28 11:27:11
+tags: 线程
+categories:  iOS
+keywords: 线程
+-–
+线程有关异步任务&amp;amp;同步任务两者的主要区别是：是否等待队列的任务执行结束，以及是否具备开启新线程的能力。
+
+同步执行（sync）
+同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ongfei | 一步一步往上爬">
+<meta property="og:url" content="http://yoursite.com/2019/08/17/线程相关/index.html">
+<meta property="og:site_name" content="ongfei | 一步一步往上爬">
+<meta property="og:description" content="-–
+title: 线程相关
+date: 2017-11-28 11:27:11
+tags: 线程
+categories:  iOS
+keywords: 线程
+-–
+线程有关异步任务&amp;amp;同步任务两者的主要区别是：是否等待队列的任务执行结束，以及是否具备开启新线程的能力。
+
+同步执行（sync）
+同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续">
+<meta property="og:updated_time" content="2019-08-17T12:26:35.765Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ongfei | 一步一步往上爬">
+<meta name="twitter:description" content="-–
+title: 线程相关
+date: 2017-11-28 11:27:11
+tags: 线程
+categories:  iOS
+keywords: 线程
+-–
+线程有关异步任务&amp;amp;同步任务两者的主要区别是：是否等待队列的任务执行结束，以及是否具备开启新线程的能力。
+
+同步执行（sync）
+同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/08/17/线程相关/"/>
+
+
+
+
+
+  <title> | ongfei | 一步一步往上爬</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ongfei | 一步一步往上爬</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">ongfei | 一步一步往上爬</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+
+  <a href="https://github.com/ongfei"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/17/线程相关/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="ongfei">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/ico.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ongfei | 一步一步往上爬">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-17T19:30:26+08:00">
+                2019-08-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>-–</p>
+<p>title: 线程相关</p>
+<p>date: 2017-11-28 11:27:11</p>
+<p>tags: 线程</p>
+<p>categories:  iOS</p>
+<p>keywords: 线程</p>
+<p>-–</p>
+<h4 id="线程有关"><a href="#线程有关" class="headerlink" title="线程有关"></a>线程有关</h4><h5 id="异步任务-amp-同步任务"><a href="#异步任务-amp-同步任务" class="headerlink" title="异步任务&amp;同步任务"></a><strong>异步任务&amp;同步任务</strong></h5><p>两者的主要区别是：<strong>是否等待队列的任务执行结束，以及是否具备开启新线程的能力。</strong></p>
+<ul>
+<li><strong>同步执行（sync）</strong><ul>
+<li>同步添加任务到指定的队列中，在添加的任务执行结束之前，会一直等待，直到队列里面的任务完成之后再继续执行。</li>
+<li>只能在当前线程中执行任务，不具备开启新线程的能力。</li>
+</ul>
+</li>
+<li><strong>异步执行（async）</strong><ul>
+<li>异步添加任务到指定的队列中，它不会做任何等待，可以继续执行任务。</li>
+<li>可以在新的线程中执行任务，具备开启新线程的能力。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">GCD同步</div><div class="line">dispatch_sync(&lt;#dispatch_queue_t  _Nonnull queue#&gt;, &lt;#^(void)block#&gt;)</div><div class="line">GCD异步</div><div class="line">dispatch_async(&lt;#dispatch_queue_t  _Nonnull queue#&gt;, &lt;#^(void)block#&gt;)</div></pre></td></tr></table></figure>
+<h5 id="队列（Dispatch-Queue）"><a href="#队列（Dispatch-Queue）" class="headerlink" title="队列（Dispatch Queue）"></a><strong>队列（Dispatch Queue）</strong></h5><p>队列是一种特殊的线性表，采用 FIFO（先进先出）的原则，即新任务总是被插入到队列的末尾，而读取任务的时候总是从队列的头部开始读取。每读取一个任务，则从队列中释放一个任务。</p>
+<ul>
+<li><strong>串行队列（Serial Dispatch Queue）</strong><ul>
+<li>每次只有一个任务被执行。让任务一个接着一个地执行。（只开启一个线程，一个任务执行完毕后，再执行下一个任务）</li>
+<li><code>DISPATCH_QUEUE_SERIAL</code> 表示串行队列</li>
+<li>dispatch_get_main_queue() 属于串行队列</li>
+</ul>
+</li>
+<li><strong>并发队列（Concurrent Dispatch Queue）</strong><ul>
+<li>可以让多个任务并发（同时）执行。（可以开启多个线程，并且同时执行任务）</li>
+<li><code>DISPATCH_QUEUE_CONCURRENT</code> 表示并发队列。</li>
+<li>dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);属于并发队列。第一个参数表示队列优先级，一般用 <code>DISPATCH_QUEUE_PRIORITY_DEFAULT</code>。第二个参数暂时没用，用 <code>0</code> 即可</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">第一个参数表示队列的唯一标识符，用于 DEBUG，可为空。队列的名称推荐使用应用程序 ID 这种逆序全程域名。</div><div class="line">第二个参数用来识别是串行队列还是并发队列。DISPATCH_QUEUE_SERIAL 表示串行队列，DISPATCH_QUEUE_CONCURRENT 表示并发队列</div><div class="line">dispatch_queue_create(&lt;#const char * _Nullable label#&gt;, &lt;#dispatch_queue_attr_t  _Nullable attr#&gt;)</div><div class="line"></div><div class="line">// 串行队列的创建方法</div><div class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;com.testQueue&quot;, DISPATCH_QUEUE_SERIAL);</div><div class="line">// 并发队列的创建方法</div><div class="line">dispatch_queue_t queue = dispatch_queue_create(&quot;com.testQueue&quot;, DISPATCH_QUEUE_CONCURRENT);</div></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>区别</th>
+<th>并发队列</th>
+<th>串行队列</th>
+<th>主队列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同步（sync）</td>
+<td>没有开启新线程，串行执行任务</td>
+<td>没有开启新线程，串行执行任务</td>
+<td>死锁卡住不执行</td>
+</tr>
+<tr>
+<td>异步（async）</td>
+<td>有开启新线程，并发执行任务</td>
+<td>有开启新线程（1条），串行执行任务</td>
+<td>没有开启新线程，串行执行任务</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>区别</th>
+<th>『异步执行+并发队列』嵌套『同一个并发队列』</th>
+<th>『同步执行+并发队列』嵌套『同一个并发队列』</th>
+<th>『异步执行+串行队列』嵌套『同一个串行队列』</th>
+<th>『同步执行+串行队列』嵌套『同一个串行队列』</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>同步（sync）</td>
+<td>没有开启新的线程，串行执行任务</td>
+<td>没有开启新线程，串行执行任务</td>
+<td>死锁卡住不执行</td>
+<td>死锁卡住不执行</td>
+</tr>
+<tr>
+<td>异步（async）</td>
+<td>有开启新线程，并发执行任务</td>
+<td>有开启新线程，并发执行任务</td>
+<td>有开启新线程（1 条），串行执行任务</td>
+<td>有开启新线程（1 条），串行执行任务</td>
+</tr>
+</tbody>
+</table>
+<p>开辟线程的个数和异步+并发队列有关。</p>
+<p> 队列是依托于线程而存在的，只有一个线程串行队列并行队列并没有什么不同。所以可以先分析线程的个数再分析队列从而得到执行的步骤。</p>
+<h5 id="GCD-延时执行方法：dispatch-after"><a href="#GCD-延时执行方法：dispatch-after" class="headerlink" title="GCD 延时执行方法：dispatch_after"></a>GCD 延时执行方法：dispatch_after</h5><p>我们经常会遇到这样的需求：在指定时间（例如 3 秒）之后执行某个任务。可以用 GCD 的<code>dispatch_after</code>方法来实现。<br>需要注意的是：<code>dispatch_after</code>方法并不是在指定时间之后才开始执行处理，而是在指定时间之后将任务追加到主队列中。严格来说，这个时间并不是绝对准确的，但想要大致延迟执行任务，<code>dispatch_after</code>方法是很有效的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^&#123;</div><div class="line">        // 2.0 秒后异步追加任务代码到主队列，并开始执行</div><div class="line">        NSLog(@&quot;after---%@&quot;,[NSThread currentThread]);  // 打印当前线程</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h5 id="GCD-栅栏方法：dispatch-barrier-async"><a href="#GCD-栅栏方法：dispatch-barrier-async" class="headerlink" title="GCD 栅栏方法：dispatch_barrier_async"></a>GCD 栅栏方法：dispatch_barrier_async</h5><p><code>dispatch_barrier_async</code> 方法会等待前边追加到并发队列中的任务全部执行完毕之后，再将指定的任务追加到该异步队列中。然后在 <code>dispatch_barrier_async</code> 方法追加的任务执行完毕之后，异步队列才恢复为一般动作，接着追加任务到该异步队列并开始执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">   </div><div class="line">   dispatch_async(queue, ^&#123;</div><div class="line">       // 追加任务 1</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line">   &#125;);</div><div class="line">   dispatch_async(queue, ^&#123;</div><div class="line">       // 追加任务 2</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">   dispatch_barrier_async(queue, ^&#123;</div><div class="line">       // 追加任务 barrier</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;barrier---%@&quot;,[NSThread currentThread]);// 打印当前线程</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">   dispatch_async(queue, ^&#123;</div><div class="line">       // 追加任务 3</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line">   &#125;);</div></pre></td></tr></table></figure>
+<p>实现同步锁</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t  quene = dispatch_get_global_queue(0, 0);</div><div class="line"></div><div class="line">- (void)setTestStr:(NSString *)testStr &#123;</div><div class="line">    dispatch_barrier_async(quene, ^&#123;</div><div class="line">        _testStr = testStr;</div><div class="line">    &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (NSString *)testStr &#123;</div><div class="line">    __block NSString *tempStr;</div><div class="line">    dispatch_sync(quene, ^&#123;</div><div class="line">        tempStr = _testStr;</div><div class="line">    &#125;);</div><div class="line">    return tempStr;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h5 id="GCD-一次性代码（只执行一次）：dispatch-once"><a href="#GCD-一次性代码（只执行一次）：dispatch-once" class="headerlink" title="GCD 一次性代码（只执行一次）：dispatch_once"></a>GCD 一次性代码（只执行一次）：dispatch_once</h5><p>整个程序运行过程中只执行一次的代码时，我们就用到了 GCD 的 <code>dispatch_once</code> 方法。使用 <code>dispatch_once</code> 方法能保证某段代码在程序运行过程中只被执行 1 次，并且即使在多线程的环境下，<code>dispatch_once</code> 也可以保证线程安全。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">static dispatch_once_t onceToken;</div><div class="line">    dispatch_once(&amp;onceToken, ^&#123;</div><div class="line">        // 只执行 1 次的代码（这里面默认是线程安全的）</div><div class="line">    &#125;);</div></pre></td></tr></table></figure>
+<h5 id="GCD-快速迭代方法：dispatch-apply"><a href="#GCD-快速迭代方法：dispatch-apply" class="headerlink" title="GCD 快速迭代方法：dispatch_apply"></a>GCD 快速迭代方法：dispatch_apply</h5><p><code>dispatch_apply</code> 按照指定的次数将指定的任务追加到指定的队列中，并等待全部队列执行结束。</p>
+<p>如果是在串行队列中使用 <code>dispatch_apply</code>，那么就和 for 循环一样，按顺序同步执行。但是这样就体现不出快速迭代的意义了。</p>
+<p>我们可以利用并发队列进行异步执行。比如说遍历 0~5 这 6 个数字，for 循环的做法是每次取出一个元素，逐个遍历。<code>dispatch_apply</code>可以 在多个线程中同时（异步）遍历多个数字。</p>
+<p>还有一点，无论是在串行队列，还是并发队列中，dispatch_apply 都会等待全部任务执行完毕，这点就像是同步操作，也像是队列组中的 <code>dispatch_group_wait</code>方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">   </div><div class="line">   NSLog(@&quot;apply---begin&quot;);</div><div class="line">   dispatch_apply(6, queue, ^(size_t index) &#123;</div><div class="line">       NSLog(@&quot;%zd---%@&quot;,index, [NSThread currentThread]);</div><div class="line">   &#125;);</div><div class="line">   NSLog(@&quot;apply---end&quot;);</div></pre></td></tr></table></figure>
+<h5 id="GCD队列组：dispatch-group"><a href="#GCD队列组：dispatch-group" class="headerlink" title="GCD队列组：dispatch_group"></a>GCD队列组：dispatch_group</h5><p>调用队列组的 <code>dispatch_group_async</code>先把任务放到队列中，然后将队列放入队列组中异步执行。如不调用队列组则是顺序执行。或者使用队列组的 <code>dispatch_group_enter</code>、<code>dispatch_group_leave</code>组合来实现 <code>dispatch_group_async</code>。</p>
+<p>调用队列组的 <code>dispatch_group_notify</code>回到指定线程执行任务。或者使用 <code>dispatch_group_wait</code>回到当前线程继续向下执行（会阻塞当前线程）</p>
+<p><code>dispatch_group_enter</code>标志着一个任务追加到 group，执行一次，相当于 group 中未执行完毕任务数 +1</p>
+<p><code>dispatch_group_leave</code>标志着一个任务离开了 group，执行一次，相当于 group 中未执行完毕任务数 -1。</p>
+<p>当 group 中未执行完毕任务数为0的时候，才会使 <code>dispatch_group_wait</code>解除阻塞，以及执行追加到 <code>dispatch_group_notify</code>中的任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程</div><div class="line">   NSLog(@&quot;group---begin&quot;);</div><div class="line">   </div><div class="line">   dispatch_group_t group =  dispatch_group_create();</div><div class="line">   </div><div class="line">   dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">       // 追加任务 1</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">   dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</div><div class="line">       // 追加任务 2</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;2---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">   dispatch_group_notify(group, dispatch_get_main_queue(), ^&#123;</div><div class="line">       // 等前面的异步任务 1、任务 2 都执行完毕后，回到主线程执行下边任务</div><div class="line">       [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">       NSLog(@&quot;3---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line"></div><div class="line">       NSLog(@&quot;group---end&quot;);</div><div class="line">   &#125;);</div><div class="line">   </div><div class="line">   //或</div><div class="line">    // 等待上面的任务全部完成后，会往下继续执行（会阻塞当前线程）</div><div class="line">   dispatch_group_wait(group, DISPATCH_TIME_FOREVER);</div><div class="line">   </div><div class="line">   NSLog(@&quot;group---end&quot;);</div></pre></td></tr></table></figure>
+<h5 id="GCD-信号量：dispatch-semaphore"><a href="#GCD-信号量：dispatch-semaphore" class="headerlink" title="GCD 信号量：dispatch_semaphore"></a>GCD 信号量：dispatch_semaphore</h5><p>信号量是基于计数器的一种<strong>多线程同步机制</strong>，用来<strong>管理对资源的并发访问</strong>。（类似于NSOperationQueue的设置最大并发量）</p>
+<p>在 <strong>Dispatch Semaphore</strong> 中，使用计数来完成这个功能，计数小于 0 时等待，阻塞线程。计数为 0 或大于 0 时，计数减 1 ，继续运行。</p>
+<p><code>dispatch_semaphore_create</code>：创建一个 Semaphore 并初始化信号的总量</p>
+<p><code>dispatch_semaphore_signal</code>：发送一个信号，让信号总量加 1</p>
+<p><code>dispatch_semaphore_wait</code>：可以使总信号量减 1，信号总量小于 0 时就会一直等待（阻塞所在线程），否则就可以正常执行。</p>
+<p>实现线程同步，将异步执行任务转换为同步执行任务。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line"> * semaphore 线程同步</div><div class="line"> */</div><div class="line">- (void)semaphoreSync &#123;</div><div class="line">    </div><div class="line">    NSLog(@&quot;currentThread---%@&quot;,[NSThread currentThread]);  // 打印当前线程</div><div class="line">    NSLog(@&quot;semaphore---begin&quot;);</div><div class="line">    </div><div class="line">    dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);</div><div class="line">    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);</div><div class="line">    </div><div class="line">    __block int number = 0;</div><div class="line">    dispatch_async(queue, ^&#123;</div><div class="line">        // 追加任务 1</div><div class="line">        [NSThread sleepForTimeInterval:2];              // 模拟耗时操作</div><div class="line">        NSLog(@&quot;1---%@&quot;,[NSThread currentThread]);      // 打印当前线程</div><div class="line">        </div><div class="line">        number = 100;</div><div class="line">        </div><div class="line">        dispatch_semaphore_signal(semaphore);</div><div class="line">    &#125;);</div><div class="line">    </div><div class="line">    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);</div><div class="line">    NSLog(@&quot;semaphore---end,number = %zd&quot;,number);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行顺如下:</p>
+<ol>
+<li>semaphore 初始创建时计数为 0。</li>
+<li><code>异步执行</code>将 <code>任务 1</code>追加到队列之后，不做等待，接着执行 <code>dispatch_semaphore_wait</code>方法，semaphore 减 1，此时 <code>semaphore == -1</code>，当前线程进入等待状态。</li>
+<li>然后，异步任务 1 开始执行。任务 1 执行到 <code>dispatch_semaphore_signal</code>之后，总信号量加 1，此时 <code>semaphore == 0</code>，正在被阻塞的线程（主线程）恢复继续执行。</li>
+<li>最后打印 <code>semaphore---end,number = 100</code>。</li>
+</ol>
+<p>这样就实现了线程同步，将异步执行任务转换为同步执行任务。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/26/WCDB整理/" rel="next" title="WCDB整理">
+                <i class="fa fa-chevron-left"></i> WCDB整理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/ico.jpg"
+               alt="ongfei" />
+          <p class="site-author-name" itemprop="name">ongfei</p>
+           
+              <p class="site-description motion-element" itemprop="description">低调做事 快乐做人</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/ongfei" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情连接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devtang.com" title="唐巧的技术博客" target="_blank">唐巧的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.liaoxuefeng.com" title="廖雪峰的官方网站" target="_blank">廖雪峰的官方网站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://baixin.io/archive/" title="潘柏信个人站" target="_blank">潘柏信个人站</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.devzeng.com/#blog" title="曾静的技术博客" target="_blank">曾静的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://limboy.me" title="limboy" target="_blank">limboy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://liuyanwei.jumppo.com" title="liuyanwei" target="_blank">liuyanwei</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://allluckly.cn" title="allluckly" target="_blank">allluckly</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://zhongwuzw.github.io" title="钟武的技术博客" target="_blank">钟武的技术博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.harrisonxi.com" title="HarrisonXi" target="_blank">HarrisonXi</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://www.jianshu.com/u/af829e5100e6" title="dpsoxeon" target="_blank">dpsoxeon</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://pingguohe.net" title="苹果核" target="_blank">苹果核</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://opensource.alibaba.com/projects/" title="opensource.alibaba" target="_blank">opensource.alibaba</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://wereadteam.github.io" title="wereadteam" target="_blank">wereadteam</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.kittenyang.com/author/kittenyang/" title="kittenyang" target="_blank">kittenyang</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://ming1016.github.io" title="戴铭" target="_blank">戴铭</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://casatwy.com/" title="casatwy" target="_blank">casatwy</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.danthought.com/" title="但江" target="_blank">但江</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#线程有关"><span class="nav-number">1.</span> <span class="nav-text">线程有关</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#异步任务-amp-同步任务"><span class="nav-number">1.1.</span> <span class="nav-text">异步任务&同步任务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#队列（Dispatch-Queue）"><span class="nav-number">1.2.</span> <span class="nav-text">队列（Dispatch Queue）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCD-延时执行方法：dispatch-after"><span class="nav-number">1.3.</span> <span class="nav-text">GCD 延时执行方法：dispatch_after</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCD-栅栏方法：dispatch-barrier-async"><span class="nav-number">1.4.</span> <span class="nav-text">GCD 栅栏方法：dispatch_barrier_async</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCD-一次性代码（只执行一次）：dispatch-once"><span class="nav-number">1.5.</span> <span class="nav-text">GCD 一次性代码（只执行一次）：dispatch_once</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCD-快速迭代方法：dispatch-apply"><span class="nav-number">1.6.</span> <span class="nav-text">GCD 快速迭代方法：dispatch_apply</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCD队列组：dispatch-group"><span class="nav-number">1.7.</span> <span class="nav-text">GCD队列组：dispatch_group</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GCD-信号量：dispatch-semaphore"><span class="nav-number">1.8.</span> <span class="nav-text">GCD 信号量：dispatch_semaphore</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">ongfei</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+
+</html>
