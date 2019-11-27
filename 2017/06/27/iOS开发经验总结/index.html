@@ -108,7 +108,7 @@
 [UIApplication sharedApplication].idleTimerDisabled = YES;
 2、隐藏某行cell
 - (CGFloat)tableView:(UITableView *)table">
-<meta property="og:updated_time" content="2017-06-27T08:54:43.000Z">
+<meta property="og:updated_time" content="2019-11-27T06:55:26.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS开发经验总结">
 <meta name="twitter:description" content="看到的一篇iOS开发经验总结的文章 做下记录iOS开发经验总结原文章地址 :    http://www.jianshu.com/p/1ff9e44ccc78
@@ -779,39 +779,7 @@ return platform;
  NSString *app_Version = [infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];  
  // app build版本  
  NSString *app_build = [infoDictionary objectForKey:@&quot;CFBundleVersion&quot;];  
-
-
-
-    //手机序列号  
-    NSString* identifierNumber = [[UIDevice currentDevice] uniqueIdentifier];  
-    NSLog(@&quot;手机序列号: %@&quot;,identifierNumber);  
-    //手机别名： 用户定义的名称  
-    NSString* userPhoneName = [[UIDevice currentDevice] name];  
-    NSLog(@&quot;手机别名: %@&quot;, userPhoneName);  
-    //设备名称  
-    NSString* deviceName = [[UIDevice currentDevice] systemName];  
-    NSLog(@&quot;设备名称: %@&quot;,deviceName );  
-    //手机系统版本  
-    NSString* phoneVersion = [[UIDevice currentDevice] systemVersion];  
-    NSLog(@&quot;手机系统版本: %@&quot;, phoneVersion);  
-    //手机型号  
-    NSString* phoneModel = [[UIDevice currentDevice] model];  
-    NSLog(@&quot;手机型号: %@&quot;,phoneModel );  
-    //地方型号  （国际化区域名称）  
-    NSString* localPhoneModel = [[UIDevice currentDevice] localizedModel];  
-    NSLog(@&quot;国际化区域名称: %@&quot;,localPhoneModel );  
-
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];  
-    // 当前应用名称  
-    NSString *appCurName = [infoDictionary objectForKey:@&quot;CFBundleDisplayName&quot;];  
-    NSLog(@&quot;当前应用名称：%@&quot;,appCurName);  
-    // 当前应用软件版本  比如：1.0.1  
-    NSString *appCurVersion = [infoDictionary objectForKey:@&quot;CFBundleShortVersionString&quot;];  
-    NSLog(@&quot;当前应用软件版本:%@&quot;,appCurVersion);  
-    // 当前应用版本号码   int类型  
-    NSString *appCurVersionNum = [infoDictionary objectForKey:@&quot;CFBundleVersion&quot;];  
-    NSLog(@&quot;当前应用版本号码：%@&quot;,appCurVersionNum);
-</code></pre><p>54、获取一个类的所有属性</p>
+</code></pre><p>​<br>​<br>​        //手机序列号<br>​        NSString<em> identifierNumber = [[UIDevice currentDevice] uniqueIdentifier];<br>​        NSLog(@”手机序列号: %@”,identifierNumber);<br>​        //手机别名： 用户定义的名称<br>​        NSString</em> userPhoneName = [[UIDevice currentDevice] name];<br>​        NSLog(@”手机别名: %@”, userPhoneName);<br>​        //设备名称<br>​        NSString<em> deviceName = [[UIDevice currentDevice] systemName];<br>​        NSLog(@”设备名称: %@”,deviceName );<br>​        //手机系统版本<br>​        NSString</em> phoneVersion = [[UIDevice currentDevice] systemVersion];<br>​        NSLog(@”手机系统版本: %@”, phoneVersion);<br>​        //手机型号<br>​        NSString<em> phoneModel = [[UIDevice currentDevice] model];<br>​        NSLog(@”手机型号: %@”,phoneModel );<br>​        //地方型号  （国际化区域名称）<br>​        NSString</em> localPhoneModel = [[UIDevice currentDevice] localizedModel];<br>​        NSLog(@”国际化区域名称: %@”,localPhoneModel );<br>​<br>        NSDictionary <em>infoDictionary = [[NSBundle mainBundle] infoDictionary];<br>        // 当前应用名称<br>        NSString </em>appCurName = [infoDictionary objectForKey:@”CFBundleDisplayName”];<br>        NSLog(@”当前应用名称：%@”,appCurName);<br>        // 当前应用软件版本  比如：1.0.1<br>        NSString <em>appCurVersion = [infoDictionary objectForKey:@”CFBundleShortVersionString”];<br>        NSLog(@”当前应用软件版本:%@”,appCurVersion);<br>        // 当前应用版本号码   int类型<br>        NSString </em>appCurVersionNum = [infoDictionary objectForKey:@”CFBundleVersion”];<br>        NSLog(@”当前应用版本号码：%@”,appCurVersionNum);<br>54、获取一个类的所有属性</p>
 <pre><code>id LenderClass = objc_getClass(&quot;Lender&quot;);
 unsigned int outCount, i;
 objc_property_t *properties = class_copyPropertyList(LenderClass, &amp;outCount);
@@ -1599,7 +1567,11 @@ UIGraphicsEndImageContext();
     if (action == @selector(share)) return NO;
     return [super canPerformAction:action withSender:sender];
 }
-</code></pre>
+</code></pre><p>146、百度地图显示名称的调用方式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> NSString *urlString = [[NSString stringWithFormat:@&quot;baidumap://map/direction?origin=%f,%f|name:华业大厦&amp;destination=latlng:%f,%f|name:目的地&amp;mode=driving&quot;,40.002606,116.340136, 39.925035,116.494764] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];</div><div class="line">                        </div><div class="line">[[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];</div></pre></td></tr></table></figure>
+<p>147、YYTextView限制字数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">#define MAX_STARWORDS_LENGTH 10</div><div class="line">-(void)addObserver &#123;</div><div class="line">    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewDidChangeNotification:) name:YYTextViewTextDidChangeNotification object:self.yytextView];</div><div class="line">&#125;</div><div class="line"></div><div class="line">-(void)textViewDidChangeNotification:(NSNotification*)obj &#123;</div><div class="line">   YYTextView *textView = (YYTextView *)obj.object;</div><div class="line">      NSString *toBeString = textView.text;</div><div class="line">      YYTextRange *selectedRange = [textView valueForKey:@&quot;_markedTextRange&quot;];</div><div class="line">      SEL selName = NSSelectorFromString(@&quot;positionFromPosition:offset:&quot;);</div><div class="line">      YYTextPosition *position = ((YYTextPosition *(*)(id,SEL,id,int))objc_msgSend)(textView,selName,selectedRange.start,0);</div><div class="line">      </div><div class="line">      if (!position) &#123;</div><div class="line">          if (toBeString.length &gt; MAX_STARWORDS_LENGTH) &#123;</div><div class="line">              NSRange rangeIndex = [toBeString rangeOfComposedCharacterSequenceAtIndex:MAX_STARWORDS_LENGTH];</div><div class="line">              if (rangeIndex.length == 1) &#123;</div><div class="line">                  textView.text = [toBeString substringToIndex:MAX_STARWORDS_LENGTH];</div><div class="line">              &#125;else &#123;</div><div class="line">                  NSRange rangeRange = [toBeString rangeOfComposedCharacterSequencesForRange:NSMakeRange(0, MAX_STARWORDS_LENGTH)];</div><div class="line">                  textView.text = [toBeString substringWithRange:rangeRange];</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
       
     </div>
 
